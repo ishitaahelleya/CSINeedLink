@@ -15,6 +15,29 @@ const { haversineMiles } = require("./agents/util");
 const dbPath = path.join(__dirname, "needlink.db");
 const db = new Database(dbPath, { fileMustExist: true }); // run `npm run seed` first
 
+// Idempotent migrations so an existing needlink.db picks up the columns the
+// app needs without forcing a re-seed (which would wipe posted requests).
+function addColumnIfMissing(table, col, decl){
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all().map(c => c.name);
+  if (!cols.includes(col)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${col} ${decl}`);
+}
+addColumnIfMissing("requests", "urgency", "TEXT NOT NULL DEFAULT 'urgent'");
+addColumnIfMissing("requests", "details", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("requests", "needed_by", "TEXT NOT NULL DEFAULT ''");
+addColumnIfMissing("requests", "pledgers", "TEXT NOT NULL DEFAULT '[]'");
+
+// A recipient posting from the app may not be one of the seeded orgs, so make
+// sure a matching org row exists before inserting their request.
+function ensureOrg(name, lat, lng, category){
+  const existing = db.prepare(`SELECT * FROM orgs WHERE name = ?`).get(name);
+  if (existing) return existing.id;
+  const id = "org_app_" + Date.now();
+  db.prepare(`INSERT INTO orgs (id,name,city,category,lat,lng,daily_capacity,current_load,staffing_level,verified,founded_year)
+              VALUES (?,?,?,?,?,?,?,?,?,?,?)`)
+    .run(id, name, "Tri-Valley", category || "Food", lat || 37.7022, lng || -121.9358, 60, 0, 3, 1, new Date().getFullYear() - 3);
+  return id;
+}
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -35,9 +58,53 @@ app.get("/api/requests", (req, res) => {
   const rows = db.prepare(`
     SELECT r.*, o.name as org_name, o.city, o.lat, o.lng, o.verified
     FROM requests r JOIN orgs o ON r.org_id = o.id
-    ORDER BY r.urgent DESC, r.created_at DESC
+    ORDER BY r.created_at DESC
   `).all();
-  res.json(rows);
+  res.json(rows.map(r => ({ ...r, pledgers: JSON.parse(r.pledgers || "[]") })));
+});
+
+// Create a request. This is what makes two machines share state: a recipient
+// posts here, and every donor polling /api/requests sees it appear.
+// The multi-agent pipeline gates it first - a hard fraud veto blocks the post.
+app.post("/api/requests", async (req, res) => {
+  const { org_name, item, unit, need, urgency, details, needed_by, category, lat, lng } = req.body;
+  if (!org_name || !item || !need) return res.status(400).json({ error: "org_name, item and need are required" });
+
+  const org_id = ensureOrg(org_name, lat, lng, category);
+  const check = await verify(db, { org_id, qty: Number(need) });
+  if (check.veto) return res.status(403).json({ error: "blocked_by_fraud_agent", agent: check });
+
+  const info = db.prepare(`INSERT INTO requests (org_id,item,unit,need,have,urgent,category,urgency,details,needed_by,pledgers)
+                           VALUES (?,?,?,?,0,?,?,?,?,?,'[]')`)
+    .run(org_id, item, unit || item, Number(need), urgency === "urgent" ? 1 : 0,
+         category || "Food", urgency || "urgent", details || "", needed_by || "");
+
+  const row = db.prepare(`SELECT r.*, o.name as org_name, o.lat, o.lng, o.verified
+                          FROM requests r JOIN orgs o ON r.org_id = o.id WHERE r.id = ?`).get(info.lastInsertRowid);
+  res.json({ ok: true, request: { ...row, pledgers: [] }, agent_check: check });
+});
+
+// Pledge against a request - increments have + records who pledged.
+app.post("/api/requests/:id/pledge", (req, res) => {
+  const { qty, donor_name } = req.body;
+  const r = db.prepare(`SELECT * FROM requests WHERE id = ?`).get(req.params.id);
+  if (!r) return res.status(404).json({ error: "unknown_request" });
+  const pledgers = JSON.parse(r.pledgers || "[]");
+  pledgers.push(donor_name || "A donor");
+  db.prepare(`UPDATE requests SET have = have + ?, pledgers = ? WHERE id = ?`)
+    .run(Number(qty) || 1, JSON.stringify(pledgers), req.params.id);
+  res.json({ ok: true, pledgers });
+});
+
+// Cancel - only allowed while nobody has pledged yet.
+app.delete("/api/requests/:id", (req, res) => {
+  const r = db.prepare(`SELECT * FROM requests WHERE id = ?`).get(req.params.id);
+  if (!r) return res.status(404).json({ error: "unknown_request" });
+  if (JSON.parse(r.pledgers || "[]").length > 0) {
+    return res.status(409).json({ error: "cannot_cancel_after_pledges" });
+  }
+  db.prepare(`DELETE FROM requests WHERE id = ?`).run(req.params.id);
+  res.json({ ok: true });
 });
 
 app.get("/api/clubs", (req, res) => res.json(db.prepare(`SELECT * FROM clubs`).all()));

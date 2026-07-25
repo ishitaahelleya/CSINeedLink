@@ -55,7 +55,7 @@ svg{display:block;}
   #app{max-width:none;border-left:1px solid rgba(255,255,255,0.06);}
   .screen{padding-left:48px;padding-right:48px;}
   .hero-wrap{max-width:620px;}
-  .grid-row{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+  .grid-row{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));}
   .fab{right:44px !important;left:auto !important;transform:none !important;}
   .fab:active{transform:scale(0.92) !important;}
 }
@@ -297,7 +297,14 @@ svg{display:block;}
   .expand-toggle:hover{gap:8px;}
 }
 
-.req-card{min-width:220px;background:var(--surface);border-radius:var(--radius-lg);padding:14px;flex-shrink:0;transition:transform .15s ease-out;border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 20px rgba(20,10,40,0.22);position:relative;overflow:hidden;}
+.req-card{min-width:340px;background:var(--surface);border-radius:var(--radius-lg);padding:24px 22px 18px;flex-shrink:0;transition:transform .15s ease-out;border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 20px rgba(20,10,40,0.22);position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.req-card .utag{align-self:flex-start;}
+.grid-row .req-card{min-width:0;} /* grid tracks control width; prevents cell overflow/overlap at any screen size */
+.org-line{display:flex;align-items:center;gap:8px;margin-top:2px;}
+.org-line .org-name{font-size:17px;font-weight:700;}
+.info-btn{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.1);color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.info-btn:hover{background:rgba(255,255,255,0.2);color:var(--cream);}
+.req-help-btn{margin-top:14px;width:100%;padding:11px;border-radius:10px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;}
 .req-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--muted-dim);}
 .req-card.u-urgent::before{background:var(--urgent);}
 .req-card.u-scheduled::before{background:var(--scheduled);}
@@ -305,9 +312,9 @@ svg{display:block;}
 .req-card.surplus::before{background:var(--teal);}
 .req-card:active{transform:scale(0.97);}
 .req-card.surplus{border-color:var(--teal);}
-.scroll-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.scroll-row{display:flex;gap:16px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
 .scroll-row::-webkit-scrollbar{display:none;}
-.grid-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.grid-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
 .grid-row>*, .scroll-row>*, .events-scroll>*{animation:cardPop .38s cubic-bezier(.2,.8,.3,1.2) both;}
 .grid-row>*:nth-child(1),.scroll-row>*:nth-child(1),.events-scroll>*:nth-child(1){animation-delay:.02s;}
 .grid-row>*:nth-child(2),.scroll-row>*:nth-child(2),.events-scroll>*:nth-child(2){animation-delay:.07s;}
@@ -478,6 +485,32 @@ label.field-label{font-size:12px;color:var(--muted);font-weight:600;display:bloc
 .fab{position:fixed;left:50%;transform:translateX(calc(-50% + 200px));bottom:96px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#3a2018;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(240,179,77,0.4);z-index:40;transition:transform .15s ease-out;}
 .fab:active{transform:translateX(calc(-50% + 200px)) scale(0.92);}
 .fab svg{width:24px;height:24px;}
+
+/* compact live-alert lines (not cards) */
+.alert-line{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.alert-line:last-of-type{border-bottom:none;}
+.alert-help-btn{background:var(--accent);color:#3a2018;font-weight:700;font-size:12px;padding:9px 14px;border-radius:10px;flex-shrink:0;}
+
+/* modern org profile */
+.orgp-header{position:relative;margin-top:6px;}
+.orgp-identity{display:flex;gap:14px;align-items:flex-end;margin-top:-26px;padding:0 16px;position:relative;z-index:1;}
+.orgp-avatar{width:64px;height:64px;border-radius:18px;background:var(--accent);color:#3a2018;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;border:3px solid var(--bg);flex-shrink:0;box-shadow:0 6px 18px rgba(20,10,40,0.3);}
+.orgp-identity h2{line-height:1.1;}
+.orgp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px;}
+.orgp-stat{background:var(--surface);border-radius:var(--radius);padding:12px 8px;text-align:center;box-shadow:0 4px 14px rgba(20,10,40,0.16);}
+.orgp-stat b{display:block;font-size:16px;font-family:'Space Grotesk',sans-serif;color:var(--accent);}
+.orgp-stat span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;font-weight:700;}
+.orgp-contact{display:flex;flex-direction:column;gap:12px;}
+.orgp-contact-row{display:flex;align-items:center;gap:10px;font-size:13px;}
+
+/* org post-request urgency options */
+.urgency-pick{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.urgency-opt{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:13px 14px;border-radius:var(--radius);background:var(--surface);border:2px solid transparent;text-align:left;}
+.urgency-opt em{font-style:italic;font-size:12px;color:var(--muted);font-weight:400;}
+.urgency-opt.selected{background:rgba(255,255,255,0.08);}
+.urgency-opt.selected.u-urgent{border-color:var(--urgent);}
+.urgency-opt.selected.u-scheduled{border-color:var(--scheduled);}
+.urgency-opt.selected.u-ongoing{border-color:var(--ongoing);}
 
 /* donor streak badge */
 .badge-card{display:flex;gap:16px;align-items:center;margin-top:18px;}
@@ -662,9 +695,9 @@ const chatThreads = {
 };
 
 const orgQueue = [
-  {id:1, item:"Blankets", need:12, pledges:5, urgency:"urgent"},
-  {id:2, item:"Canned goods", need:90, pledges:2, urgency:"ongoing"},
-  {id:3, item:"Winter coats", need:28, pledges:0, urgency:"urgent"},
+  {id:1, reqId:1, item:"Blankets", need:12, pledges:5, urgency:"urgent"},
+  {id:2, reqId:2, item:"Canned goods", need:90, pledges:2, urgency:"ongoing"},
+  {id:3, reqId:4, item:"Winter coats", need:28, pledges:0, urgency:"urgent"},
 ];
 
 const traceLog = [
@@ -728,7 +761,7 @@ let state = {
   mapOpenFor:null,
   financeSheetOpen:false,
   financeAmount:25,
-  postRequestForm:{item:"", qty:"", urgency:"urgent", details:""},
+  postRequestForm:{item:"", qty:"", urgency:"urgent", details:"", timing:""},
   postRequestSuccess:false,
   orgAboutText:"",
   orgEmail:"",
@@ -738,6 +771,13 @@ let state = {
   createDriveForm:{title:"", date:"", type:"Drive", needs:"", desc:""},
   createDriveSuccess:false,
   donorStreakMonths:3,
+  pledgeHistory:[],
+  apiBase:"",
+  syncStatus:"off",   // off | connecting | live | error
+  syncCount:0,
+  traceContext:"donor",
+  liveAgents:null,
+  liveAgentsChecked:false,
   helpFlowStage:"form",
   helpFlowImage:null,
   helpFlowQty:1,
@@ -896,7 +936,7 @@ function sidenavHtml(active){
     ${items.map(([scr,label,ic])=>`<button class="sidenav-item ${active===scr?'active':''}" data-act="nav" data-val="${scr}">${icon(ic,20)}<span>${label}</span></button>`).join("")}
     <div style="flex:1;"></div>
     <button class="sidenav-item" data-act="open-settings">${icon('gear',20)}<span>Settings</span></button>
-    <button class="sidenav-item" data-act="switch-mode">${icon(state.mode==='org'?'hand':'building',20)}<span>${state.mode==='org'?'Donor view':'Org view'}</span></button>
+    <button class="sidenav-item" data-act="switch-mode">${icon(state.mode==='org'?'hand':'building',20)}<span>${state.mode==='org'?'Donor view':'Recipient view'}</span></button>
   `;
 }
 
@@ -1031,14 +1071,16 @@ function renderOnboard(){
 // ---------- REQUEST CARD ----------
 function reqCardHtml(r){
   const pct = Math.min(100, Math.round((r.have/r.need)*100));
-  return `<div class="req-card ${r.surplus?'surplus':'u-'+r.urgency}" style="padding-top:18px;">
-    <div data-act="open-item" data-id="${r.id}" style="cursor:pointer;">
-      <span class="utag ${r.surplus?'surplus':r.urgency}">${r.surplus?'Surplus match':urgencyLabel(r.urgency)}</span>
-      <div class="org-name" data-act="open-org-profile" data-val="${r.org}" style="width:fit-content;">${r.org}</div>
-      <p style="font-size:12px;margin-top:4px;">${r.have} of ${r.need} ${r.unit}</p>
-      <div class="progress-bar"><div class="progress-fill ${r.surplus?'teal':''}" style="width:${pct}%"></div></div>
-      <p style="font-size:11px;margin-top:6px;display:flex;align-items:center;gap:4px;">${iconWrap('mapPin',11,'var(--muted)')} ${liveDistance(r)}${r.surplus? " · from "+r.source:""}</p>
+  return `<div class="req-card ${r.surplus?'surplus':'u-'+r.urgency}">
+    <span class="utag ${r.surplus?'surplus':r.urgency}">${r.surplus?'Surplus match':urgencyLabel(r.urgency)}</span>
+    <div class="org-line">
+      <span class="org-name">${r.org}</span>
+      <button class="info-btn" data-act="open-org-profile" data-val="${r.org}" title="About this organization">${icon('info',14)}</button>
     </div>
+    <p style="font-size:13px;margin-top:6px;">${r.have} of ${r.need} ${r.unit}</p>
+    <div class="progress-bar"><div class="progress-fill ${r.surplus?'teal':''}" style="width:${pct}%"></div></div>
+    <p style="font-size:11.5px;margin-top:8px;display:flex;align-items:center;gap:4px;">${iconWrap('mapPin',11,'var(--muted)')} ${liveDistance(r)}${r.surplus? " · from "+r.source:""}</p>
+    <button class="cta-help req-help-btn" data-act="open-item" data-id="${r.id}">${iconWrap('hand',14)} Help</button>
   </div>`;
 }
 
@@ -1056,7 +1098,7 @@ function eventBannerHtml(e){
     </div>
     <p class="evt-desc">${e.desc}</p>
     <div class="evt-actions">
-      <button class="cta-help" data-act="cta-event" data-id="${e.id}">${iconWrap('hand',14)} I Can Help</button>
+      ${state.mode!=="org" ? `<button class="cta-help" data-act="cta-event" data-id="${e.id}">${iconWrap('hand',14)} I Can Help</button>` : ""}
       <button class="evt-loc-btn" data-act="show-location" data-id="${e.id}" title="Show location">${icon('mapPin',18)}</button>
     </div>
   </div>`;
@@ -1071,7 +1113,7 @@ function eventRowHtml(e){
       <p>${e.date} · ${liveDistance(e)} · needs: ${e.help}</p>
     </div>
     <div class="evt-row-actions">
-      <button class="cta-help" data-act="cta-event" data-id="${e.id}">I Can Help</button>
+      ${state.mode!=="org" ? `<button class="cta-help" data-act="cta-event" data-id="${e.id}">I Can Help</button>` : ""}
       <button class="evt-loc-btn" data-act="show-location" data-id="${e.id}">${icon('mapPin',16)}</button>
     </div>
   </div>`;
@@ -1102,8 +1144,18 @@ function renderFeed(){
       </div>
     </div>
 
-    <div class="section-title" style="margin-top:20px;">Community alerts <span class="see-all" data-act="go-events">See all</span></div>
-    <div class="events-banner-wrap"><div class="events-scroll">${filteredEvents().slice(0,3).map(eventBannerHtml).join("")}</div></div>
+    <div class="section-title" style="margin-top:20px;">Happening now</div>
+    ${(()=>{ const live = communityEvents.filter(e=>e.liveNow);
+      return live.length ? live.map(e=>`
+      <div class="alert-line">
+        <span class="liveDot" style="flex-shrink:0;"></span>
+        <div style="flex:1;min-width:0;">
+          <b style="font-size:14px;">${e.title}</b>
+          <p style="font-size:12px;margin-top:2px;color:var(--muted);">${e.org} · ${e.date} · needs: ${e.help}</p>
+        </div>
+        ${state.mode!=="org" ? `<button class="alert-help-btn" data-act="cta-event" data-id="${e.id}">I Can Help</button>` : ""}
+      </div>`).join("")
+      : `<p style="font-size:12.5px;color:var(--muted);">No live alerts right now — you'll see drives and events here the moment they start.</p>`; })()}
 
     <div class="section-title">For you, near you <span class="see-all" data-act="go-browse">Browse all</span></div>
     <p style="font-size:12px;margin-top:-4px;margin-bottom:10px;">Sorted by urgency.</p>
@@ -1209,28 +1261,33 @@ function renderOrgProfile(){
   return `<div class="screen">
     <div class="topbar">${backBtn("feed")}<div></div><div></div></div>
 
-    <div class="org-photo-banner">
-      <span class="org-photo-banner-icon">${icon('building',64)}</span>
-    </div>
-
-    <div class="org-hero" style="margin-top:-30px;position:relative;border-top-left-radius:0;border-top-right-radius:0;">
-      <div style="display:flex;gap:14px;align-items:center;">
-        <div class="avatar">${name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
-        <div><h2 style="font-size:19px;">${name}</h2><p style="font-size:12px;margin-top:2px;">Founded ${p.founded||'—'} · ${liveDistance(req||{})}</p></div>
-      </div>
-      <p style="margin-top:14px;font-size:13.5px;color:var(--cream);line-height:1.5;">${p.mission||''}</p>
-      <div class="social-row">
-        ${p.social ? `<a class="social-btn" href="#" title="${p.social.instagram}">${icon('instagram',16)}</a>
-        <a class="social-btn" href="https://${p.social.web}" target="_blank" title="${p.social.web}">${icon('web',16)}</a>
-        <a class="social-btn" href="mailto:${p.social.mail}" title="${p.social.mail}">${icon('mail',16)}</a>` : ""}
+    <div class="orgp-header">
+      <div class="org-photo-banner"><span class="org-photo-banner-icon">${icon('building',64)}</span></div>
+      <div class="orgp-identity">
+        <div class="orgp-avatar">${name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+        <div>
+          <h2 style="font-size:21px;">${name}</h2>
+          <p style="font-size:12.5px;margin-top:3px;color:var(--muted);">${p.address || ""}</p>
+        </div>
       </div>
     </div>
 
-    <div class="card" style="margin-top:14px;">
-      <div class="org-info-row"><span class="org-info-label">${iconWrap('mapPin',14,'var(--muted)')} Address</span><span>${p.address||'Not listed'}</span></div>
-      <div class="org-info-row"><span class="org-info-label">${iconWrap('chat',14,'var(--muted)')} Phone</span><span>${p.phone||'Not listed'}</span></div>
-      <div class="org-info-row"><span class="org-info-label">${iconWrap('clock',14,'var(--muted)')} Hours</span><span>${p.hours||'Not listed'}</span></div>
-      <div class="org-info-row" style="border-bottom:none;"><span class="org-info-label">${iconWrap('heart',14,'var(--muted)')} Donations received</span><span>${p.donationsCount||0} to date</span></div>
+    <div class="orgp-stats">
+      <div class="orgp-stat"><b>${p.donationsCount||0}</b><span>Donations</span></div>
+      <div class="orgp-stat"><b>${p.founded||"—"}</b><span>Founded</span></div>
+      <div class="orgp-stat"><b>${liveDistance(req||{})}</b><span>Away</span></div>
+      <div class="orgp-stat"><b>${(p.pastDrives||[]).length}</b><span>Past drives</span></div>
+    </div>
+
+    <div class="section-title">About</div>
+    <p style="font-size:13.5px;line-height:1.55;">${p.mission||"No description yet."}</p>
+
+    <div class="section-title">Contact & hours</div>
+    <div class="card orgp-contact">
+      ${p.phone ? `<div class="orgp-contact-row">${iconWrap('chat',15,'var(--accent)')}<span>${p.phone}</span></div>` : ""}
+      ${p.hours ? `<div class="orgp-contact-row">${iconWrap('clock',15,'var(--accent)')}<span>${p.hours}</span></div>` : ""}
+      ${p.social ? `<div class="orgp-contact-row">${iconWrap('mail',15,'var(--accent)')}<a href="mailto:${p.social.mail}" style="color:var(--cream);">${p.social.mail}</a></div>
+      <div class="orgp-contact-row">${iconWrap('web',15,'var(--accent)')}<a href="https://${p.social.web}" target="_blank" style="color:var(--cream);">${p.social.web}</a></div>` : ""}
     </div>
 
     <div class="section-title">Currently needs</div>
@@ -1322,10 +1379,16 @@ function renderPostRequest(){
     <label class="field-label">Quantity</label>
     <input type="text" id="prQty" placeholder="e.g. 25" value="${f.qty}">
 
+    <label class="field-label">When do you need this by? <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+    <input type="text" id="prTiming" placeholder="e.g. Before Aug 15, or ongoing" value="${f.timing||''}">
+
     <label class="field-label">Urgency</label>
-    <div class="toggle-row">
-      <button class="toggle-opt ${f.urgency==='urgent'?'on-urgent':''}" data-act="set-pr-urgency" data-val="urgent">Urgent</button>
-      <button class="toggle-opt ${f.urgency==='not'?'on-ok':''}" data-act="set-pr-urgency" data-val="not">Not urgent</button>
+    <div class="urgency-pick">
+      ${[["urgent","Urgent","Needs items or help as soon as possible."],["scheduled","Scheduled","Needs items for a specific event or date."],["ongoing","Ongoing","Needs items throughout the year — lowest priority."]].map(([v,label,desc])=>`
+        <button class="urgency-opt ${f.urgency===v?'selected u-'+v:''}" data-act="set-pr-urgency" data-val="${v}">
+          <span class="utag ${v}">${label}</span>
+          <em>${desc}</em>
+        </button>`).join("")}
     </div>
 
     <label class="field-label">Any details donors should know?</label>
@@ -1420,7 +1483,7 @@ function renderHelpFlow(){
 
     <label class="field-label">Quantity</label>
     <div class="stepper" style="justify-content:flex-start;gap:16px;">
-      <button data-act="helpflow-qty-dec">–</button><div class="val" style="font-size:24px;">${state.helpFlowQty}</div><button data-act="helpflow-qty-inc">+</button>
+      <button data-act="helpflow-qty-dec">–</button><div class="val" id="helpQtyVal" style="font-size:24px;">${state.helpFlowQty}</div><button data-act="helpflow-qty-inc">+</button>
     </div>
 
     <label class="field-label">Your contact email</label>
@@ -1457,16 +1520,17 @@ function renderDonationSheet(){
     <p style="font-size:12px;margin-top:4px;">${r.have} of ${r.need} ${r.unit} · ${liveDistance(r)}</p>
     <div class="progress-bar"><div class="progress-fill ${r.surplus?'teal':''}" style="width:${pct}%"></div></div>
     ${r.details ? `<p style="font-size:12.5px;margin-top:10px;line-height:1.5;">${r.details}</p>` : ""}
+    ${r.neededBy ? `<p style="font-size:12px;margin-top:6px;color:var(--scheduled);font-weight:600;">${iconWrap('clock',12)} Needed by: ${r.neededBy}</p>` : ""}
     ${(r.pledgers && r.pledgers.length>0) ? `<button class="btn-ghost" style="padding-left:0;margin-top:6px;" data-act="open-pledge-list">${iconWrap('user',13)} ${r.pledgers.length} ${r.pledgers.length===1?'person has':'people have'} pledged — see who</button>` : ""}
 
     <label class="field-label">How many ${r.unit} are you giving?</label>
     <div class="stepper">
       <button data-act="qty-dec">–</button>
-      <div class="val">${state.qty}</div>
+      <div class="val" id="qtyVal">${state.qty}</div>
       <button data-act="qty-inc">+</button>
     </div>
 
-    ${state.qty>0 ? matchCheckHtml(r, state.qty) : ""}
+    <div id="matchCheckWrap">${state.qty>0 ? matchCheckHtml(r, state.qty) : ""}</div>
 
     <label class="field-label">Drop-off or pickup?</label>
     <div style="display:flex;gap:10px;margin-top:6px;">
@@ -1474,7 +1538,7 @@ function renderDonationSheet(){
       <button class="taptarget ${state.dropoff==='pickup'?'selected':''}" data-act="pick-dropoff" data-val="pickup">${icon('box',20)}Request pickup</button>
     </div>
 
-    <button class="btn-primary" style="margin-top:24px;" data-act="confirm-donation" ${(state.qty<1||!state.dropoff)?'disabled':''}>Confirm pledge</button>
+    <button class="btn-primary" style="margin-top:24px;" data-act="confirm-donation" id="confirmPledgeBtn" ${(state.qty<1||!state.dropoff)?'disabled':''}>Confirm pledge</button>
     <button class="btn-ghost" style="align-self:center;display:block;margin:8px auto 0;" data-act="open-finance" data-val="${r.org}">${iconWrap('dollar',13)} Give money instead</button>
     `;
   } else if(state.donationStage==="loading"){
@@ -1515,11 +1579,31 @@ function matchCheckHtml(r, qty){
 }
 
 // ---------- REASONING TRACE (concise by default, real-LLM-style single summary) ----------
-const FALLBACK_SUMMARY = `Millbrook Bakery had 40 extra loaves at closing. NeedLink found two kitchens nearby with room for them today, checked the bakery's track record, and split the loaves 18/22 between Second Harvest and Grace Community Kitchen. Three donors were notified — the ones who hadn't hit their weekly limit yet.`;
+const ORG_TRACE_LOG = [
+  {agent:"FORECASTING", text:"Blanket requests recurred this same week in each of the past 2 years."},
+  {agent:"CAPACITY", text:"Your intake headroom today: 34 items."},
+  {agent:"NOTIFICATION GOVERNOR", text:"6 nearby donors are under their weekly alert limit."},
+  {agent:"RECONCILIATION", text:"Recommendation: post now with Scheduled urgency."},
+];
+
+function fallbackSummaryFor(ctx){
+  if(ctx === "org"){
+    return "Requests like this spiked around this same week in past years. Nearby donor activity and your intake capacity both look healthy, so posting now gets you ahead of the rush.";
+  }
+  return "Before a request reaches you, NeedLink runs four quick checks: the organization is verified, it can actually accept items today, you're nearby and a good fit, and you haven't been over-notified this week. It only shows up in your feed when all four say yes.";
+}
+
+function activeTraceLog(){
+  if(state.traceContext === "org"){
+    if(state.liveAgents && state.liveAgents.trace) return state.liveAgents.trace;
+    return ORG_TRACE_LOG;
+  }
+  return traceLog;
+}
 
 async function fetchLiveTraceSummary(){
   if(!state.apiKey || state.apiKey.trim().length <= 10){
-    state.traceSummaryText = FALLBACK_SUMMARY;
+    state.traceSummaryText = fallbackSummaryFor(state.traceContext);
     state.traceSummaryLive = false;
     render();
     return;
@@ -1528,7 +1612,7 @@ async function fetchLiveTraceSummary(){
   state.traceSummaryText = null;
   render();
   try{
-    const logText = traceLog.map(l=>`[${l.agent}] ${l.text}`).join("\n");
+    const logText = activeTraceLog().map(l=>`[${l.agent}] ${l.text}`).join("\n");
     const resp = await fetch("https://api.anthropic.com/v1/messages", {
       method:"POST",
       headers:{"Content-Type":"application/json","x-api-key":state.apiKey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
@@ -1546,7 +1630,7 @@ async function fetchLiveTraceSummary(){
     state.traceSummaryLive = true;
   }catch(err){
     console.error("Live trace summary failed, falling back:", err);
-    state.traceSummaryText = FALLBACK_SUMMARY;
+    state.traceSummaryText = fallbackSummaryFor(state.traceContext);
     state.traceSummaryLive = false;
     state.traceSummaryError = true;
   }
@@ -1564,14 +1648,15 @@ function renderTracePanel(){
         ${state.traceSummaryLoading ? `
           <div class="trace-summary"><span class="ai-thinking">Asking Claude to summarize the decision log...</span></div>
         ` : `
-          <div class="trace-summary">${state.traceSummaryText || FALLBACK_SUMMARY}</div>
+          <div class="trace-summary">${state.traceSummaryText || fallbackSummaryFor(state.traceContext)}</div>
           <p style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;">
             ${state.traceSummaryLive ? `<span class="dot-live"></span> Generated live by Claude just now.` : state.traceSummaryError ? `Live call failed — showing a fallback summary.` : `Add an API key in Settings to make this a live Claude summary.`}
           </p>
         `}
       ` : `
         <div class="trace-panel">
-          ${traceLog.map(l=>`<div class="trace-line"><span class="agent">${l.agent}</span> — ${l.text}</div>`).join("")}
+          <p style="font-size:10.5px;color:var(--muted);margin-bottom:8px;">${state.traceContext==="org" ? (state.liveAgents && state.liveAgents.trace ? "Live decision log — from your local AI agents" : "Example decision log") : "Example decision log — a recent match"}</p>
+          ${activeTraceLog().map(l=>`<div class="trace-line"><span class="agent">${l.agent}</span> — ${l.text}</div>`).join("")}
         </div>
       `}
       <button class="btn-ghost" style="align-self:center;display:block;margin:14px auto 0;" data-act="close-trace">Close</button>
@@ -1587,6 +1672,16 @@ function renderSettingsSheet(){
       <label class="field-label">Location</label>
       <p style="font-size:12px;">${state.locStatus==="granted" ? "Using your real device location for distances." : state.locStatus==="denied" ? "Location denied — using an approximate default." : "Requesting..."}</p>
       ${state.locStatus!=="granted" ? `<button class="btn-outline" style="margin-top:10px;" data-act="retry-location">Enable real location</button>` : ""}
+
+      <label class="field-label">Shared server (connect two devices)</label>
+      <p class="key-note">Run the backend on one computer, then enter its address here on both. Requests posted on one device appear on the other. Example: <b>192.168.1.42:4000</b></p>
+      <input type="text" id="apiBaseInput" class="item-input" style="margin-top:8px;" placeholder="localhost:4000 or 192.168.1.42:4000" value="${state.apiBase}">
+      <button class="btn-primary" style="margin-top:12px;" data-act="save-api-base">Connect</button>
+      <div class="status-pill ${state.syncStatus==='live'?'live':'mock'}">${
+        state.syncStatus==='live' ? `<span class="dot-live"></span> Connected — ${state.syncCount} shared request${state.syncCount===1?'':'s'}`
+        : state.syncStatus==='connecting' ? 'Connecting...'
+        : state.syncStatus==='error' ? "Can't reach that address"
+        : 'Not connected (this device only)'}</div>
 
       <label class="field-label">Anthropic API key (optional)</label>
       <p class="key-note">Enables real Claude calls for scanning and summaries. Stored only in this tab.</p>
@@ -1608,11 +1703,11 @@ function renderFinanceSheet(){
         <div><h3 style="font-size:16px;">Donating to ${orgLabel}</h3><p style="font-size:12px;">For when the org can shop faster than you can ship.</p></div>
       </div>
       <label class="field-label">Amount</label>
-      <div class="stepper"><button data-act="fin-dec">–</button><div class="val">$${state.financeAmount}</div><button data-act="fin-inc">+</button></div>
+      <div class="stepper"><button data-act="fin-dec">–</button><div class="val" id="finVal">$${state.financeAmount}</div><button data-act="fin-inc">+</button></div>
       <div class="card" style="margin-top:14px;">
         <p style="font-size:11.5px;display:flex;gap:8px;align-items:flex-start;">${iconWrap('info',14,'var(--muted)')} Processed securely, sent directly to the org — NeedLink never holds funds.</p>
       </div>
-      <button class="btn-primary" style="margin-top:20px;" data-act="confirm-finance">${iconWrap('dollar',16)} Donate $${state.financeAmount}</button>
+      <button class="btn-primary" style="margin-top:20px;" data-act="confirm-finance">${iconWrap('dollar',16)} Donate <span id="finBtnAmt">$${state.financeAmount}</span></button>
       <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="close-finance">Cancel</button>
     </div>
   </div>`;
@@ -1625,12 +1720,18 @@ function renderImpact(){
       <div class="card impact-stat" style="flex:1;"><div class="num">${state.impact.items}</div><div class="lbl">Items given</div></div>
       <div class="card impact-stat" style="flex:1;"><div class="num">${state.impact.orgs}</div><div class="lbl">Orgs supported</div></div>
     </div>
-    <div class="section-title">History</div>
-    <div class="card">
-      <div class="timeline-item"><div class="status-dot confirmed"></div><div><b style="font-size:13px;">12 blankets → Harbor View</b><p style="font-size:11px;">Confirmed · 2 days ago</p></div></div>
-      <div class="timeline-item"><div class="status-dot pending"></div><div><b style="font-size:13px;">4 loaves → Second Harvest</b><p style="font-size:11px;">Pending confirmation</p></div></div>
-      <div class="timeline-item" style="border:none;"><div class="status-dot confirmed"></div><div><b style="font-size:13px;">6 backpacks → Cedar St.</b><p style="font-size:11px;">Confirmed · 9 days ago</p></div></div>
-    </div>
+    <div class="section-title">Past pledges</div>
+    ${state.pledgeHistory.length ? `<div style="margin-bottom:6px;">
+      ${state.pledgeHistory.map((h,i)=>`
+      <div class="timeline-item" ${i===state.pledgeHistory.length-1?'style="border:none;"':''}>
+        <div class="status-dot pending"></div>
+        <div style="flex:1;">
+          <b style="font-size:13.5px;">${h.kind==="money" ? "$"+h.amount : h.qty+" "+h.unit} → ${h.org}</b>
+          <p style="font-size:11.5px;margin-top:2px;">${h.detail}</p>
+          <p style="font-size:11px;color:var(--muted);margin-top:2px;">${h.when.toLocaleDateString([], {month:"short", day:"numeric"})} · ${h.when.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"})} · Pending org confirmation</p>
+        </div>
+      </div>`).join("")}
+    </div>` : `<p style="font-size:12.5px;color:var(--muted);">No pledges yet — when you confirm one, it appears here with the date, amount, and organization.</p>`}
 
     ${state.inventory.length>0 ? `
     <div class="section-title">My inventory <span class="see-all" data-act="open-scan">+ scan more</span></div>
@@ -1706,13 +1807,6 @@ function renderProfile(){
     <div class="section-title">Location</div>
     <p style="font-size:13px;">${state.location || (state.locStatus==="granted" ? "Using device location" : "Not set")}</p>
 
-    ${state.giveAs && state.giveAs!=="Individual" ? `
-    <div class="card" style="margin-top:18px;">
-      <b style="font-size:14px;">Organize a drive</b>
-      <p style="font-size:12px;margin-top:4px;">Rally your ${state.giveAs.toLowerCase()} around one request.</p>
-      <button class="btn-outline" style="margin-top:10px;">Start a drive</button>
-    </div>` : ""}
-
     <div class="section-title">Account</div>
     <button class="btn-outline" data-act="edit-onboarding" style="margin-bottom:10px;">Edit preferences</button>
     <button class="btn-ghost" style="align-self:flex-start;">Sign out</button>
@@ -1771,38 +1865,40 @@ function renderOrgDash(){
       <button class="mode-switch" data-act="nav" data-val="landing">${iconWrap('hand',13)} Donor view</button>
     </div>
 
-    ${eveningStage===0 ? `<button class="btn-ghost" style="margin-top:6px;" data-act="trigger-evening">▶ simulate 6:00 PM surplus demo</button>` : ""}
+    ${eveningStage===0 ? `<button class="btn-ghost" style="margin-top:6px;" data-act="trigger-evening">▶ Play the 6:00 PM demo</button>` : ""}
 
-    ${eveningStage>=1 ? `<div class="evening-banner"><b>6:00 PM — Millbrook Bakery closing soon</b>Surplus Sensing flagged likely bread surplus before anyone confirmed.</div>` : ""}
+    ${eveningStage>=1 ? `<div class="evening-banner"><b>6:00 PM</b>Millbrook Bakery is closing — NeedLink predicts they'll have extra bread tonight.</div>
+    <p id="agentStatusLine" style="font-size:11px;margin-top:6px;color:var(--muted);">${state.liveAgents ? (state.liveAgents.ok ? "● Decided live by your local AI agents ("+state.liveAgents.model+")" : "Demo mode — start the backend to run this through your real AI agents.") : ""}</p>` : ""}
 
     ${eveningStage===1 ? `<div class="card" style="border:1px solid var(--teal);">
-      <span class="utag surplus">Predicted match</span>
-      <p style="font-size:13px;color:var(--cream);">~40 loaves, ready around 6:15 PM</p>
-      <p class="reliability">Millbrook Bakery — 98% accepted, high reliability</p>
-      <button class="btn-primary" style="margin-top:12px;" data-act="confirm-business">Simulate business one-tap confirm</button>
+      <p style="font-size:14px;color:var(--cream);">The bakery almost always has ~40 loaves left at closing. NeedLink asked before anyone had to.</p>
+      <button class="btn-primary" style="margin-top:12px;" data-act="confirm-business">Bakery taps: "Yes, we have extra"</button>
     </div>` : ""}
 
     ${eveningStage>=2 ? `<div class="card" style="border:1px solid var(--teal);">
-      <span class="utag surplus">Surplus match — split allocation</span>
-      <p style="font-size:13px;color:var(--cream);">40 loaves — quantity reported by Millbrook Bakery at closing</p>
+      <p style="font-size:14px;color:var(--cream);">40 loaves are available. NeedLink split them between the two kitchens with room today:</p>
       <div class="split-bar"><div class="split-seg" style="width:45%;"></div><div class="split-seg" style="width:55%;opacity:0.6;"></div></div>
-      <p style="font-size:11px;margin-top:6px;">18 → Second Harvest Co-op · 22 → Grace Community Kitchen</p>
-      ${eveningStage===2 ? `<button class="btn-primary" style="margin-top:12px;" data-act="accept-surplus">Accept for our share</button>` : `<p style="font-size:12px;margin-top:10px;color:var(--accent);">✔ Accepted — impact counter updated live</p>`}
+      <p style="font-size:12px;margin-top:6px;"><b>18</b> → Second Harvest Co-op · <b>22</b> → Grace Community Kitchen</p>
+      ${eveningStage===2 ? `<button class="btn-primary" style="margin-top:12px;" data-act="accept-surplus">Accept our 18 loaves</button>` : `<p style="font-size:12px;margin-top:10px;color:var(--accent);">✔ Accepted — 18 loaves added to today's intake</p>`}
+      <button class="btn-ghost" style="padding-left:0;margin-top:4px;" data-act="open-trace" data-val="org">How was this decided?</button>
     </div>` : ""}
 
     <div class="forecast-card" style="margin-top:20px;">
-      <span class="utag scheduled">System noticed</span>
-      <p style="font-size:13px;color:var(--cream);">Blanket demand usually spikes next week based on local pattern.</p>
+      <p style="font-size:14px;color:var(--cream);">Blankets usually run out around this week. Post your request early?</p>
       <div style="display:flex;gap:10px;margin-top:10px;">
-        <button class="btn-primary" style="flex:1;" data-act="prepost">Pre-post this request</button>
-        <button class="btn-ghost" data-act="open-trace">Why?</button>
+        <button class="btn-primary" style="flex:1;" data-act="prepost">Pre-post request</button>
+        <button class="btn-ghost" data-act="open-trace" data-val="org">Why?</button>
       </div>
     </div>
 
-    <div class="section-title">Open requests</div>
+    <div class="section-title">My requests</div>
     ${orgQueue.map(o=>`<div class="org-row">
       <div><span class="utag ${o.urgency}" style="margin-bottom:4px;">${urgencyLabel(o.urgency)}</span><br><b style="font-size:14px;">${o.item}</b><p style="font-size:11px;">${o.need} needed</p></div>
-      ${o.pledges>0 ? `<span class="badge-count">${o.pledges} pledges</span>` : `<span style="font-size:11px;color:var(--muted);">No pledges yet</span>`}
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        ${o.pledges>0
+          ? `<span class="badge-count">${o.pledges} pledges</span><span style="font-size:10.5px;color:var(--muted);">Donors committed — can't cancel</span>`
+          : `<span style="font-size:11px;color:var(--muted);">No pledges yet</span><button class="btn-ghost" style="padding:4px 0;font-size:12px;color:var(--urgent);" data-act="cancel-org-request" data-val="${o.id}">Cancel request</button>`}
+      </div>
     </div>`).join("")}
 
     <button class="btn-primary" style="margin-top:10px;" data-act="go-post-request">${iconWrap('box',16)} Post a request</button>
@@ -1928,6 +2024,97 @@ function updateBrowseResults(){
 // the flash and jump on repeated taps was distracting.
 const INSTANT_ACTS = new Set(["qty-inc","qty-dec","fin-inc","fin-dec","helpflow-qty-inc","helpflow-qty-dec"]);
 
+// Ask the real multi-agent backend (localhost:4000) to make the surplus decision.
+// If it's running, the demo becomes a genuinely AI-decided flow and says so;
+// if not, we fall back to scripted demo data and say that honestly instead.
+async function checkLiveAgents(){
+  if(state.liveAgentsChecked) return;
+  state.liveAgentsChecked = true;
+  const t = ms => ({signal: AbortSignal.timeout(ms)});
+  try{
+    const st = await (await fetch("http://localhost:4000/api/llm-status", t(1500))).json();
+    let trace = null;
+    try{
+      const rec = await (await fetch("http://localhost:4000/api/reconcile/surplus", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({source_id:"src_1", item:"bread", unit:"loaves", qty:40, category:"Food"}),
+        ...t(25000),
+      })).json();
+      if(rec && rec.trace) trace = rec.trace.map(humanizeTraceStep);
+    }catch(e){ /* reconcile failed; status alone still useful */ }
+    state.liveAgents = {ok:true, model: st.model, ollama: st.ollama_reachable, trace};
+  }catch(e){
+    state.liveAgents = {ok:false};
+  }
+  const line = document.getElementById("agentStatusLine");
+  if(line) line.textContent = state.liveAgents.ok
+    ? (state.liveAgents.ollama ? "● Decided live by your local AI agents ("+state.liveAgents.model+")" : "● Backend connected — agents running in rules mode (start Ollama for AI judgment)")
+    : "Demo mode — start the backend to run this through your real AI agents.";
+}
+
+function humanizeTraceStep(t){
+  const o = t.output || {};
+  let text = "";
+  if(t.agent.includes("FRAUD")) text = `Source ${o.veto?"blocked":o.frozen?"held for review":"cleared"}${o.method ? " ("+(o.method==="llm"?"AI judgment":"rules")+")" : ""}${o.reasoning ? " — "+o.reasoning : ""}`;
+  else if(t.agent.includes("CAPACITY")) text = `Room for ${o.accepted_qty ?? "?"} items today`;
+  else if(t.agent.includes("RECONCILIATION")) text = o.splits ? "Split: " + o.splits.map(x=>`${x.qty} → ${x.org_name}`).join(" · ") : "Final decision made";
+  else text = JSON.stringify(o).slice(0, 110);
+  return {agent: t.agent.replace(/_/g," "), text};
+}
+
+// ---------- SHARED-SERVER SYNC ----------
+// Point this at the machine running the backend (Settings > Shared server) and
+// two computers see the same data: a recipient posts a request on one, the
+// donor's feed picks it up on the other within a few seconds.
+function apiUrl(path){
+  let b = (state.apiBase || "").trim().replace(/\/$/, "");
+  if(b && !/^https?:\/\//.test(b)) b = "http://" + b;
+  return b ? b + path : null;
+}
+
+// Backend row -> the shape the UI already renders.
+function mapServerRequest(r){
+  return {
+    id: "srv-" + r.id, serverId: r.id, org: r.org_name,
+    item: r.item, unit: r.unit || r.item,
+    have: r.have, need: r.need,
+    urgency: r.urgency || (r.urgent ? "urgent" : "ongoing"),
+    category: r.category, surplus: false, verified: !!r.verified,
+    details: r.details || "", neededBy: r.needed_by || "",
+    pledgers: r.pledgers || [],
+    lat: r.lat, lng: r.lng, fromServer: true,
+  };
+}
+
+async function syncRequests(){
+  const url = apiUrl("/api/requests");
+  if(!url){ state.syncStatus = "off"; return; }
+  try{
+    const rows = await (await fetch(url, {signal: AbortSignal.timeout(4000)})).json();
+    const mapped = rows.map(mapServerRequest);
+    const before = JSON.stringify(requests.filter(r=>r.fromServer).map(r=>[r.id,r.have,r.pledgers.length]));
+    const after  = JSON.stringify(mapped.map(r=>[r.id,r.have,r.pledgers.length]));
+    // Server rows replace previous server rows; local demo seeds stay put.
+    const localOnly = requests.filter(r => !r.fromServer);
+    requests.length = 0;
+    requests.push(...mapped, ...localOnly);
+    state.syncStatus = "live";
+    state.syncCount = mapped.length;
+    if(before !== after) render();   // only re-render when something actually changed
+  }catch(err){
+    state.syncStatus = "error";
+  }
+}
+
+let syncTimer = null;
+function startSync(){
+  if(syncTimer) clearInterval(syncTimer);
+  if(!state.apiBase) { state.syncStatus = "off"; render(); return; }
+  state.syncStatus = "connecting"; render();
+  syncRequests().then(render);
+  syncTimer = setInterval(syncRequests, 5000);   // donor feed picks up changes ~5s after they're posted
+}
+
 function readCreateDriveForm(){
   const g = id => { const el = document.getElementById(id); return el ? el.value : null; };
   const f = state.createDriveForm;
@@ -2034,6 +2221,9 @@ function attachHandlers(){
     distSlider.addEventListener("input", e=>{ state.eventFilters={...state.eventFilters, maxDistance:parseInt(e.target.value)}; });
     distSlider.addEventListener("change", e=>{ setState({eventFilters:{...state.eventFilters, maxDistance:parseInt(e.target.value)}}); });
   }
+
+  const apiBaseInput = document.getElementById("apiBaseInput");
+  if(apiBaseInput) apiBaseInput.addEventListener("input", e=>{ state.apiBase = e.target.value; });
 
   const apiKeyInput = document.getElementById("apiKeyInput");
   if(apiKeyInput) apiKeyInput.addEventListener("input", e=>{ state.apiKey = e.target.value; });
@@ -2175,14 +2365,36 @@ function handleAction(act, val, el){
     case "close-sheet": setState({sheetOpen:false, sheetItem:null, donationStage:"form"}); break;
     case "open-pledge-list": setState({pledgeListOpen:true}); break;
     case "close-pledge-list": setState({pledgeListOpen:false}); break;
-    case "qty-inc": setState({qty:state.qty+1}); break;
-    case "qty-dec": setState({qty:Math.max(0,state.qty-1)}); break;
+    case "qty-inc": case "qty-dec": {
+      state.qty = act==="qty-inc" ? state.qty+1 : Math.max(0, state.qty-1);
+      const v = document.getElementById("qtyVal"); if(v) v.textContent = state.qty;
+      const mc = document.getElementById("matchCheckWrap");
+      if(mc && state.sheetItem) mc.innerHTML = state.qty>0 ? matchCheckHtml(state.sheetItem, state.qty) : "";
+      const cb = document.getElementById("confirmPledgeBtn"); if(cb) cb.disabled = (state.qty<1 || !state.dropoff);
+      break;
+    }
     case "pick-dropoff": setState({dropoff:val}); break;
     case "confirm-donation": {
       setState({donationStage:"loading"});
       setTimeout(()=>{
         state.sheetItem.have += state.qty;
         state.impact.items += state.qty;
+        state.sheetItem.pledgers = state.sheetItem.pledgers || [];
+        state.sheetItem.pledgers.push(state.userName || "You");
+        const oq = orgQueue.find(o=>o.reqId==state.sheetItem.id);
+        if(oq) oq.pledges += 1;
+        const pledgeUrl = state.sheetItem.serverId ? apiUrl("/api/requests/"+state.sheetItem.serverId+"/pledge") : null;
+        if(pledgeUrl){
+          fetch(pledgeUrl, {
+            method:"POST", headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({qty: state.qty, donor_name: state.userName || "A donor"}),
+          }).then(()=>syncRequests()).catch(()=>{});
+        }
+        state.pledgeHistory.unshift({
+          kind:"items", org: state.sheetItem.org, qty: state.qty, unit: state.sheetItem.unit,
+          detail: state.dropoff==="pickup" ? "Pickup requested" : "Dropping off",
+          when: new Date(),
+        });
         setState({donationStage:"success"});
         setTimeout(()=>{ setState({sheetOpen:false, sheetItem:null, donationStage:"form"}); showToast("You're in — we'll notify you the moment they confirm."); }, 1400);
       }, 700);
@@ -2227,6 +2439,12 @@ function handleAction(act, val, el){
       setState({settingsOpen:false, apiKey:key, aiStatus:key.length>10?"live":"mock"});
       break;
     }
+    case "save-api-base": {
+      const el2 = document.getElementById("apiBaseInput");
+      state.apiBase = el2 ? el2.value.trim() : state.apiBase;
+      startSync();
+      break;
+    }
     case "save-api-key": {
       const el3 = document.getElementById("apiKeyInput");
       const key = el3 ? el3.value.trim() : "";
@@ -2262,7 +2480,7 @@ function handleAction(act, val, el){
 
     // ---- trace ----
     case "open-trace": {
-      setState({traceOpen:true, traceVisible:0, traceConcise:true, traceSummaryText:null, traceSummaryError:false});
+      setState({traceOpen:true, traceVisible:0, traceConcise:true, traceSummaryText:null, traceSummaryError:false, traceContext: val==="org" ? "org" : "donor"});
       fetchLiveTraceSummary();
       break;
     }
@@ -2270,28 +2488,77 @@ function handleAction(act, val, el){
     case "toggle-trace-detail": setState({traceConcise:!state.traceConcise, traceVisible: state.traceConcise?0:traceLog.length}); break;
 
     // ---- org dashboard demo ----
-    case "trigger-evening": setState({eveningStage:1}); break;
+    case "check-live-agents": break; // reserved
+    case "trigger-evening": checkLiveAgents(); setState({eveningStage:1}); break;
     case "confirm-business": setState({eveningStage:2}); break;
     case "accept-surplus": { setState({eveningStage:3}); state.impact.items+=18; showToast("Impact counter updated live"); break; }
-    case "prepost": showToast("Request posted — nearby donors are being notified now"); break;
+    case "prepost": goTo("postRequest", {extra:{postRequestSuccess:false, postRequestForm:{item:"Blankets", qty:"24", urgency:"scheduled", details:"", timing:"Next week"}}}); break;
 
     // ---- post request (bug fix: real confirmation) ----
     case "set-pr-urgency": setState({postRequestForm:{...state.postRequestForm, urgency:val}}); break;
     case "submit-post-request": {
       const f = state.postRequestForm;
+      const timingEl = document.getElementById("prTiming");
+      f.timing = timingEl ? timingEl.value : (f.timing||"");
       if(!f.item.trim() || !f.qty.trim()){ showToast("Add an item and quantity to post"); return; }
       const cat = autoCategorize(f.item);
-      const urgencyVal = f.urgency==="urgent" ? "urgent" : "ongoing";
+      const urgencyVal = ["urgent","scheduled","ongoing"].includes(f.urgency) ? f.urgency : "urgent";
       const orgName = state.userName || "Your organization";
       const loc = state.userLoc || HQ;
-      orgQueue.unshift({id:Date.now(), item:f.item, need:parseInt(f.qty)||1, pledges:0, urgency:urgencyVal});
+      const newId = Date.now();
+      orgQueue.unshift({id:newId, reqId:newId, item:f.item, need:parseInt(f.qty)||1, pledges:0, urgency:urgencyVal});
+
+      // If a shared server is configured, post there so other devices see it.
+      const postUrl = apiUrl("/api/requests");
+      if(postUrl){
+        fetch(postUrl, {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({
+            org_name: orgName, item: f.item, unit: f.item.toLowerCase(),
+            need: parseInt(f.qty)||1, urgency: urgencyVal, details: f.details||"",
+            needed_by: f.timing||"", category: cat, lat: loc.lat, lng: loc.lng,
+          }),
+        })
+        .then(r=>r.json())
+        .then(d=>{
+          if(d && d.request){
+            const oq = orgQueue.find(o=>o.id===newId);
+            if(oq) oq.serverId = d.request.id;
+            showToast("Posted — donors on other devices can see it now");
+            syncRequests().then(render);
+          } else if(d && d.error === "blocked_by_fraud_agent"){
+            showToast("Our verification agent blocked this request.");
+          }
+        })
+        .catch(()=> showToast("Saved locally — shared server unreachable"));
+      }
       requests.unshift({
-        id: Date.now(), org: orgName, item: f.item.toLowerCase(), have: 0, need: parseInt(f.qty)||1,
-        unit: "items", urgency: urgencyVal, category: cat, surplus:false, verified:true,
-        details: f.details || "", pledgers: [],
+        id: newId, org: orgName, item: f.item.toLowerCase(), have: 0, need: parseInt(f.qty)||1,
+        unit: f.item.toLowerCase(), urgency: urgencyVal, category: cat, surplus:false, verified:true,
+        details: f.details || "", neededBy: f.timing || "", pledgers: [],
         lat: loc.lat + (Math.random()-0.5)*0.02, lng: loc.lng + (Math.random()-0.5)*0.02,
       });
-      setState({postRequestSuccess:true, postRequestForm:{item:"",qty:"",urgency:"urgent",details:""}});
+      setState({postRequestSuccess:true, postRequestForm:{item:"",qty:"",urgency:"urgent",details:"",timing:""}});
+      break;
+    }
+
+    case "cancel-org-request": {
+      const idx = orgQueue.findIndex(o=>o.id==val);
+      if(idx === -1) return;
+      if(orgQueue[idx].pledges > 0){ showToast("Donors have already committed — this request can't be canceled."); return; }
+      const reqId = orgQueue[idx].reqId;
+      const serverId = orgQueue[idx].serverId;
+      if(serverId){
+        const delUrl = apiUrl("/api/requests/"+serverId);
+        if(delUrl) fetch(delUrl, {method:"DELETE"})
+          .then(r=>{ if(r.status===409) showToast("A donor already pledged — can't cancel."); })
+          .then(()=>syncRequests().then(render)).catch(()=>{});
+      }
+      orgQueue.splice(idx, 1);
+      const rIdx = requests.findIndex(r=>r.id==reqId);
+      if(rIdx !== -1 && (requests[rIdx].pledgers||[]).length === 0) requests.splice(rIdx, 1);
+      showToast("Request canceled.");
+      render();
       break;
     }
 
@@ -2314,23 +2581,40 @@ function handleAction(act, val, el){
 
     // ---- I Can Help flow ----
     case "trigger-helpflow-camera": document.getElementById("helpFlowFile").click(); break;
-    case "helpflow-qty-inc": setState({helpFlowQty: state.helpFlowQty+1}); break;
-    case "helpflow-qty-dec": setState({helpFlowQty: Math.max(1, state.helpFlowQty-1)}); break;
+    case "helpflow-qty-inc": case "helpflow-qty-dec": {
+      state.helpFlowQty = act==="helpflow-qty-inc" ? state.helpFlowQty+1 : Math.max(1, state.helpFlowQty-1);
+      const v = document.getElementById("helpQtyVal"); if(v) v.textContent = state.helpFlowQty;
+      break;
+    }
     case "submit-help-flow": {
       const emailEl = document.getElementById("helpFlowEmail");
       const email = emailEl ? emailEl.value.trim() : state.helpFlowEmail;
       if(!email){ showToast("Add your email so the org can reach you"); return; }
-      setState({helpFlowStage:"success", helpFlowEmail:email});
+      const evt = communityEvents.find(e=>e.id==state.helpFlowEventId);
+      state.pledgeHistory.unshift({
+        kind:"items", org: state.helpFlowOrg, qty: state.helpFlowQty, unit: "items",
+        detail: evt ? `For "${evt.title}"` : "Direct offer to the organization",
+        when: new Date(),
+      });
       state.impact.items += state.helpFlowQty;
+      setState({helpFlowStage:"success", helpFlowEmail:email});
       break;
     }
 
     // ---- finance ----
     case "open-finance": setState({financeSheetOpen:true, financeOrg: val||null}); break;
     case "close-finance": setState({financeSheetOpen:false}); break;
-    case "fin-inc": setState({financeAmount:state.financeAmount+5}); break;
-    case "fin-dec": setState({financeAmount:Math.max(5,state.financeAmount-5)}); break;
+    case "fin-inc": case "fin-dec": {
+      state.financeAmount = act==="fin-inc" ? state.financeAmount+5 : Math.max(5, state.financeAmount-5);
+      const v = document.getElementById("finVal"); if(v) v.textContent = "$"+state.financeAmount;
+      const b = document.getElementById("finBtnAmt"); if(b) b.textContent = "$"+state.financeAmount;
+      break;
+    }
     case "confirm-finance": {
+      state.pledgeHistory.unshift({
+        kind:"money", org: state.financeOrg || "NeedLink community fund", amount: state.financeAmount,
+        detail: "Sent directly to the organization", when: new Date(),
+      });
       showToast(`$${state.financeAmount} donated securely — thank you!`);
       setState({financeSheetOpen:false});
       break;
