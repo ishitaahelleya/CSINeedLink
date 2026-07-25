@@ -486,6 +486,16 @@ label.field-label{font-size:12px;color:var(--muted);font-weight:600;display:bloc
 .fab:active{transform:translateX(calc(-50% + 200px)) scale(0.92);}
 .fab svg{width:24px;height:24px;}
 
+/* shared-server sync UI */
+.sync-bar{display:flex;align-items:center;gap:8px;font-size:12px;padding:10px 14px;border-radius:12px;background:rgba(63,193,224,0.12);border:1px solid rgba(63,193,224,0.35);color:var(--cream);margin-top:14px;}
+.sync-bar.error{background:rgba(255,107,91,0.12);border-color:rgba(255,107,91,0.4);}
+.sync-bar.connecting{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.18);}
+.sync-refresh{margin-left:auto;color:var(--cream);opacity:0.7;display:flex;align-items:center;}
+.shared-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.3px;padding:4px 9px;border-radius:8px;background:rgba(63,193,224,0.18);color:var(--teal);border:1px solid rgba(63,193,224,0.45);}
+.new-tag{font-size:10px;font-weight:800;padding:4px 8px;border-radius:8px;background:var(--accent);color:#3a2018;letter-spacing:0.3px;}
+.req-card.just-arrived{animation:arrivePulse 1.4s ease-out 2;}
+@keyframes arrivePulse{0%,100%{box-shadow:0 6px 20px rgba(20,10,40,0.22);}50%{box-shadow:0 6px 26px rgba(63,193,224,0.55);}}
+
 /* compact live-alert lines (not cards) */
 .alert-line{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid rgba(255,255,255,0.08);}
 .alert-line:last-of-type{border-bottom:none;}
@@ -775,6 +785,9 @@ let state = {
   apiBase:"",
   syncStatus:"off",   // off | connecting | live | error
   syncCount:0,
+  syncEverLoaded:false,
+  lastSyncAt:null,
+  newRequestIds:new Set(),
   traceContext:"donor",
   liveAgents:null,
   liveAgentsChecked:false,
@@ -848,7 +861,34 @@ function animateMapZoom(lat, lng){
   step();
 }
 
-function setState(patch){ state = {...state, ...patch}; render(); }
+function setState(patch){ state = {...state, ...patch}; syncUrlHash(); render(); }
+
+// Keeps the address bar in step with where you are, so a refresh (or opening
+// the same link on the other laptop) lands you back on the same screen and
+// still connected to the shared server - instead of bouncing to the home page.
+const PRE_AUTH = ["splash","landing","nameEntry","onboard","orgonboard","orgAbout"];
+function syncUrlHash(){
+  if(PRE_AUTH.includes(state.screen)) return;
+  const parts = ["s=" + state.screen, "m=" + state.mode];
+  if(state.apiBase) parts.push("api=" + encodeURIComponent(state.apiBase));
+  if(state.userName) parts.push("n=" + encodeURIComponent(state.userName));
+  const next = "#" + parts.join("&");
+  if(location.hash !== next) history.replaceState(null, "", next);
+}
+
+function restoreFromUrlHash(){
+  const h = location.hash.replace(/^#/, "");
+  if(!h) return false;
+  const q = Object.fromEntries(h.split("&").map(p => {
+    const i = p.indexOf("="); return [p.slice(0,i), decodeURIComponent(p.slice(i+1))];
+  }));
+  if(!q.s) return false;
+  state.screen = q.s;
+  state.mode = q.m || "donor";
+  if(q.n) state.userName = q.n;
+  if(q.api){ state.apiBase = q.api; }
+  return true;
+}
 
 function goTo(screen, opts={}){
   const push = opts.push !== false;
@@ -1071,8 +1111,13 @@ function renderOnboard(){
 // ---------- REQUEST CARD ----------
 function reqCardHtml(r){
   const pct = Math.min(100, Math.round((r.have/r.need)*100));
-  return `<div class="req-card ${r.surplus?'surplus':'u-'+r.urgency}">
-    <span class="utag ${r.surplus?'surplus':r.urgency}">${r.surplus?'Surplus match':urgencyLabel(r.urgency)}</span>
+  const isNew = state.newRequestIds.has(r.id);
+  return `<div class="req-card ${r.surplus?'surplus':'u-'+r.urgency} ${isNew?'just-arrived':''}">
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span class="utag ${r.surplus?'surplus':r.urgency}">${r.surplus?'Surplus match':urgencyLabel(r.urgency)}</span>
+      ${r.fromServer ? `<span class="shared-tag"><span class="liveDot"></span>Shared</span>` : ""}
+      ${isNew ? `<span class="new-tag">NEW</span>` : ""}
+    </div>
     <div class="org-line">
       <span class="org-name">${r.org}</span>
       <button class="info-btn" data-act="open-org-profile" data-val="${r.org}" title="About this organization">${icon('info',14)}</button>
@@ -1143,6 +1188,14 @@ function renderFeed(){
         <button class="mode-switch" data-act="go-orgonboard">${iconWrap('building',13)} Org view</button>
       </div>
     </div>
+
+    ${state.apiBase ? `<div class="sync-bar ${state.syncStatus}">
+      ${state.syncStatus==="live"
+        ? `<span class="liveDot"></span><b>Live</b> · ${state.syncCount} shared request${state.syncCount===1?"":"s"} from the network${state.lastSyncAt?` · updated ${state.lastSyncAt.toLocaleTimeString([], {hour:"numeric", minute:"2-digit", second:"2-digit"})}`:""}`
+        : state.syncStatus==="connecting" ? `Connecting to shared server...`
+        : `Can't reach the shared server — showing this device only`}
+      <button class="sync-refresh" data-act="force-sync" title="Check now">${icon('search',13)}</button>
+    </div>` : ""}
 
     <div class="section-title" style="margin-top:20px;">Happening now</div>
     ${(()=>{ const live = communityEvents.filter(e=>e.liveNow);
@@ -1856,6 +1909,23 @@ function renderOrgOnboard(){
   </div>`;
 }
 
+// The recipient's own request list. When a shared server is connected we show
+// the live server rows for this org - so pledges made on another laptop show
+// up here - and fall back to the local queue when running offline.
+function myRequestRows(){
+  const myName = state.userName || "Harbor View Shelter";
+  const serverRows = requests.filter(r => r.fromServer && r.org === myName).map(r => ({
+    id: r.id, serverId: r.serverId, item: r.item, need: r.need, have: r.have,
+    urgency: r.urgency, pledges: (r.pledgers || []).length, pledgers: r.pledgers || [],
+    fromServer: true,
+  }));
+  const serverKeys = new Set(serverRows.map(r => (r.item||"").toLowerCase()));
+  const localRows = orgQueue
+    .filter(o => !serverKeys.has((o.item||"").toLowerCase()))
+    .map(o => ({...o, have: 0, pledgers: []}));
+  return [...serverRows, ...localRows];
+}
+
 // ---------- ORG DASHBOARD (now with its own nav, and a working Post Request button) ----------
 function renderOrgDash(){
   const eveningStage = state.eveningStage;
@@ -1891,12 +1961,28 @@ function renderOrgDash(){
       </div>
     </div>
 
+    ${state.apiBase ? `<div class="sync-bar ${state.syncStatus}" style="margin-top:18px;">
+      ${state.syncStatus==="live"
+        ? `<span class="liveDot"></span><b>Live</b> · posts here are visible to donors on other devices`
+        : `Not connected — posts stay on this device`}
+      <button class="sync-refresh" data-act="force-sync" title="Check now">${icon('search',13)}</button>
+    </div>` : ""}
+
     <div class="section-title">My requests</div>
-    ${orgQueue.map(o=>`<div class="org-row">
-      <div><span class="utag ${o.urgency}" style="margin-bottom:4px;">${urgencyLabel(o.urgency)}</span><br><b style="font-size:14px;">${o.item}</b><p style="font-size:11px;">${o.need} needed</p></div>
+    ${myRequestRows().map(o=>`<div class="org-row">
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+          <span class="utag ${o.urgency}">${urgencyLabel(o.urgency)}</span>
+          ${o.fromServer ? `<span class="shared-tag"><span class="liveDot"></span>Shared</span>` : ""}
+        </div>
+        <b style="font-size:14px;">${o.item}</b>
+        <p style="font-size:11px;">${o.have>0 ? `${o.have} of ${o.need} received` : `${o.need} needed`}</p>
+      </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
         ${o.pledges>0
-          ? `<span class="badge-count">${o.pledges} pledges</span><span style="font-size:10.5px;color:var(--muted);">Donors committed — can't cancel</span>`
+          ? `<span class="badge-count">${o.pledges} pledge${o.pledges===1?"":"s"}</span>
+             ${o.pledgers && o.pledgers.length ? `<span style="font-size:10.5px;color:var(--muted);">from ${o.pledgers.slice(0,2).join(", ")}${o.pledgers.length>2?` +${o.pledgers.length-2}`:""}</span>` : ""}
+             <span style="font-size:10.5px;color:var(--muted);">Donors committed — can't cancel</span>`
           : `<span style="font-size:11px;color:var(--muted);">No pledges yet</span><button class="btn-ghost" style="padding:4px 0;font-size:12px;color:var(--urgent);" data-act="cancel-org-request" data-val="${o.id}">Cancel request</button>`}
       </div>
     </div>`).join("")}
@@ -2092,15 +2178,30 @@ async function syncRequests(){
   try{
     const rows = await (await fetch(url, {signal: AbortSignal.timeout(4000)})).json();
     const mapped = rows.map(mapServerRequest);
+    const prevIds = new Set(requests.filter(r=>r.fromServer).map(r=>r.id));
     const before = JSON.stringify(requests.filter(r=>r.fromServer).map(r=>[r.id,r.have,r.pledgers.length]));
     const after  = JSON.stringify(mapped.map(r=>[r.id,r.have,r.pledgers.length]));
-    // Server rows replace previous server rows; local demo seeds stay put.
+
+    // Anything with an id we haven't seen before came from another device.
+    const arrivals = state.syncEverLoaded ? mapped.filter(r => !prevIds.has(r.id)) : [];
+
     const localOnly = requests.filter(r => !r.fromServer);
     requests.length = 0;
     requests.push(...mapped, ...localOnly);
     state.syncStatus = "live";
     state.syncCount = mapped.length;
-    if(before !== after) render();   // only re-render when something actually changed
+    state.syncEverLoaded = true;
+    state.lastSyncAt = new Date();
+
+    if(arrivals.length){
+      const a = arrivals[0];
+      showToast(arrivals.length === 1
+        ? `New request just in: ${a.need} ${a.unit} for ${a.org}`
+        : `${arrivals.length} new requests just came in`);
+      arrivals.forEach(r => state.newRequestIds.add(r.id));
+      setTimeout(()=>{ arrivals.forEach(r => state.newRequestIds.delete(r.id)); render(); }, 12000);
+    }
+    if(before !== after) render();
   }catch(err){
     state.syncStatus = "error";
   }
@@ -2439,6 +2540,7 @@ function handleAction(act, val, el){
       setState({settingsOpen:false, apiKey:key, aiStatus:key.length>10?"live":"mock"});
       break;
     }
+    case "force-sync": syncRequests().then(render); break;
     case "save-api-base": {
       const el2 = document.getElementById("apiBaseInput");
       state.apiBase = el2 ? el2.value.trim() : state.apiBase;
@@ -2622,7 +2724,12 @@ function handleAction(act, val, el){
   }
 }
 
-render();
+if(restoreFromUrlHash()){
+  render();
+  if(state.apiBase) startSync();   // reconnect automatically after a refresh
+} else {
+  render();
+}
 </script>
 </body>
 </html>
