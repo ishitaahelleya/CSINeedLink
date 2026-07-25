@@ -38,7 +38,7 @@ body{
 }
 h1,h2,h3{font-weight:700;margin:0;color:var(--cream);letter-spacing:-0.01em;font-family:'Space Grotesk',sans-serif;}
 p{margin:0;color:var(--muted);}
-button{font-family:inherit;cursor:pointer;border:none;letter-spacing:0;}
+button{font-family:inherit;cursor:pointer;border:none;letter-spacing:0;background:none;color:inherit;}
 a{color:inherit;}
 svg{display:block;}
 
@@ -238,7 +238,7 @@ svg{display:block;}
 /* chips */
 .chip-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
 .interest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px;}
-@media (min-width:600px){.interest-grid{grid-template-columns:repeat(3,1fr);}}
+@media (min-width:600px){.interest-grid{grid-template-columns:repeat(2,1fr);}}
 .interest-card{
   display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:18px 16px;
   background:var(--surface);border-radius:var(--radius-lg);border:2px solid transparent;
@@ -247,6 +247,7 @@ svg{display:block;}
 .interest-icon{width:40px;height:40px;border-radius:12px;background:rgba(240,179,77,0.14);color:var(--accent);display:flex;align-items:center;justify-content:center;}
 .interest-card.selected{border-color:var(--accent);background:rgba(240,179,77,0.12);transform:scale(1.03);}
 .interest-card.selected .interest-icon{background:var(--accent);color:#3a2018;}
+.interest-desc{font-style:italic;font-weight:400;font-size:11.5px;color:var(--muted);line-height:1.45;text-align:left;}
 .chip{padding:10px 16px;border-radius:20px;background:var(--surface);color:var(--cream);border:2px solid transparent;font-weight:600;font-size:14px;transition:transform .15s ease-out, background .2s;}
 .chip.selected{background:var(--accent);color:#3a2018;transform:scale(1.05);}
 
@@ -348,9 +349,9 @@ svg{display:block;}
 /* visible confirmation on every clickable action, so nothing ever feels like it "did nothing" */
 .confirm-pop{animation:confirmPulse .32s cubic-bezier(.3,.6,.3,1.5);}
 @keyframes confirmPulse{
-  0%{transform:scale(1);filter:brightness(1);}
-  35%{transform:scale(0.94);filter:brightness(1.25);}
-  100%{transform:scale(1);filter:brightness(1);}
+  0%{transform:scale(1);}
+  35%{transform:scale(0.96);}
+  100%{transform:scale(1);}
 }
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
 
@@ -478,14 +479,33 @@ label.field-label{font-size:12px;color:var(--muted);font-weight:600;display:bloc
 .fab:active{transform:translateX(calc(-50% + 200px)) scale(0.92);}
 .fab svg{width:24px;height:24px;}
 
+/* donor streak badge */
+.badge-card{display:flex;gap:16px;align-items:center;margin-top:18px;}
+.badge-medal{
+  width:74px;height:74px;border-radius:50%;flex-shrink:0;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(20,10,40,0.3), inset 0 2px 6px rgba(255,255,255,0.35);
+}
+.badge-medal svg{position:relative;z-index:1;}
+.badge-bronze{background:radial-gradient(circle at 32% 28%, #e8a978, #b06b3a 65%, #8a4f28);color:#4a2812;}
+.badge-silver{background:radial-gradient(circle at 32% 28%, #f2f2f4, #b9bec9 65%, #8c93a3);color:#3c4250;}
+.badge-gold{background:radial-gradient(circle at 32% 28%, #ffe49a, #f0b34d 60%, #b97f22);color:#553a0d;}
+.badge-platinum{background:radial-gradient(circle at 32% 28%, #f4fbff, #c3d9e8 55%, #7fa4bd);color:#2c4356;}
+.badge-tier-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
+
 /* org profile page */
 .org-hero{background:linear-gradient(135deg, var(--surface2), var(--surface));border-radius:var(--radius-lg);padding:20px;}
 .org-photo-banner{
-  height:120px;border-radius:var(--radius-lg);
-  background:linear-gradient(120deg, #6D3EC9, #F0743D, #F0B34D);
-  background-size:200% 200%;animation:miniGradient 8s ease infinite;
-  display:flex;align-items:flex-end;justify-content:flex-start;padding:16px;
+  height:130px;border-radius:var(--radius-lg);
+  background:linear-gradient(135deg, var(--bg-deep) 0%, var(--surface2) 100%);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
 }
+.org-photo-banner::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 75% 30%, rgba(240,179,77,0.16), transparent 60%);
+}
+.org-photo-banner-icon{position:relative;z-index:1;color:rgba(255,255,255,0.14);width:64px;height:64px;}
 .org-photo-initials{width:0;height:0;overflow:hidden;}
 .org-info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12.5px;}
 .org-info-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;}
@@ -565,7 +585,7 @@ const ICONS = {
   user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6 8-6s6.5 1.5 8 6"/></svg>`,
   mapPin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.5 7-13a7 7 0 0 0-14 0c0 5.5 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>`,
   chat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 4.4-4 8-9 8-1.4 0-2.7-.2-3.9-.7L3 20l1.2-4.1C3.4 14.6 3 13.3 3 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg>`,
-  dollar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.3c0-1.3 1.1-2.3 2.5-2.3s2.5.8 2.5 2c0 3-5 1.7-5 4.7 0 1.2 1.1 2.3 2.5 2.3s2.5-1 2.5-2.3"/></svg>`,
+  dollar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.5c0-1.7-2-3-4.5-3s-4.5 1.3-4.5 3 1.5 2.5 4.5 3.2 4.5 1.7 4.5 3.3-2 3-4.5 3-4.5-1.3-4.5-3"/></svg>`,
   back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>`,
   filter: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>`,
   info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>`,
@@ -596,10 +616,10 @@ function withGeo(list){
 }
 
 const requests = withGeo([
-  {id:1, org:"Harbor View Shelter", item:"blankets", have:38, need:50, unit:"blankets", urgency:"urgent", category:"Shelter", surplus:false, verified:true, details:"Twin and full-size blankets needed most — overnight temperatures have been dropping fast this week.", pledgers:["Alex R.", "Priya S.", "Dublin HS Key Club"]},
+  {id:1, org:"Harbor View Shelter", item:"blankets", have:38, need:50, unit:"blankets", urgency:"urgent", category:"Social Services", surplus:false, verified:true, details:"Twin and full-size blankets needed most — overnight temperatures have been dropping fast this week.", pledgers:["Alex R.", "Priya S.", "Dublin HS Key Club"]},
   {id:2, org:"Millbrook Food Pantry", item:"canned goods", have:210, need:300, unit:"cans", urgency:"ongoing", category:"Food", surplus:false, verified:true, details:"Low-sodium canned vegetables and soups preferred. Drop off any weekday, 9am–5pm.", pledgers:["Jamie K.", "Tri-Valley Rotary"]},
   {id:3, org:"Cedar St. Family Center", item:"school backpacks", have:47, need:50, unit:"backpacks", urgency:"scheduled", category:"Education", surplus:false, verified:true, almost:true, details:"Filling the last few backpacks before term starts Aug 12. New or gently used both welcome.", pledgers:["Sam T.", "Foothill Interact", "Alex R."]},
-  {id:4, org:"Riverside Youth Home", item:"winter coats", have:12, need:40, unit:"coats", urgency:"urgent", category:"Shelter", surplus:false, verified:true, details:"Sizes youth medium through adult large needed for residents ages 14–21.", pledgers:["Livermore Lions"]},
+  {id:4, org:"Riverside Youth Home", item:"winter coats", have:12, need:40, unit:"coats", urgency:"urgent", category:"Social Services", surplus:false, verified:true, details:"Sizes youth medium through adult large needed for residents ages 14–21.", pledgers:["Livermore Lions"]},
   {id:5, org:"Second Harvest Co-op", item:"fresh bread", have:18, need:40, unit:"loaves", urgency:"urgent", category:"Food", surplus:true, verified:true, source:"Millbrook Bakery", reliability:98, details:"Same-day surplus from Millbrook Bakery — best used within 24 hours.", pledgers:[]},
   {id:6, org:"Grace Community Kitchen", item:"day-old pastries", have:9, need:24, unit:"pastries", urgency:"scheduled", category:"Food", surplus:true, verified:true, source:"Millbrook Bakery", reliability:98, almost:true, details:"Used in the Thursday community breakfast — perishable, pickup only.", pledgers:["Jamie K."]},
 ]);
@@ -682,6 +702,10 @@ let state = {
   traceOpen: false,
   traceVisible: 0,
   traceConcise: true,
+  traceSummaryText: null,
+  traceSummaryLoading: false,
+  traceSummaryLive: false,
+  traceSummaryError: false,
   scanStage: "capture",
   scanImage: null,
   scanResult: null,
@@ -710,6 +734,10 @@ let state = {
   orgEmail:"",
   orgPhone:"",
   helpFlowOrg:null,
+  helpFlowEventId:null,
+  createDriveForm:{title:"", date:"", type:"Drive", needs:"", desc:""},
+  createDriveSuccess:false,
+  donorStreakMonths:3,
   helpFlowStage:"form",
   helpFlowImage:null,
   helpFlowQty:1,
@@ -833,6 +861,7 @@ function render(){
   else if(state.screen==="mapView") html = renderMapView();
   else if(state.screen==="postRequest") html = renderPostRequest();
   else if(state.screen==="helpFlow") html = renderHelpFlow();
+  else if(state.screen==="createDrive") html = renderCreateDrive();
 
   if(showNav){
     html += (state.mode==="org" ? orgBottomNav(state.screen) : bottomNav(state.screen));
@@ -851,9 +880,7 @@ function render(){
   app.innerHTML = html + overlay;
   attachHandlers();
 
-  if(state.traceOpen && !state.traceConcise && state.traceVisible < traceLog.length){
-    setTimeout(()=>{ setState({traceVisible: state.traceVisible+1}); }, 650);
-  }
+
 }
 
 function navItemsFor(mode){
@@ -905,7 +932,7 @@ function renderLanding(){
     <div class="blob blob3"></div>
     <img src="${LOGO_SRC}" class="hero-logo-pulse hero-logo-big">
     <p class="hero-typewriter"><span id="heroTwText"></span><span class="tw-cursor" id="heroTwCursor">|</span></p>
-    <div class="scroll-hint" id="scrollHint">${icon('back',18)}<span>scroll</span></div>
+    <div class="scroll-hint" id="scrollHint">${icon('back',18)}<span>Scroll</span></div>
   </div>
 
   <div class="screen" style="padding-top:60px;padding-bottom:80px;">
@@ -913,11 +940,11 @@ function renderLanding(){
       <div class="stat-row">
         <div class="stat-block">
           <div class="counter counter-big" id="counterNum">0</div>
-          <p style="font-size:14px;">items delivered through NeedLink</p>
+          <p style="font-size:14px;">Items delivered through NeedLink</p>
         </div>
         <div class="stat-block">
           <div class="counter counter-big" id="counterNum2">0</div>
-          <p style="font-size:14px;">orgs supported</p>
+          <p style="font-size:14px;">Orgs supported</p>
         </div>
       </div>
       <div class="mega-btn-row">
@@ -943,7 +970,7 @@ function renderNameEntry(){
       <img src="${LOGO_SRC}" class="form-logo">
       <div class="hero-wrap">
         <h2 style="font-size:24px;text-align:center;">${forOrg ? "What's your organization called?" : "What should we call you?"}</h2>
-        <p style="margin-top:6px;font-size:14px;text-align:center;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company/club's name if you're giving on its behalf."}</p>
+        <p style="margin-top:6px;font-size:14px;text-align:center;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company or club's name if you're giving on its behalf."}</p>
         <label class="field-label">${forOrg ? "Organization name" : "Your name"}</label>
         <input type="text" id="nameEntryInput" placeholder="${forOrg ? 'e.g. Harbor View Shelter' : 'e.g. Alex Rivera'}" value="${state.userName}">
         <button class="btn-primary" style="margin-top:24px;" data-act="submit-name" data-val="${forOrg?'org':'donor'}">Continue</button>
@@ -956,18 +983,24 @@ function renderOnboard(){
   const step = state.onboardStep;
   let inner = "";
   if(step===0){
-    const interestOpts = [["Food","food"],["Shelter","home"],["Education","book"],["Health","heart"],["Disaster relief","alert"]];
-    inner = `<h2 style="font-size:24px;">What are you providing?</h2>
-    <p style="margin-top:6px;font-size:14px;">Pick a few to tune your feed.</p>
+    const interestOpts = [
+      ["Food","food","Meals, groceries, and pantry staples for families facing food insecurity."],
+      ["Social Services","home","Clothing, bedding, hygiene items, and shelter support for people in crisis."],
+      ["Education","book","School supplies, books, and technology for under-resourced students."],
+      ["Health","heart","First-aid, hygiene, and basic medical supplies for community clinics."],
+    ];
+    inner = `<h2 style="font-size:24px;">What matters to you?</h2>
+    <p style="margin-top:6px;font-size:14px;">Pick the causes you want to support.</p>
     <div class="interest-grid" id="interestChipRow">
-      ${interestOpts.map(([c,ic])=>
+      ${interestOpts.map(([c,ic,desc])=>
         `<button class="interest-card ${state.interests.includes(c)?'selected':''}" data-act="toggle-interest" data-val="${c}">
           <span class="interest-icon">${icon(ic,22)}</span><span>${c}</span>
+          <em class="interest-desc">${desc}</em>
         </button>`).join("")}
     </div>`;
   } else if(step===1){
     const opts = [["Individual","individual","Just you, giving on your own."],["School club","club","Rally your club around one request."],["Company","building","Give as a business or team."]];
-    inner = `<h2 style="font-size:24px;">How are you giving?</h2>
+    inner = `<h2 style="font-size:24px;">Who/what are you?</h2>
     <div style="margin-top:16px;" id="giveAsRow">
       ${opts.map(([c,ic,sub])=>
         `<div class="give-card ${state.giveAs===c?'selected':''}" data-act="pick-give" data-val="${c}">
@@ -989,7 +1022,7 @@ function renderOnboard(){
         <div class="dots">${[0,1,2].map(i=>`<div class="dot ${i<=step?'active':''}"></div>`).join("")}</div>
         ${inner}
         <button class="btn-primary" data-act="onboard-next" style="margin-top:24px;">${step<2?"Continue":"See my feed"}</button>
-        <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="skip-onboard">skip for now</button>
+        <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="skip-onboard">Skip for now</button>
       </div>
     </div>
   </div>`;
@@ -1001,7 +1034,7 @@ function reqCardHtml(r){
   return `<div class="req-card ${r.surplus?'surplus':'u-'+r.urgency}" style="padding-top:18px;">
     <div data-act="open-item" data-id="${r.id}" style="cursor:pointer;">
       <span class="utag ${r.surplus?'surplus':r.urgency}">${r.surplus?'Surplus match':urgencyLabel(r.urgency)}</span>
-      <div class="org-name" data-act="open-org-profile" data-val="${r.org}" style="width:fit-content;">${r.org} ${r.verified?iconWrap('check',13,'var(--accent)'):''}</div>
+      <div class="org-name" data-act="open-org-profile" data-val="${r.org}" style="width:fit-content;">${r.org}</div>
       <p style="font-size:12px;margin-top:4px;">${r.have} of ${r.need} ${r.unit}</p>
       <div class="progress-bar"><div class="progress-fill ${r.surplus?'teal':''}" style="width:${pct}%"></div></div>
       <p style="font-size:11px;margin-top:6px;display:flex;align-items:center;gap:4px;">${iconWrap('mapPin',11,'var(--muted)')} ${liveDistance(r)}${r.surplus? " · from "+r.source:""}</p>
@@ -1014,7 +1047,7 @@ function eventBannerHtml(e){
   return `<div class="event-banner ${e.liveNow?'live-flash':''}">
     ${e.liveNow ? `<div class="live-badge"><span class="liveDot"></span>Happening now</div>` : ""}
     <span class="utag ${e.urgency}" style="margin-top:${e.liveNow?'20px':'0'};">${urgencyLabel(e.urgency)}</span>
-    <div class="evt-org" data-act="open-org-profile" data-val="${e.org}" style="width:fit-content;cursor:pointer;">${e.org} ${iconWrap('check',11,'var(--accent)')}</div>
+    <div class="evt-org" data-act="open-org-profile" data-val="${e.org}" style="width:fit-content;cursor:pointer;">${e.org}</div>
     <h3>${e.title}</h3>
     <div class="evt-meta">
       <span>${iconWrap('clock',12)} ${e.date}</span>
@@ -1069,10 +1102,10 @@ function renderFeed(){
       </div>
     </div>
 
-    <div class="section-title" style="margin-top:20px;">Community alerts <span class="see-all" data-act="go-events">see all</span></div>
+    <div class="section-title" style="margin-top:20px;">Community alerts <span class="see-all" data-act="go-events">See all</span></div>
     <div class="events-banner-wrap"><div class="events-scroll">${filteredEvents().slice(0,3).map(eventBannerHtml).join("")}</div></div>
 
-    <div class="section-title">For you, near you <span class="see-all" data-act="go-browse">browse all</span></div>
+    <div class="section-title">For you, near you <span class="see-all" data-act="go-browse">Browse all</span></div>
     <p style="font-size:12px;margin-top:-4px;margin-bottom:10px;">Sorted by urgency.</p>
     <div class="grid-row">${topPicks.map(reqCardHtml).join("")}</div>
   </div>
@@ -1091,7 +1124,7 @@ function filteredRequests(){
 
 function renderBrowse(){
   const results = filteredRequests();
-  const cats = ["All","Food","Shelter","Education","Health"];
+  const cats = ["All","Food","Social Services","Education","Health","Disaster Services"];
   return `<div class="screen">
     <div class="topbar">${backBtn("feed")}<h2 style="font-size:20px;">Browse</h2><div></div></div>
 
@@ -1177,7 +1210,7 @@ function renderOrgProfile(){
     <div class="topbar">${backBtn("feed")}<div></div><div></div></div>
 
     <div class="org-photo-banner">
-      <div class="org-photo-initials">${name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+      <span class="org-photo-banner-icon">${icon('building',64)}</span>
     </div>
 
     <div class="org-hero" style="margin-top:-30px;position:relative;border-top-left-radius:0;border-top-right-radius:0;">
@@ -1209,8 +1242,7 @@ function renderOrgProfile(){
     </div>` : ""}
 
     <div class="org-action-col">
-      <button class="btn-primary" data-act="open-chat" data-val="${name}">${iconWrap('chat',16)} Message org</button>
-      <button class="btn-outline" data-act="open-item" data-id="${req?req.id:''}">${iconWrap('hand',16)} Donate items</button>
+      <button class="btn-primary" data-act="open-item" data-id="${req?req.id:''}">${iconWrap('hand',16)} Donate items</button>
       <button class="btn-outline" data-act="open-finance" data-val="${name}">${iconWrap('dollar',16)} Give money</button>
       ${state.mode==="org" ? `<button class="btn-outline" data-act="go-post-request">${iconWrap('box',16)} Post a request for this org</button>` : ""}
     </div>
@@ -1308,12 +1340,49 @@ function autoCategorize(text){
   const t = text.toLowerCase();
   const map = [
     ["Food", ["apple","banana","fruit","bread","canned","soup","rice","pasta","produce","food","snack","milk","cereal","vegetable","meat","grocery","water bottle","loaves"]],
-    ["Shelter", ["coat","blanket","jacket","clothes","clothing","tent","sleeping bag","shoe","sock","pillow"]],
+    ["Disaster Services", ["disaster","earthquake","wildfire","flood","hurricane","evacuation","emergency kit","generator","tarp"]],
+    ["Social Services", ["coat","blanket","jacket","clothes","clothing","tent","sleeping bag","shoe","sock","pillow"]],
     ["Education", ["backpack","school","book","supplies","laptop","pencil","notebook","binder","calculator"]],
     ["Health", ["first aid","medicine","health","hygiene","mask","bandage","toothpaste","soap","diaper"]],
   ];
   for(const [cat, keywords] of map){ if(keywords.some(k=>t.includes(k))) return cat; }
   return "Food";
+}
+
+// ---------- CREATE A FUNDRAISER / DRIVE (org side) ----------
+function renderCreateDrive(){
+  const f = state.createDriveForm;
+  if(state.createDriveSuccess){
+    return `<div class="screen" style="align-items:center;justify-content:center;text-align:center;">
+      ${iconWrap('check',54,'var(--accent)')}
+      <h2 style="font-size:20px;margin-top:16px;">Your ${f.type.toLowerCase()} is live!</h2>
+      <p style="margin-top:8px;font-size:13px;">"${f.title}" now appears in Community Alerts for nearby donors.</p>
+      <button class="btn-primary" style="margin-top:24px;" data-act="nav" data-val="orgdash">Back to dashboard</button>
+    </div>`;
+  }
+  return `<div class="screen">
+    <div class="topbar">${backBtn("orgdash")}<h2 style="font-size:19px;">Create a fundraiser or drive</h2><div></div></div>
+    <p style="font-size:13px;margin-top:6px;">This will appear in Community Alerts for donors near you.</p>
+
+    <label class="field-label">Title</label>
+    <input type="text" id="cdTitle" placeholder="e.g. Winter Coat Drive" value="${f.title}">
+
+    <label class="field-label">Date(s)</label>
+    <input type="text" id="cdDate" placeholder="e.g. Aug 9, 10am-2pm" value="${f.date}">
+
+    <label class="field-label">Type</label>
+    <div class="toggle-row">
+      ${["Drive","Fundraiser","Volunteer","Event"].map(t=>`<button class="toggle-opt ${f.type===t?'on-ok':''}" data-act="set-cd-type" data-val="${t}">${t}</button>`).join("")}
+    </div>
+
+    <label class="field-label">What do you need from donors?</label>
+    <input type="text" id="cdNeeds" placeholder="e.g. Coats, gloves, volunteers" value="${f.needs}">
+
+    <label class="field-label">Description</label>
+    <textarea id="cdDesc" placeholder="What it's for, where to show up, anything donors should know...">${f.desc}</textarea>
+
+    <button class="btn-primary" style="margin-top:24px;" data-act="submit-create-drive">Publish to Community Alerts</button>
+  </div>`;
 }
 
 // ---------- I CAN HELP FLOW (photo + quantity + org contact) ----------
@@ -1331,11 +1400,16 @@ function renderHelpFlow(){
   return `<div class="screen">
     <div class="topbar">${backBtn("feed")}<h2 style="font-size:19px;">Helping ${org}</h2><div></div></div>
 
+    ${(()=>{ const evt = communityEvents.find(e=>e.id==state.helpFlowEventId); return `
     <div class="card" style="margin-top:14px;">
-      <b style="font-size:14px;">${org}</b>
-      <p style="font-size:12px;margin-top:4px;">${(p.needs||[]).join(", ") || "General donations welcome"}</p>
+      ${evt ? `<span class="utag ${evt.urgency}">${urgencyLabel(evt.urgency)}</span>
+      <b style="font-size:15px;display:block;">${evt.title}</b>
+      <p style="font-size:12px;margin-top:4px;">${evt.date} · ${evt.type}</p>
+      <p style="font-size:12.5px;margin-top:8px;line-height:1.5;">${evt.desc||""}</p>
+      <p style="font-size:12px;margin-top:8px;"><b>Needs:</b> ${evt.help}</p>` : ``}
+      <p style="font-size:12px;margin-top:${evt?'10':'0'}px;color:var(--muted);">Hosted by <b style="color:var(--cream);cursor:pointer;" data-act="open-org-profile" data-val="${org}">${org}</b>${p.mission ? ` — ${p.mission}` : ""}</p>
       ${p.social ? `<a class="btn-ghost" style="padding-left:0;margin-top:8px;" href="mailto:${p.social.mail}">${iconWrap('mail',13)} ${p.social.mail}</a>` : ""}
-    </div>
+    </div>`; })()}
 
     <label class="field-label">Photo of what you're donating</label>
     <div class="scan-frame" style="aspect-ratio:16/9;">
@@ -1367,7 +1441,7 @@ function renderPledgeListSheet(){
       <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
         ${(r.pledgers||[]).map(name=>`<div class="inv-row"><div style="display:flex;align-items:center;gap:10px;"><span class="profile-avatar" style="width:34px;height:34px;border-radius:10px;background:var(--surface2);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">${name.split(' ').map(w=>w[0]).slice(0,2).join('')}</span>${name}</div></div>`).join("")}
       </div>
-      <button class="btn-ghost" style="align-self:center;display:block;margin:14px auto 0;" data-act="close-pledge-list">close</button>
+      <button class="btn-ghost" style="align-self:center;display:block;margin:14px auto 0;" data-act="close-pledge-list">Close</button>
     </div>
   </div>`;
 }
@@ -1379,7 +1453,7 @@ function renderDonationSheet(){
   let inner = "";
   if(state.donationStage==="form"){
     inner = `
-    <div class="org-name">${r.org} ${iconWrap('check',13,'var(--accent)')}</div>
+    <div class="org-name">${r.org}</div>
     <p style="font-size:12px;margin-top:4px;">${r.have} of ${r.need} ${r.unit} · ${liveDistance(r)}</p>
     <div class="progress-bar"><div class="progress-fill ${r.surplus?'teal':''}" style="width:${pct}%"></div></div>
     ${r.details ? `<p style="font-size:12.5px;margin-top:10px;line-height:1.5;">${r.details}</p>` : ""}
@@ -1401,6 +1475,7 @@ function renderDonationSheet(){
     </div>
 
     <button class="btn-primary" style="margin-top:24px;" data-act="confirm-donation" ${(state.qty<1||!state.dropoff)?'disabled':''}>Confirm pledge</button>
+    <button class="btn-ghost" style="align-self:center;display:block;margin:8px auto 0;" data-act="open-finance" data-val="${r.org}">${iconWrap('dollar',13)} Give money instead</button>
     `;
   } else if(state.donationStage==="loading"){
     inner = `<div style="display:flex;flex-direction:column;align-items:center;padding:30px 0;">
@@ -1440,27 +1515,66 @@ function matchCheckHtml(r, qty){
 }
 
 // ---------- REASONING TRACE (concise by default, real-LLM-style single summary) ----------
-function conciseSummary(){
-  // In a full build this calls the user's own API key for a real one-shot summarization
-  // of the structured agent log below; falls back to a templated plain-English summary.
-  return `Millbrook Bakery had bread left over at closing. NeedLink checked which nearby kitchens had room today, made sure the bakery was a trusted source, then split the 40 loaves 18/22 between Second Harvest and Grace Community Kitchen — and only pinged 3 donors who hadn't already hit their weekly notification limit.`;
+const FALLBACK_SUMMARY = `Millbrook Bakery had 40 extra loaves at closing. NeedLink found two kitchens nearby with room for them today, checked the bakery's track record, and split the loaves 18/22 between Second Harvest and Grace Community Kitchen. Three donors were notified — the ones who hadn't hit their weekly limit yet.`;
+
+async function fetchLiveTraceSummary(){
+  if(!state.apiKey || state.apiKey.trim().length <= 10){
+    state.traceSummaryText = FALLBACK_SUMMARY;
+    state.traceSummaryLive = false;
+    render();
+    return;
+  }
+  state.traceSummaryLoading = true;
+  state.traceSummaryText = null;
+  render();
+  try{
+    const logText = traceLog.map(l=>`[${l.agent}] ${l.text}`).join("\n");
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":state.apiKey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-6", max_tokens:200,
+        messages:[{role:"user", content:
+          `Here is a raw log from a donation-matching system's decision agents:\n\n${logText}\n\nWrite a single short, plain-English paragraph (3-4 sentences, no jargon like "agent" or "reconciliation") explaining what happened and why, for a non-technical person to read. Return ONLY the paragraph, no preamble.`
+        }]
+      })
+    });
+    const data = await resp.json();
+    const textBlock = (data.content||[]).find(b=>b.type==="text");
+    if(!textBlock) throw new Error("No text in response");
+    state.traceSummaryText = textBlock.text.trim();
+    state.traceSummaryLive = true;
+  }catch(err){
+    console.error("Live trace summary failed, falling back:", err);
+    state.traceSummaryText = FALLBACK_SUMMARY;
+    state.traceSummaryLive = false;
+    state.traceSummaryError = true;
+  }
+  state.traceSummaryLoading = false;
+  render();
 }
+
 function renderTracePanel(){
   return `<div class="sheet-backdrop" data-act="close-trace">
     <div class="sheet" onclick="event.stopPropagation()" style="background:#1c1228;">
       <div class="topbar"><h3 style="font-size:16px;">How NeedLink decided this</h3>
-        <button class="btn-ghost" data-act="toggle-trace-detail">${state.traceConcise ? 'show full log' : 'show summary'}</button>
+        <button class="btn-ghost" data-act="toggle-trace-detail">${state.traceConcise ? 'Show full log' : 'Show summary'}</button>
       </div>
       ${state.traceConcise ? `
-        <div class="trace-summary">${conciseSummary()}</div>
-        <p style="font-size:11px;color:var(--muted);">${state.apiKey?'Generated live by Claude.':'Add an API key in Settings to make this a live summary.'}</p>
+        ${state.traceSummaryLoading ? `
+          <div class="trace-summary"><span class="ai-thinking">Asking Claude to summarize the decision log...</span></div>
+        ` : `
+          <div class="trace-summary">${state.traceSummaryText || FALLBACK_SUMMARY}</div>
+          <p style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;">
+            ${state.traceSummaryLive ? `<span class="dot-live"></span> Generated live by Claude just now.` : state.traceSummaryError ? `Live call failed — showing a fallback summary.` : `Add an API key in Settings to make this a live Claude summary.`}
+          </p>
+        `}
       ` : `
         <div class="trace-panel">
-          ${traceLog.slice(0, state.traceVisible).map(l=>`<div class="trace-line"><span class="agent">${l.agent}</span> — ${l.text}</div>`).join("")}
-          ${state.traceVisible<traceLog.length ? `<div class="trace-line" style="opacity:0.5;">...</div>` : ""}
+          ${traceLog.map(l=>`<div class="trace-line"><span class="agent">${l.agent}</span> — ${l.text}</div>`).join("")}
         </div>
       `}
-      <button class="btn-ghost" style="align-self:center;display:block;margin:14px auto 0;" data-act="close-trace">close</button>
+      <button class="btn-ghost" style="align-self:center;display:block;margin:14px auto 0;" data-act="close-trace">Close</button>
     </div>
   </div>`;
 }
@@ -1499,7 +1613,7 @@ function renderFinanceSheet(){
         <p style="font-size:11.5px;display:flex;gap:8px;align-items:flex-start;">${iconWrap('info',14,'var(--muted)')} Processed securely, sent directly to the org — NeedLink never holds funds.</p>
       </div>
       <button class="btn-primary" style="margin-top:20px;" data-act="confirm-finance">${iconWrap('dollar',16)} Donate $${state.financeAmount}</button>
-      <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="close-finance">cancel</button>
+      <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="close-finance">Cancel</button>
     </div>
   </div>`;
 }
@@ -1508,8 +1622,8 @@ function renderImpact(){
   return `<div class="screen">
     <div class="topbar"><h2 style="font-size:20px;">Your impact</h2><div></div></div>
     <div style="display:flex;gap:20px;margin-top:20px;">
-      <div class="card impact-stat" style="flex:1;"><div class="num">${state.impact.items}</div><div class="lbl">items given</div></div>
-      <div class="card impact-stat" style="flex:1;"><div class="num">${state.impact.orgs}</div><div class="lbl">orgs supported</div></div>
+      <div class="card impact-stat" style="flex:1;"><div class="num">${state.impact.items}</div><div class="lbl">Items given</div></div>
+      <div class="card impact-stat" style="flex:1;"><div class="num">${state.impact.orgs}</div><div class="lbl">Orgs supported</div></div>
     </div>
     <div class="section-title">History</div>
     <div class="card">
@@ -1532,6 +1646,13 @@ function renderImpact(){
   </div>
   <button class="fab" data-act="open-scan" title="Scan an item">${icon('camera',24)}</button>
   `;
+}
+
+function donorBadge(months){
+  if(months >= 12) return {tier:"Platinum", cls:"badge-platinum", next:null};
+  if(months >= 6)  return {tier:"Gold", cls:"badge-gold", next:{tier:"Platinum", at:12}};
+  if(months >= 3)  return {tier:"Silver", cls:"badge-silver", next:{tier:"Gold", at:6}};
+  return {tier:"Bronze", cls:"badge-bronze", next:{tier:"Silver", at:3}};
 }
 
 // ---------- PROFILE (genuinely separate screen — fixes the impact/profile glitch) ----------
@@ -1569,6 +1690,16 @@ function renderProfile(){
       <p style="font-size:12px;margin-top:2px;">Giving as: ${state.giveAs || "Individual"}</p></div>
     </div>
 
+    ${(()=>{ const b = donorBadge(state.donorStreakMonths); return `
+    <div class="card badge-card">
+      <div class="badge-medal ${b.cls}">${icon('heart',30)}</div>
+      <div>
+        <div class="badge-tier-label">${b.tier} Supporter</div>
+        <p style="font-size:12.5px;margin-top:3px;">${state.donorStreakMonths} month${state.donorStreakMonths===1?'':'s'} in a row helping local orgs.</p>
+        ${b.next ? `<p style="font-size:11.5px;margin-top:3px;color:var(--muted);">${b.next.at - state.donorStreakMonths} more month${(b.next.at-state.donorStreakMonths)===1?'':'s'} to reach ${b.next.tier}.</p>` : `<p style="font-size:11.5px;margin-top:3px;color:var(--muted);">Highest tier — thank you.</p>`}
+      </div>
+    </div>`; })()}
+
     <div class="section-title">Interests</div>
     <div class="chip-row" style="margin-top:0;">${(state.interests.length?state.interests:["Not set yet"]).map(i=>`<span class="chip ${state.interests.length?'selected':''}">${i}</span>`).join("")}</div>
 
@@ -1601,7 +1732,7 @@ function renderOrgAbout(){
         <h2 style="font-size:24px;text-align:center;">Tell donors about ${state.userName || "your organization"}</h2>
         <p style="margin-top:6px;font-size:14px;text-align:center;">A quick summary donors will see before they help. Keep it brief.</p>
 
-        <label class="field-label">About the organization/yourself <span id="wordCountLabel" style="color:${wordCount>30?'var(--urgent)':'var(--muted)'};">(${wordCount}/30 words)</span></label>
+        <label class="field-label">About you/organization <span id="wordCountLabel" style="color:${wordCount>30?'var(--urgent)':'var(--muted)'};">(${wordCount}/30 words)</span></label>
         <textarea id="orgAboutInput" placeholder="e.g. We provide emergency shelter and meals for families in the Tri-Valley area.">${state.orgAboutText}</textarea>
 
         <label class="field-label">Contact email</label>
@@ -1626,7 +1757,7 @@ function renderOrgOnboard(){
         <span class="utag scheduled" style="margin-top:10px;">Under review</span>
       </div>
       <button class="btn-primary" style="margin-top:20px;" data-act="go-orgdash">Continue to dashboard</button>
-      <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="nav" data-val="landing">back to home</button>
+      <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="nav" data-val="landing">Back to home</button>
     </div>
   </div>`;
 }
@@ -1653,7 +1784,7 @@ function renderOrgDash(){
 
     ${eveningStage>=2 ? `<div class="card" style="border:1px solid var(--teal);">
       <span class="utag surplus">Surplus match — split allocation</span>
-      <p style="font-size:13px;color:var(--cream);">40 loaves confirmed by Millbrook Bakery</p>
+      <p style="font-size:13px;color:var(--cream);">40 loaves — quantity reported by Millbrook Bakery at closing</p>
       <div class="split-bar"><div class="split-seg" style="width:45%;"></div><div class="split-seg" style="width:55%;opacity:0.6;"></div></div>
       <p style="font-size:11px;margin-top:6px;">18 → Second Harvest Co-op · 22 → Grace Community Kitchen</p>
       ${eveningStage===2 ? `<button class="btn-primary" style="margin-top:12px;" data-act="accept-surplus">Accept for our share</button>` : `<p style="font-size:12px;margin-top:10px;color:var(--accent);">✔ Accepted — impact counter updated live</p>`}
@@ -1664,60 +1795,24 @@ function renderOrgDash(){
       <p style="font-size:13px;color:var(--cream);">Blanket demand usually spikes next week based on local pattern.</p>
       <div style="display:flex;gap:10px;margin-top:10px;">
         <button class="btn-primary" style="flex:1;" data-act="prepost">Pre-post this request</button>
-        <button class="btn-ghost" data-act="open-trace">why?</button>
+        <button class="btn-ghost" data-act="open-trace">Why?</button>
       </div>
     </div>
 
     <div class="section-title">Open requests</div>
     ${orgQueue.map(o=>`<div class="org-row">
       <div><span class="utag ${o.urgency}" style="margin-bottom:4px;">${urgencyLabel(o.urgency)}</span><br><b style="font-size:14px;">${o.item}</b><p style="font-size:11px;">${o.need} needed</p></div>
-      ${o.pledges>0 ? `<span class="badge-count">${o.pledges} pledges</span>` : `<span style="font-size:11px;color:var(--muted);">no pledges yet</span>`}
+      ${o.pledges>0 ? `<span class="badge-count">${o.pledges} pledges</span>` : `<span style="font-size:11px;color:var(--muted);">No pledges yet</span>`}
     </div>`).join("")}
 
     <button class="btn-primary" style="margin-top:10px;" data-act="go-post-request">${iconWrap('box',16)} Post a request</button>
+    <button class="btn-outline" style="margin-top:10px;" data-act="go-create-drive">${iconWrap('heart',16)} Create a fundraiser or drive</button>
   </div>
   `;
 }
 
 // ---------- SCAN ----------
 // ---------- I CAN HELP FLOW (from Community Alerts CTA) ----------
-function renderHelpFlow(){
-  const orgName = state.helpFlowOrg;
-  const p = orgProfiles[orgName] || {};
-  if(state.helpFlowStage==="success"){
-    return `<div class="screen" style="align-items:center;justify-content:center;text-align:center;">
-      ${iconWrap('check',54,'var(--accent)')}
-      <h2 style="font-size:20px;margin-top:16px;">Thanks for helping!</h2>
-      <p style="margin-top:8px;font-size:13px;">${orgName} has been notified and will reach out with drop-off details.</p>
-      <button class="btn-primary" style="margin-top:24px;" data-act="nav" data-val="feed">Back to feed</button>
-    </div>`;
-  }
-  return `<div class="screen">
-    <div class="topbar">${backBtn("events")}<h2 style="font-size:19px;">Help ${orgName}</h2><div></div></div>
-
-    <div class="card" style="margin-top:14px;">
-      <p style="font-size:12px;color:var(--muted);">Contact</p>
-      <p style="font-size:13px;margin-top:2px;">${p.social ? p.social.mail : "contact@"+(orgName||"org").toLowerCase().replace(/\\s+/g,"")+".org"}</p>
-    </div>
-
-    <label class="field-label">Photo of what you're donating</label>
-    <div class="scan-frame" id="helpFlowFrame">
-      ${state.helpFlowImage ? `<img src="${state.helpFlowImage}">` : `${icon('camera',36)}<p style="font-size:12px;text-align:center;padding:0 20px;">Optional, but helps the org plan.</p>`}
-    </div>
-    <input type="file" id="helpFlowFile" accept="image/*" capture="environment" style="display:none;">
-    <button class="btn-outline" style="margin-top:12px;" data-act="trigger-help-camera">${iconWrap('camera',16)} ${state.helpFlowImage?'Retake photo':'Add a photo'}</button>
-
-    <label class="field-label">Quantity</label>
-    <div class="stepper" style="justify-content:flex-start;gap:16px;">
-      <button data-act="help-qty-dec">–</button>
-      <div class="val" style="font-size:24px;">${state.helpFlowQty}</div>
-      <button data-act="help-qty-inc">+</button>
-    </div>
-
-    <button class="btn-primary" style="margin-top:26px;" data-act="submit-help-flow">Send to ${orgName}</button>
-  </div>`;
-}
-
 function renderScan(){
   let inner = "";
   if(state.scanStage==="capture"){
@@ -1750,7 +1845,7 @@ function renderScan(){
       <p style="font-size:11px;margin-top:2px;">${liveDistance(m)} · ${m.need-m.have} ${m.unit} still needed</p></div>
     </div>` : ""}
     <button class="btn-primary" style="margin-top:22px;" data-act="confirm-scan">Add to my inventory</button>
-    <button class="btn-ghost" style="align-self:center;margin-top:6px;" data-act="retake-scan">retake photo</button>
+    <button class="btn-ghost" style="align-self:center;margin-top:6px;" data-act="retake-scan">Retake photo</button>
     `;
   }
   return `<div class="screen">
@@ -1770,7 +1865,7 @@ async function runScanAnalysis(dataUrl, mimeType){
           model:"claude-sonnet-4-6", max_tokens:300,
           messages:[{role:"user", content:[
             {type:"image", source:{type:"base64", media_type:mimeType, data:base64}},
-            {type:"text", text:"Identify the donation item in this photo and, if a quantity is printed on the box/label, extract it. Respond with ONLY raw JSON: {\"item\":\"short item name\",\"qty\":number,\"unit\":\"unit word\",\"category\":\"Food|Shelter|Education|Health\"}. If quantity isn't visible, estimate 1."}
+            {type:"text", text:"Identify the donation item in this photo and, if a quantity is printed on the box/label, extract it. Respond with ONLY raw JSON: {\"item\":\"short item name\",\"qty\":number,\"unit\":\"unit word\",\"category\":\"Food|Social Services|Education|Health|Disaster Services\"}. If quantity isn't visible, estimate 1."}
           ]}]
         })
       });
@@ -1790,7 +1885,7 @@ async function runScanAnalysis(dataUrl, mimeType){
     const guesses = [
       {item:"Canned soup", qty:12, unit:"cans", category:"Food"},
       {item:"Bottled water", qty:24, unit:"bottles", category:"Food"},
-      {item:"Winter coats", qty:3, unit:"coats", category:"Shelter"},
+      {item:"Winter coats", qty:3, unit:"coats", category:"Social Services"},
       {item:"Cereal boxes", qty:8, unit:"boxes", category:"Food"},
     ];
     const guess = guesses[Math.floor(Math.random()*guesses.length)];
@@ -1824,20 +1919,35 @@ function updateBrowseResults(){
     ? `<div class="grid-row">${results.map(reqCardHtml).join("")}</div>`
     : `<div class="empty-state">${icon('search',44)}<p>Nothing matches "${state.browseSearch || state.browseFilter}" yet.</p><button class="btn-outline" data-act="clear-browse-filters">Clear filters</button></div>`;
   container.querySelectorAll("[data-act]").forEach(el=>{
-    el.addEventListener("click", e=>handleAction(el.getAttribute("data-act"), el.getAttribute("data-val"), el));
+    el.addEventListener("click", e=>{ e.stopPropagation(); handleAction(el.getAttribute("data-act"), el.getAttribute("data-val") ?? el.getAttribute("data-id"), el); });
   });
 }
 
 // ---------- HANDLERS ----------
+// Rapid-fire controls (steppers) get no pop animation and no dispatch delay -
+// the flash and jump on repeated taps was distracting.
+const INSTANT_ACTS = new Set(["qty-inc","qty-dec","fin-inc","fin-dec","helpflow-qty-inc","helpflow-qty-dec"]);
+
+function readCreateDriveForm(){
+  const g = id => { const el = document.getElementById(id); return el ? el.value : null; };
+  const f = state.createDriveForm;
+  return {
+    title: g("cdTitle") ?? f.title,
+    date: g("cdDate") ?? f.date,
+    type: f.type,
+    needs: g("cdNeeds") ?? f.needs,
+    desc: g("cdDesc") ?? f.desc,
+  };
+}
+
 function attachHandlers(){
   document.querySelectorAll("[data-act]").forEach(el=>{
     el.addEventListener("click", (e)=>{
       e.stopPropagation();
       const act = el.getAttribute("data-act");
-      const val = el.getAttribute("data-val");
-      // Visible press confirmation on every actionable element. Most actions trigger a
-      // synchronous re-render that would otherwise destroy this element before the
-      // browser ever paints the animation, so we let it paint first, then act.
+      // Buttons use data-val or data-id interchangeably; accept either.
+      const val = el.getAttribute("data-val") ?? el.getAttribute("data-id");
+      if(INSTANT_ACTS.has(act)){ handleAction(act, val, el); return; }
       el.classList.add("confirm-pop");
       setTimeout(()=>{ handleAction(act, val, el); }, 110);
     });
@@ -2096,7 +2206,7 @@ function handleAction(act, val, el){
     case "show-location": setState({screen:"mapView", mapOpenFor:val}); break;
     case "cta-event": {
       const evt = communityEvents.find(e=>e.id==val);
-      goTo("helpFlow", {extra:{helpFlowOrg:evt.org, helpFlowStage:"form", helpFlowImage:null, helpFlowQty:1}});
+      goTo("helpFlow", {extra:{helpFlowOrg:evt.org, helpFlowEventId:evt.id, helpFlowStage:"form", helpFlowImage:null, helpFlowQty:1}});
       break;
     }
 
@@ -2151,7 +2261,11 @@ function handleAction(act, val, el){
     case "donate-inv": { const entry = state.inventory[parseInt(val)]; showToast(`Matching ${entry.item} to nearby requests...`); break; }
 
     // ---- trace ----
-    case "open-trace": setState({traceOpen:true, traceVisible:0, traceConcise:true}); break;
+    case "open-trace": {
+      setState({traceOpen:true, traceVisible:0, traceConcise:true, traceSummaryText:null, traceSummaryError:false});
+      fetchLiveTraceSummary();
+      break;
+    }
     case "close-trace": setState({traceOpen:false, traceVisible:0}); break;
     case "toggle-trace-detail": setState({traceConcise:!state.traceConcise, traceVisible: state.traceConcise?0:traceLog.length}); break;
 
@@ -2178,6 +2292,23 @@ function handleAction(act, val, el){
         lat: loc.lat + (Math.random()-0.5)*0.02, lng: loc.lng + (Math.random()-0.5)*0.02,
       });
       setState({postRequestSuccess:true, postRequestForm:{item:"",qty:"",urgency:"urgent",details:""}});
+      break;
+    }
+
+    // ---- create fundraiser/drive (org side) ----
+    case "go-create-drive": goTo("createDrive", {extra:{createDriveSuccess:false}}); break;
+    case "set-cd-type": setState({createDriveForm:{...readCreateDriveForm(), type:val}}); break;
+    case "submit-create-drive": {
+      const f = readCreateDriveForm();
+      if(!f.title.trim() || !f.needs.trim()){ showToast("Add a title and what you need to publish"); return; }
+      const loc = state.userLoc || HQ;
+      communityEvents.unshift({
+        id: Date.now(), org: state.userName || "Your organization", title: f.title,
+        date: f.date || "Date TBD", type: f.type, urgency: "scheduled",
+        desc: f.desc || "", help: f.needs, cta: "I Can Help", liveNow: false,
+        lat: loc.lat + (Math.random()-0.5)*0.02, lng: loc.lng + (Math.random()-0.5)*0.02,
+      });
+      setState({createDriveForm:f, createDriveSuccess:true});
       break;
     }
 

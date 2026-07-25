@@ -10,7 +10,7 @@ const { logDecision } = require("./util");
 // decision. Every step is logged with correlation_id so the trace is a
 // literal, replayable log of this function's inputs and output - not a
 // narrated summary.
-function reconcileRequestFulfillment(db, { request_id, proposed_qty }) {
+async function reconcileRequestFulfillment(db, { request_id, proposed_qty }) {
   const correlationId = `req-${request_id}-${Date.now()}`;
   const trace = [];
 
@@ -18,7 +18,7 @@ function reconcileRequestFulfillment(db, { request_id, proposed_qty }) {
   if (!request) return { ok: false, reason: "unknown_request", trace };
 
   // 1. Fraud/Verification - hard gate, runs first
-  const fraudResult = verify(db, { org_id: request.org_id, qty: proposed_qty });
+  const fraudResult = await verify(db, { org_id: request.org_id, qty: proposed_qty });
   logDecision(db, correlationId, "FRAUD_VERIFICATION", { org_id: request.org_id, qty: proposed_qty }, fraudResult);
   trace.push({ agent: "FRAUD/VERIFICATION", input: { org_id: request.org_id, qty: proposed_qty }, output: fraudResult });
   if (fraudResult.veto) {
@@ -58,11 +58,11 @@ function reconcileRequestFulfillment(db, { request_id, proposed_qty }) {
 }
 
 // Surplus-specific reconciliation: splits one signal across multiple orgs by capacity headroom.
-function reconcileSurplusSplit(db, { source_id, item, unit, qty, category }) {
+async function reconcileSurplusSplit(db, { source_id, item, unit, qty, category }) {
   const correlationId = `surplus-${source_id}-${Date.now()}`;
   const trace = [];
 
-  const fraudResult = verify(db, { source_id, qty });
+  const fraudResult = await verify(db, { source_id, qty });
   logDecision(db, correlationId, "FRAUD_VERIFICATION", { source_id, qty }, fraudResult);
   trace.push({ agent: "FRAUD/VERIFICATION", input: { source_id, qty }, output: fraudResult });
   if (fraudResult.veto) return { ok: false, reason: "fraud_veto", flags: fraudResult.flags, trace };

@@ -9,6 +9,7 @@ const { allocateSlots } = require("./agents/notificationGovernor");
 const { matchDonors } = require("./agents/donorMatching");
 const { forecast, predictSurplus } = require("./agents/forecasting");
 const { reconcileRequestFulfillment, reconcileSurplusSplit } = require("./agents/reconciliation");
+const { isOllamaReachable, OLLAMA_MODEL } = require("./agents/llmClient");
 const { haversineMiles } = require("./agents/util");
 
 const dbPath = path.join(__dirname, "needlink.db");
@@ -50,23 +51,30 @@ app.get("/api/trace/:correlationId", (req, res) => {
 
 // ---------- Individual agent endpoints (each independently callable) ----------
 app.post("/api/agents/capacity", (req, res) => res.json(checkCapacity(db, req.body)));
-app.post("/api/agents/fraud", (req, res) => res.json(verify(db, req.body)));
+app.post("/api/agents/fraud", async (req, res) => res.json(await verify(db, req.body)));
 app.post("/api/agents/notification-governor", (req, res) => res.json(allocateSlots(db, req.body)));
 app.post("/api/agents/donor-matching", (req, res) => res.json(matchDonors(db, req.body)));
-app.post("/api/agents/forecasting", (req, res) => res.json(forecast(db, req.body)));
-app.post("/api/agents/surplus-sensing", (req, res) => res.json(predictSurplus(db, req.body)));
+app.post("/api/agents/forecasting", async (req, res) => res.json(await forecast(db, req.body)));
+app.post("/api/agents/surplus-sensing", async (req, res) => res.json(await predictSurplus(db, req.body)));
 
 // ---------- Reconciliation orchestrator (fans out to all agents above) ----------
-app.post("/api/reconcile/request", (req, res) => {
+app.post("/api/reconcile/request", async (req, res) => {
   const { request_id, proposed_qty } = req.body;
   if (!request_id || !proposed_qty) return res.status(400).json({ error: "request_id and proposed_qty required" });
-  res.json(reconcileRequestFulfillment(db, { request_id, proposed_qty }));
+  res.json(await reconcileRequestFulfillment(db, { request_id, proposed_qty }));
 });
 
-app.post("/api/reconcile/surplus", (req, res) => {
+app.post("/api/reconcile/surplus", async (req, res) => {
   const { source_id, item, unit, qty, category } = req.body;
   if (!source_id || !item || !qty || !category) return res.status(400).json({ error: "source_id, item, qty, category required" });
-  res.json(reconcileSurplusSplit(db, { source_id, item, unit, qty, category }));
+  res.json(await reconcileSurplusSplit(db, { source_id, item, unit, qty, category }));
+});
+
+// Real check of whether the local Ollama server is reachable right now -
+// not a hardcoded flag. Lets the frontend show live/fallback status honestly.
+app.get("/api/llm-status", async (req, res) => {
+  const reachable = await isOllamaReachable();
+  res.json({ ollama_reachable: reachable, model: OLLAMA_MODEL });
 });
 
 app.get("/api/health", (req, res) => res.json({ ok: true, db: dbPath }));
