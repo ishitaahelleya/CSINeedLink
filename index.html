@@ -63,6 +63,16 @@ svg{display:block;}
   .screen{padding-left:72px;padding-right:72px;}
 }
 
+.form-logo{width:56px;display:block;margin:0 auto 18px auto;}
+@media (min-width:900px){
+  .form-screen{padding-left:24px;padding-right:24px;}
+  .form-center-wrap{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:calc(100vh - 140px);
+  }
+  .form-logo{width:84px;margin-bottom:22px;}
+}
+
 /* ---------- MEGA HERO (animated gradient, centered logo, scroll-revealed CTAs) ---------- */
 .mega-hero{
   position:relative;min-height:100vh;width:100%;overflow:hidden;
@@ -927,16 +937,18 @@ function renderLanding(){
 // ---------- NAME ENTRY (after "I want to help" / "I want to receive") ----------
 function renderNameEntry(){
   const forOrg = state.pendingMode === "org";
-  return `<div class="screen">
-    <div class="topbar">${backBtn("landing")}<div class="brand"><img src="${LOGO_SRC}" style="height:26px;"></div><div></div></div>
-    <div class="hero-wrap" style="margin-top:40px;">
-      <h2 style="font-size:24px;">${forOrg ? "What's your organization called?" : "What should we call you?"}</h2>
-      <p style="margin-top:6px;font-size:14px;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company or club's name if you're giving on its behalf."}</p>
-      <label class="field-label">${forOrg ? "Organization name" : "Your name"}</label>
-      <input type="text" id="nameEntryInput" placeholder="${forOrg ? 'e.g. Harbor View Shelter' : 'e.g. Alex Rivera'}" value="${state.userName}">
+  return `<div class="screen form-screen">
+    <div class="topbar">${backBtn("landing")}<div></div><div></div></div>
+    <div class="form-center-wrap">
+      <img src="${LOGO_SRC}" class="form-logo">
+      <div class="hero-wrap">
+        <h2 style="font-size:24px;text-align:center;">${forOrg ? "What's your organization called?" : "What should we call you?"}</h2>
+        <p style="margin-top:6px;font-size:14px;text-align:center;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company or club's name if you're giving on its behalf."}</p>
+        <label class="field-label">${forOrg ? "Organization name" : "Your name"}</label>
+        <input type="text" id="nameEntryInput" placeholder="${forOrg ? 'e.g. Harbor View Shelter' : 'e.g. Alex Rivera'}" value="${state.userName}">
+        <button class="btn-primary" style="margin-top:24px;" data-act="submit-name" data-val="${forOrg?'org':'donor'}">Continue</button>
+      </div>
     </div>
-    <div style="flex:1;"></div>
-    <button class="btn-primary hero-wrap" style="margin-top:24px;" data-act="submit-name" data-val="${forOrg?'org':'donor'}">Continue</button>
   </div>`;
 }
 // ---------- ONBOARDING (no full-page refresh on chip taps) ----------
@@ -971,12 +983,14 @@ function renderOnboard(){
     <div class="map-preview" id="zoomMapPreview">${state.geocodedLoc ? '' : `<div class="radius-circle"></div>`}</div>`;
   }
 
-  return `<div class="screen">
-    <div class="hero-wrap" style="width:100%;">
-      <div class="dots">${[0,1,2].map(i=>`<div class="dot ${i<=step?'active':''}"></div>`).join("")}</div>
-      ${inner}
-      <button class="btn-primary" data-act="onboard-next" style="margin-top:24px;">${step<2?"Continue":"See my feed"}</button>
-      <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="skip-onboard">skip for now</button>
+  return `<div class="screen form-screen">
+    <div class="form-center-wrap">
+      <div class="hero-wrap" style="width:100%;">
+        <div class="dots">${[0,1,2].map(i=>`<div class="dot ${i<=step?'active':''}"></div>`).join("")}</div>
+        ${inner}
+        <button class="btn-primary" data-act="onboard-next" style="margin-top:24px;">${step<2?"Continue":"See my feed"}</button>
+        <button class="btn-ghost" style="align-self:center;display:block;margin:10px auto 0;" data-act="skip-onboard">skip for now</button>
+      </div>
     </div>
   </div>`;
 }
@@ -1579,23 +1593,26 @@ function renderProfile(){
 // ---------- ORG ABOUT (bio + contact, before verification) ----------
 function renderOrgAbout(){
   const wordCount = state.orgAboutText.trim() ? state.orgAboutText.trim().split(/\s+/).length : 0;
-  return `<div class="screen">
-    <div class="topbar">${backBtn("nameEntry")}<div class="brand"><img src="${LOGO_SRC}" style="height:26px;"></div><div></div></div>
-    <div class="hero-wrap" style="margin-top:32px;">
-      <h2 style="font-size:24px;">Tell donors about ${state.userName || "your organization"}</h2>
-      <p style="margin-top:6px;font-size:14px;">A quick summary donors will see before they help. Keep it brief.</p>
+  return `<div class="screen form-screen">
+    <div class="topbar">${backBtn("nameEntry")}<div></div><div></div></div>
+    <div class="form-center-wrap">
+      <img src="${LOGO_SRC}" class="form-logo">
+      <div class="hero-wrap">
+        <h2 style="font-size:24px;text-align:center;">Tell donors about ${state.userName || "your organization"}</h2>
+        <p style="margin-top:6px;font-size:14px;text-align:center;">A quick summary donors will see before they help. Keep it brief.</p>
 
-      <label class="field-label">About the organization/yourself <span id="wordCountLabel" style="color:${wordCount>30?'var(--urgent)':'var(--muted)'};">(${wordCount}/30 words)</span></label>
-      <textarea id="orgAboutInput" placeholder="e.g. We provide emergency shelter and meals for families in the Tri-Valley area.">${state.orgAboutText}</textarea>
+        <label class="field-label">About the organization/yourself <span id="wordCountLabel" style="color:${wordCount>30?'var(--urgent)':'var(--muted)'};">(${wordCount}/30 words)</span></label>
+        <textarea id="orgAboutInput" placeholder="e.g. We provide emergency shelter and meals for families in the Tri-Valley area.">${state.orgAboutText}</textarea>
 
-      <label class="field-label">Contact email</label>
-      <input type="text" id="orgEmailInput" placeholder="contact@yourorg.org" value="${state.orgEmail}">
+        <label class="field-label">Contact email</label>
+        <input type="text" id="orgEmailInput" placeholder="contact@yourorg.org" value="${state.orgEmail}">
 
-      <label class="field-label">Phone number</label>
-      <input type="text" id="orgPhoneInput" placeholder="(555) 123-4567" value="${state.orgPhone}">
+        <label class="field-label">Phone number</label>
+        <input type="text" id="orgPhoneInput" placeholder="(555) 123-4567" value="${state.orgPhone}">
+
+        <button class="btn-primary" style="margin-top:24px;" data-act="submit-org-about">Continue</button>
+      </div>
     </div>
-    <div style="flex:1;"></div>
-    <button class="btn-primary hero-wrap" style="margin-top:24px;" data-act="submit-org-about">Continue</button>
   </div>`;
 }
 
