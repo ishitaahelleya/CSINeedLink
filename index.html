@@ -2176,7 +2176,9 @@ async function syncRequests(){
   const url = apiUrl("/api/requests");
   if(!url){ state.syncStatus = "off"; return; }
   try{
-    const rows = await (await fetch(url, {signal: AbortSignal.timeout(4000)})).json();
+    const resp = await fetch(url, {signal: AbortSignal.timeout(4000)});
+    if(!resp.ok) throw new Error("bad_response");
+    const rows = await resp.json();
     const mapped = rows.map(mapServerRequest);
     const prevIds = new Set(requests.filter(r=>r.fromServer).map(r=>r.id));
     const before = JSON.stringify(requests.filter(r=>r.fromServer).map(r=>[r.id,r.have,r.pledgers.length]));
@@ -2621,7 +2623,12 @@ function handleAction(act, val, el){
             needed_by: f.timing||"", category: cat, lat: loc.lat, lng: loc.lng,
           }),
         })
-        .then(r=>r.json())
+        .then(r=>{
+          // An old server.js has GET /api/requests but not POST, so connecting
+          // succeeds while posting 404s. Call that out specifically.
+          if(r.status === 404) throw new Error("endpoint_missing");
+          return r.json();
+        })
         .then(d=>{
           if(d && d.request){
             const oq = orgQueue.find(o=>o.id===newId);
@@ -2632,7 +2639,11 @@ function handleAction(act, val, el){
             showToast("Our verification agent blocked this request.");
           }
         })
-        .catch(()=> showToast("Saved locally — shared server unreachable"));
+        .catch(err => showToast(
+          err && err.message === "endpoint_missing"
+            ? "Saved locally — your backend is out of date (server.js needs updating)"
+            : "Saved locally — couldn't reach the shared server"
+        ));
       }
       requests.unshift({
         id: newId, org: orgName, item: f.item.toLowerCase(), have: 0, need: parseInt(f.qty)||1,
