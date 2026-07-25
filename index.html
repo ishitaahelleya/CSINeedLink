@@ -943,7 +943,7 @@ function renderNameEntry(){
       <img src="${LOGO_SRC}" class="form-logo">
       <div class="hero-wrap">
         <h2 style="font-size:24px;text-align:center;">${forOrg ? "What's your organization called?" : "What should we call you?"}</h2>
-        <p style="margin-top:6px;font-size:14px;text-align:center;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company or club's name if you're giving on its behalf."}</p>
+        <p style="margin-top:6px;font-size:14px;text-align:center;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company/club's name if you're giving on its behalf."}</p>
         <label class="field-label">${forOrg ? "Organization name" : "Your name"}</label>
         <input type="text" id="nameEntryInput" placeholder="${forOrg ? 'e.g. Harbor View Shelter' : 'e.g. Alex Rivera'}" value="${state.userName}">
         <button class="btn-primary" style="margin-top:24px;" data-act="submit-name" data-val="${forOrg?'org':'donor'}">Continue</button>
@@ -957,7 +957,7 @@ function renderOnboard(){
   let inner = "";
   if(step===0){
     const interestOpts = [["Food","food"],["Shelter","home"],["Education","book"],["Health","heart"],["Disaster relief","alert"]];
-    inner = `<h2 style="font-size:24px;">What matters to you?</h2>
+    inner = `<h2 style="font-size:24px;">What are you providing?</h2>
     <p style="margin-top:6px;font-size:14px;">Pick a few to tune your feed.</p>
     <div class="interest-grid" id="interestChipRow">
       ${interestOpts.map(([c,ic])=>
