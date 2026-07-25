@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeedLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#77639F;
@@ -17,8 +17,8 @@
   --cream:#FBF8F4;
   --muted:#DCD3EC;
   --muted-dim:#c3b6dc;
-  --teal:#4E9E8F;
-  --urgent:#E4573D;
+  --teal:#3FC1E0;
+  --urgent:#FF6B5B;
   --scheduled:#F0B34D;
   --ongoing:#4CAF7D;
   --radius:14px;
@@ -31,12 +31,12 @@ body{
   background:linear-gradient(160deg, #6f5c96 0%, #5f4f83 55%, #4f4173 100%);
   background-attachment:fixed;
   color:var(--cream);
-  font-family:'League Spartan',sans-serif;
+  font-family:'Plus Jakarta Sans',sans-serif;
   min-height:100vh;
   overflow-x:hidden;
   letter-spacing:0;
 }
-h1,h2,h3{font-weight:800;margin:0;color:var(--cream);letter-spacing:0;}
+h1,h2,h3{font-weight:700;margin:0;color:var(--cream);letter-spacing:-0.01em;font-family:'Space Grotesk',sans-serif;}
 p{margin:0;color:var(--muted);}
 button{font-family:inherit;cursor:pointer;border:none;letter-spacing:0;}
 a{color:inherit;}
@@ -63,7 +63,77 @@ svg{display:block;}
   .screen{padding-left:72px;padding-right:72px;}
 }
 
-.hero-wrap{max-width:100%;}
+/* ---------- MEGA HERO (animated gradient, centered logo, scroll-revealed CTAs) ---------- */
+.mega-hero{
+  position:relative;min-height:100vh;width:100%;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  background:var(--bg-deep);flex-shrink:0;padding:0 24px;
+}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);mix-blend-mode:screen;}
+.blob1{width:62vw;height:62vw;max-width:640px;max-height:640px;background:#6D3EC9;top:-12%;left:-14%;opacity:0.85;animation:blobMove1 17s ease-in-out infinite;}
+.blob2{width:56vw;height:56vw;max-width:580px;max-height:580px;background:#F0743D;top:22%;right:-12%;opacity:0.8;animation:blobMove2 21s ease-in-out infinite;}
+.blob3{width:50vw;height:50vw;max-width:520px;max-height:520px;background:#F0B34D;bottom:-18%;left:22%;opacity:0.75;animation:blobMove3 19s ease-in-out infinite;}
+@keyframes blobMove1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(6%,8%) scale(1.12);}}
+@keyframes blobMove2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-8%,-4%) scale(1.15);}}
+@keyframes blobMove3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(5%,-8%) scale(1.1);}}
+
+.hero-logo-big{width:min(70vw,460px) !important;}
+
+.hero-typewriter{
+  position:relative;z-index:2;font-size:clamp(16px,2.6vw,24px);color:var(--cream);font-weight:600;
+  min-height:1.4em;text-align:center;max-width:600px;
+}
+.tw-cursor{display:inline-block;color:var(--accent);font-weight:700;animation:twBlink .8s step-end infinite;margin-left:2px;}
+@keyframes twBlink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+
+.stat-row{display:flex;justify-content:center;gap:56px;flex-wrap:wrap;}
+.stat-block{text-align:center;}
+
+.hero-logo-pulse{
+  position:relative;z-index:2;width:min(52vw,320px);
+  filter:drop-shadow(0 14px 44px rgba(0,0,0,0.4));
+  animation:logoPulse 4.2s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.3;transform:scale(0.93);}
+}
+
+.scroll-hint{
+  position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--cream);opacity:0.6;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  animation:scrollBounce 1.8s ease-in-out infinite;
+}
+.scroll-hint svg{transform:rotate(-90deg);}
+@keyframes scrollBounce{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
+
+.reveal-ctas{opacity:0;transform:translateY(50px);transition:opacity .7s ease-out, transform .7s cubic-bezier(.2,.8,.2,1);}
+.reveal-ctas.in-view{opacity:1;transform:translateY(0);}
+
+.mega-btn-row{display:flex;flex-direction:column;gap:20px;margin-top:32px;max-width:900px;margin-left:auto;margin-right:auto;}
+@media (min-width:700px){ .mega-btn-row{flex-direction:row;} }
+
+.mega-btn{
+  position:relative;overflow:hidden;flex:1;padding:32px 30px;border-radius:24px;
+  transition:transform .28s cubic-bezier(.2,.8,.25,1.3), box-shadow .28s ease;
+  display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
+}
+.mega-btn-title{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;font-size:21px;font-weight:800;}
+.mega-btn-sub{position:relative;z-index:2;font-size:13px;font-weight:500;opacity:0.8;line-height:1.4;max-width:280px;}
+.mega-btn::before{
+  content:'';position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .35s ease;
+  background:linear-gradient(120deg, rgba(109,62,201,0.5), rgba(240,116,61,0.45), rgba(240,179,77,0.5));
+  background-size:220% 220%;animation:miniGradient 6s ease infinite;
+}
+@keyframes miniGradient{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.mega-btn-primary{background:var(--accent);color:#3a2018;box-shadow:0 8px 24px rgba(240,179,77,0.3);}
+.mega-btn-outline{background:rgba(255,255,255,0.04);border:2px solid var(--accent);color:var(--accent);}
+@media (hover:hover){
+  .mega-btn:hover{transform:translateY(-6px) scale(1.015); box-shadow:0 20px 40px rgba(20,10,40,0.4);}
+  .mega-btn:hover::before{opacity:0.55;}
+}
+
 
 /* ---------- LANDING HERO (real desktop layout, not a stretched phone) ---------- */
 .landing-h1{font-size:clamp(28px,4vw,42px);line-height:1.12;}
@@ -157,6 +227,16 @@ svg{display:block;}
 
 /* chips */
 .chip-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+.interest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px;}
+@media (min-width:600px){.interest-grid{grid-template-columns:repeat(3,1fr);}}
+.interest-card{
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:18px 16px;
+  background:var(--surface);border-radius:var(--radius-lg);border:2px solid transparent;
+  font-weight:700;font-size:14px;color:var(--cream);transition:transform .18s ease-out, border-color .2s, background .2s;
+}
+.interest-icon{width:40px;height:40px;border-radius:12px;background:rgba(240,179,77,0.14);color:var(--accent);display:flex;align-items:center;justify-content:center;}
+.interest-card.selected{border-color:var(--accent);background:rgba(240,179,77,0.12);transform:scale(1.03);}
+.interest-card.selected .interest-icon{background:var(--accent);color:#3a2018;}
 .chip{padding:10px 16px;border-radius:20px;background:var(--surface);color:var(--cream);border:2px solid transparent;font-weight:600;font-size:14px;transition:transform .15s ease-out, background .2s;}
 .chip.selected{background:var(--accent);color:#3a2018;transform:scale(1.05);}
 
@@ -199,8 +279,8 @@ svg{display:block;}
   .fab:hover{transform:scale(1.08); box-shadow:0 10px 26px rgba(240,179,77,0.55);}
   .partner-chip{transition:transform .2s ease, background .2s ease;}
   .partner-chip:hover{transform:translateY(-3px); background:var(--surface2);}
-  .cta-help,.cta-donate,.cta-volunteer,.cta-learn{transition:transform .18s ease, filter .18s ease;}
-  .cta-help:hover,.cta-donate:hover,.cta-volunteer:hover,.cta-learn:hover{transform:translateY(-2px); filter:brightness(1.08);}
+  .cta-help{transition:transform .18s ease, filter .18s ease;}
+  .cta-help:hover{transform:translateY(-2px); filter:brightness(1.08);}
   input[type=text]:hover,textarea:hover{border-color:var(--muted-dim);}
   .expand-toggle{transition:gap .2s ease;}
   .expand-toggle:hover{gap:8px;}
@@ -232,11 +312,11 @@ svg{display:block;}
 .progress-fill.teal{background:var(--teal);}
 
 /* urgency tags: red/orange/green */
-.utag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:3px 9px;border-radius:8px;margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase;}
-.utag.urgent{background:rgba(228,87,61,0.18);color:var(--urgent);border:1px solid rgba(228,87,61,0.5);}
-.utag.scheduled{background:rgba(240,179,77,0.16);color:var(--scheduled);border:1px solid rgba(240,179,77,0.5);}
-.utag.ongoing{background:rgba(76,175,125,0.16);color:var(--ongoing);border:1px solid rgba(76,175,125,0.5);}
-.utag.surplus{background:rgba(78,158,143,0.16);color:var(--teal);border:1px solid rgba(78,158,143,0.5);}
+.utag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:4px 10px;border-radius:8px;margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase;}
+.utag.urgent{background:var(--urgent);color:#420f08;}
+.utag.scheduled{background:var(--scheduled);color:#3a2018;}
+.utag.ongoing{background:var(--ongoing);color:#082818;}
+.utag.surplus{background:var(--teal);color:#052733;}
 
 .section-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin:24px 0 10px 0;display:flex;justify-content:space-between;align-items:center;}
 .see-all{color:var(--accent);font-size:12px;font-weight:700;}
@@ -254,6 +334,14 @@ svg{display:block;}
 .taptarget.selected{border-color:var(--accent);background:rgba(240,179,77,0.12);color:var(--accent);}
 
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--bg-deep);color:var(--cream);padding:12px 18px;border-radius:12px;font-size:13px;max-width:400px;text-align:center;z-index:220;animation:toastIn .3s ease-out;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;}
+
+/* visible confirmation on every clickable action, so nothing ever feels like it "did nothing" */
+.confirm-pop{animation:confirmPulse .32s cubic-bezier(.3,.6,.3,1.5);}
+@keyframes confirmPulse{
+  0%{transform:scale(1);filter:brightness(1);}
+  35%{transform:scale(0.94);filter:brightness(1.25);}
+  100%{transform:scale(1);filter:brightness(1);}
+}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
 
 .skel{background:linear-gradient(90deg, var(--surface) 25%, var(--surface2) 37%, var(--surface) 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--radius);}
@@ -269,9 +357,10 @@ svg{display:block;}
 .trace-line{opacity:0;animation:traceIn .35s ease-out forwards;margin-bottom:8px;}
 @keyframes traceIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 .trace-line .agent{color:var(--accent);font-weight:600;}
-.trace-summary{background:rgba(240,179,77,0.1);border:1px solid rgba(240,179,77,0.3);border-radius:12px;padding:14px;font-family:'League Spartan',sans-serif;font-size:14px;color:var(--cream);margin-bottom:16px;line-height:1.5;}
+.trace-summary{background:rgba(240,179,77,0.1);border:1px solid rgba(240,179,77,0.3);border-radius:12px;padding:14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--cream);margin-bottom:16px;line-height:1.5;}
 
-.counter{font-size:40px;font-weight:800;color:var(--accent);}
+.counter{font-size:40px;font-weight:700;color:var(--accent);font-family:'Space Grotesk',sans-serif;}
+.counter-big{font-size:clamp(56px,9vw,96px);}
 .give-card{background:var(--surface);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;border:2px solid transparent;transition:all .15s;display:flex;gap:14px;align-items:flex-start;}
 .give-card.selected{border-color:var(--accent);}
 .give-card svg{width:26px;height:26px;color:var(--accent);flex-shrink:0;margin-top:2px;}
@@ -288,7 +377,8 @@ svg{display:block;}
 .reliability{font-size:11px;color:var(--teal);font-weight:600;margin-top:4px;}
 .empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:40px 20px;}
 
-.map-preview{height:120px;border-radius:var(--radius);background:radial-gradient(circle, rgba(240,179,77,0.25) 0%, var(--surface) 70%);display:flex;align-items:center;justify-content:center;margin-top:14px;animation:mapIn .5s ease-out;position:relative;overflow:hidden;}
+.map-preview{height:200px;border-radius:var(--radius);background:radial-gradient(circle, rgba(240,179,77,0.25) 0%, var(--surface) 70%);display:flex;align-items:center;justify-content:center;margin-top:14px;animation:mapIn .5s ease-out;position:relative;overflow:hidden;}
+.map-preview iframe{width:100%;height:100%;border:0;filter:saturate(0.85);}
 @keyframes mapIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
 .radius-circle{width:70px;height:70px;border:2px solid var(--accent);border-radius:50%;animation:radiusPulse 2s infinite;}
 @keyframes radiusPulse{0%{transform:scale(0.8);opacity:0.6;}50%{transform:scale(1.15);opacity:1;}100%{transform:scale(0.8);opacity:0.6;}}
@@ -329,13 +419,13 @@ label.field-label{font-size:12px;color:var(--muted);font-weight:600;display:bloc
 .event-banner .evt-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--muted);}
 .event-banner .evt-meta span{display:flex;align-items:center;gap:4px;}
 .event-banner p.evt-desc{font-size:12px;color:var(--cream);opacity:0.9;margin-top:8px;line-height:1.4;}
-.event-banner .evt-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-.event-banner .evt-actions button{padding:11px 12px;border-radius:10px;font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.event-banner .evt-actions{display:flex;gap:10px;margin-top:14px;align-items:center;}
+.event-banner .evt-actions .cta-help{flex:1;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;}
 .cta-help{background:var(--accent);color:#3a2018;}
-.cta-donate{background:var(--teal);color:#0c211d;}
-.cta-volunteer{background:#7C8FE0;color:#1a1f3d;}
-.cta-learn{background:transparent;border:1.5px solid var(--muted-dim);color:var(--cream);}
-.evt-loc-btn{background:transparent;border:1.5px solid var(--surface2);color:var(--cream);width:42px;flex:none !important;padding:0 !important;display:flex;align-items:center;justify-content:center;}
+.evt-loc-btn{background:transparent;border:1.5px solid var(--surface2);color:var(--cream);width:44px;height:44px;flex:none;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;}
+.evt-row-actions{display:flex;flex-direction:column;gap:8px;align-items:stretch;flex-shrink:0;width:110px;}
+.evt-row-actions .cta-help{padding:10px 12px;border-radius:10px;font-size:12px;font-weight:700;text-align:center;}
+.evt-row-actions .evt-loc-btn{align-self:center;width:38px;height:38px;}
 .dist-pill{font-size:10px;color:var(--teal);font-weight:700;}
 .cta-legend{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
 .cta-legend .row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);}
@@ -380,6 +470,16 @@ label.field-label{font-size:12px;color:var(--muted);font-weight:600;display:bloc
 
 /* org profile page */
 .org-hero{background:linear-gradient(135deg, var(--surface2), var(--surface));border-radius:var(--radius-lg);padding:20px;}
+.org-photo-banner{
+  height:120px;border-radius:var(--radius-lg);
+  background:linear-gradient(120deg, #6D3EC9, #F0743D, #F0B34D);
+  background-size:200% 200%;animation:miniGradient 8s ease infinite;
+  display:flex;align-items:flex-end;justify-content:flex-start;padding:16px;
+}
+.org-photo-initials{width:0;height:0;overflow:hidden;}
+.org-info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12.5px;}
+.org-info-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;}
+.org-action-col{display:flex;flex-direction:column;gap:12px;margin-top:22px;}
 .org-hero .avatar{width:56px;height:56px;border-radius:16px;background:var(--accent);color:#3a2018;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;}
 .social-row{display:flex;gap:10px;margin-top:14px;}
 .social-btn{width:38px;height:38px;border-radius:50%;background:var(--bg-deep);display:flex;align-items:center;justify-content:center;color:var(--cream);}
@@ -429,7 +529,7 @@ label.field-label{font-size:12px;color:var(--muted);font-weight:600;display:bloc
 /* toggle switch (urgent/not urgent) */
 .toggle-row{display:flex;gap:10px;margin-top:8px;}
 .toggle-opt{flex:1;padding:12px;border-radius:var(--radius);text-align:center;font-weight:700;font-size:13px;border:2px solid var(--surface2);background:var(--bg-deep);}
-.toggle-opt.on-urgent{border-color:var(--urgent);color:var(--urgent);background:rgba(228,87,61,0.1);}
+.toggle-opt.on-urgent{border-color:var(--urgent);color:var(--urgent);background:rgba(255,107,91,0.14);}
 .toggle-opt.on-ok{border-color:var(--ongoing);color:var(--ongoing);background:rgba(76,175,125,0.1);}
 </style>
 </head>
@@ -446,6 +546,9 @@ const LOGO_SRC = "data:image/png;base64," + LOGO_B64;
 
 // ---------- ICONS (vector, not emoji) ----------
 const ICONS = {
+  food: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 0 0 4 0V3M9 10v11M17 3c-1.5 1-2 3-2 5s1 4 2 4v9"/></svg>`,
+  book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c2-1 5-1 7 0v14c-2-1-5-1-7 0V5zM20 5c-2-1-5-1-7 0v14c2-1 5-1 7 0V5z"/></svg>`,
+  alert: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17v.01"/></svg>`,
   home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>`,
   search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
   heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-9.5-9C.6 7.3 2 3.5 5.5 3 8 2.6 10 4 12 6c2-2 4-3.4 6.5-3 3.5.5 4.9 4.3 3 8-2.5 4.5-9.5 9-9.5 9z"/></svg>`,
@@ -483,25 +586,26 @@ function withGeo(list){
 }
 
 const requests = withGeo([
-  {id:1, org:"Harbor View Shelter", item:"blankets", have:38, need:50, unit:"blankets", urgency:"urgent", category:"Shelter", surplus:false, verified:true},
-  {id:2, org:"Millbrook Food Pantry", item:"canned goods", have:210, need:300, unit:"cans", urgency:"ongoing", category:"Food", surplus:false, verified:true},
-  {id:3, org:"Cedar St. Family Center", item:"school backpacks", have:47, need:50, unit:"backpacks", urgency:"scheduled", category:"Education", surplus:false, verified:true, almost:true},
-  {id:4, org:"Riverside Youth Home", item:"winter coats", have:12, need:40, unit:"coats", urgency:"urgent", category:"Shelter", surplus:false, verified:true},
-  {id:5, org:"Second Harvest Co-op", item:"fresh bread", have:18, need:40, unit:"loaves", urgency:"urgent", category:"Food", surplus:true, verified:true, source:"Millbrook Bakery", reliability:98},
-  {id:6, org:"Grace Community Kitchen", item:"day-old pastries", have:9, need:24, unit:"pastries", urgency:"scheduled", category:"Food", surplus:true, verified:true, source:"Millbrook Bakery", reliability:98, almost:true},
+  {id:1, org:"Harbor View Shelter", item:"blankets", have:38, need:50, unit:"blankets", urgency:"urgent", category:"Shelter", surplus:false, verified:true, details:"Twin and full-size blankets needed most — overnight temperatures have been dropping fast this week.", pledgers:["Alex R.", "Priya S.", "Dublin HS Key Club"]},
+  {id:2, org:"Millbrook Food Pantry", item:"canned goods", have:210, need:300, unit:"cans", urgency:"ongoing", category:"Food", surplus:false, verified:true, details:"Low-sodium canned vegetables and soups preferred. Drop off any weekday, 9am–5pm.", pledgers:["Jamie K.", "Tri-Valley Rotary"]},
+  {id:3, org:"Cedar St. Family Center", item:"school backpacks", have:47, need:50, unit:"backpacks", urgency:"scheduled", category:"Education", surplus:false, verified:true, almost:true, details:"Filling the last few backpacks before term starts Aug 12. New or gently used both welcome.", pledgers:["Sam T.", "Foothill Interact", "Alex R."]},
+  {id:4, org:"Riverside Youth Home", item:"winter coats", have:12, need:40, unit:"coats", urgency:"urgent", category:"Shelter", surplus:false, verified:true, details:"Sizes youth medium through adult large needed for residents ages 14–21.", pledgers:["Livermore Lions"]},
+  {id:5, org:"Second Harvest Co-op", item:"fresh bread", have:18, need:40, unit:"loaves", urgency:"urgent", category:"Food", surplus:true, verified:true, source:"Millbrook Bakery", reliability:98, details:"Same-day surplus from Millbrook Bakery — best used within 24 hours.", pledgers:[]},
+  {id:6, org:"Grace Community Kitchen", item:"day-old pastries", have:9, need:24, unit:"pastries", urgency:"scheduled", category:"Food", surplus:true, verified:true, source:"Millbrook Bakery", reliability:98, almost:true, details:"Used in the Thursday community breakfast — perishable, pickup only.", pledgers:["Jamie K."]},
 ]);
 
 const orgProfiles = {
   "Harbor View Shelter": {
     mission:"Harbor View Shelter provides emergency overnight shelter and case management for families experiencing homelessness in the Tri-Valley area.",
     founded:2015, pastDrives:["Winter Coat Drive — Jan 2026 (312 coats collected)","Back-to-School Drive — Aug 2025 (140 backpacks)","Holiday Meal Drive — Dec 2025 (89 meals served)"],
-    needs:["Blankets","Winter coats","Hygiene kits"], social:{instagram:"@harborviewshelter", web:"harborviewshelter.org", mail:"hello@harborviewshelter.org"}
+    needs:["Blankets","Winter coats","Hygiene kits"], social:{instagram:"@harborviewshelter", web:"harborviewshelter.org", mail:"hello@harborviewshelter.org"},
+    address:"4210 Foothill Rd, Dublin, CA", phone:"(925) 555-0148", hours:"Mon–Fri, 9am–6pm", donationsCount:186,
   },
-  "Millbrook Food Pantry": { mission:"Millbrook Food Pantry distributes free groceries weekly to over 200 local families facing food insecurity.", founded:2012, pastDrives:["Thanksgiving Food Drive — Nov 2025","Summer Meal Program — Jun 2025"], needs:["Canned goods","Rice & pasta","Baby formula"], social:{instagram:"@millbrookpantry", web:"millbrookpantry.org", mail:"info@millbrookpantry.org"} },
-  "Cedar St. Family Center": { mission:"Cedar St. Family Center supports low-income families with after-school programs, tutoring, and school-supply access.", founded:2018, pastDrives:["Backpack Drive — Aug 2025 (200 backpacks)"], needs:["Backpacks","School supplies","Laptops"], social:{instagram:"@cedarstfc", web:"cedarstreetfc.org", mail:"contact@cedarstreetfc.org"} },
-  "Riverside Youth Home": { mission:"Riverside Youth Home offers transitional housing and life-skills support for youth aging out of foster care.", founded:2016, pastDrives:["Winter Coat Drive — Jan 2026"], needs:["Winter coats","Bedding","Job-interview clothing"], social:{instagram:"@riversideyouth", web:"riversideyouthhome.org", mail:"support@riversideyouthhome.org"} },
-  "Second Harvest Co-op": { mission:"Second Harvest Co-op rescues surplus food from local bakeries and grocers and redistributes it same-day to families in need.", founded:2019, pastDrives:["Surplus bread program — ongoing weekly"], needs:["Refrigerated transport", "Volunteer drivers"], social:{instagram:"@secondharvestcoop", web:"secondharvestcoop.org", mail:"hello@secondharvestcoop.org"} },
-  "Grace Community Kitchen": { mission:"Grace Community Kitchen serves hot meals six days a week and accepts perishable surplus donations same-day.", founded:2014, pastDrives:["Community Open House — Aug 2025"], needs:["Perishable food", "Volunteer cooks"], social:{instagram:"@gracekitchen", web:"gracecommunitykitchen.org", mail:"kitchen@gracecommunitykitchen.org"} },
+  "Millbrook Food Pantry": { mission:"Millbrook Food Pantry distributes free groceries weekly to over 200 local families facing food insecurity.", founded:2012, pastDrives:["Thanksgiving Food Drive — Nov 2025","Summer Meal Program — Jun 2025"], needs:["Canned goods","Rice & pasta","Baby formula"], social:{instagram:"@millbrookpantry", web:"millbrookpantry.org", mail:"info@millbrookpantry.org"}, address:"890 Main St, Pleasanton, CA", phone:"(925) 555-0172", hours:"Tue–Sat, 10am–4pm", donationsCount:412 },
+  "Cedar St. Family Center": { mission:"Cedar St. Family Center supports low-income families with after-school programs, tutoring, and school-supply access.", founded:2018, pastDrives:["Backpack Drive — Aug 2025 (200 backpacks)"], needs:["Backpacks","School supplies","Laptops"], social:{instagram:"@cedarstfc", web:"cedarstreetfc.org", mail:"contact@cedarstreetfc.org"}, address:"120 Cedar St, Livermore, CA", phone:"(925) 555-0193", hours:"Mon–Fri, 8am–5pm", donationsCount:97 },
+  "Riverside Youth Home": { mission:"Riverside Youth Home offers transitional housing and life-skills support for youth aging out of foster care.", founded:2016, pastDrives:["Winter Coat Drive — Jan 2026"], needs:["Winter coats","Bedding","Job-interview clothing"], social:{instagram:"@riversideyouth", web:"riversideyouthhome.org", mail:"support@riversideyouthhome.org"}, address:"55 Riverside Pkwy, Dublin, CA", phone:"(925) 555-0164", hours:"Mon–Sun, 24 hours", donationsCount:64 },
+  "Second Harvest Co-op": { mission:"Second Harvest Co-op rescues surplus food from local bakeries and grocers and redistributes it same-day to families in need.", founded:2019, pastDrives:["Surplus bread program — ongoing weekly"], needs:["Refrigerated transport", "Volunteer drivers"], social:{instagram:"@secondharvestcoop", web:"secondharvestcoop.org", mail:"hello@secondharvestcoop.org"}, address:"77 Market Ave, Pleasanton, CA", phone:"(925) 555-0107", hours:"Daily, 7am–7pm", donationsCount:238 },
+  "Grace Community Kitchen": { mission:"Grace Community Kitchen serves hot meals six days a week and accepts perishable surplus donations same-day.", founded:2014, pastDrives:["Community Open House — Aug 2025"], needs:["Perishable food", "Volunteer cooks"], social:{instagram:"@gracekitchen", web:"gracecommunitykitchen.org", mail:"kitchen@gracecommunitykitchen.org"}, address:"310 Chestnut St, Livermore, CA", phone:"(925) 555-0129", hours:"Mon–Sat, 11am–7pm", donationsCount:151 },
 };
 
 const communityEvents = withGeo([
@@ -592,7 +696,21 @@ let state = {
   financeAmount:25,
   postRequestForm:{item:"", qty:"", urgency:"urgent", details:""},
   postRequestSuccess:false,
+  orgAboutText:"",
+  orgEmail:"",
+  orgPhone:"",
+  helpFlowOrg:null,
+  helpFlowStage:"form",
+  helpFlowImage:null,
+  helpFlowQty:1,
+  helpFlowEmail:"",
+  pledgeListOpen:false,
+  financeOrg:null,
+  geocodeStatus:"idle",
+  geocodedLoc:null,
+  locGeocoding:false,
   routeLoading:false,
+  introPlayed:false,
 };
 
 function haversineMiles(lat1,lng1,lat2,lng2){
@@ -615,6 +733,41 @@ function requestRealLocation(){
     ()=>{ setState({locStatus:"denied"}); },
     {timeout:6000}
   );
+}
+
+// Real geocoding via OpenStreetMap Nominatim, constrained to California so
+// "Dublin" resolves to Dublin, CA rather than Dublin, Ireland.
+async function geocodeLocation(query){
+  if(!query || !query.trim()) return null;
+  try{
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&viewbox=-124.5,42.1,-114.0,32.4&bounded=1&q=${encodeURIComponent(query)}`;
+    const resp = await fetch(url, {headers:{"Accept":"application/json"}});
+    const data = await resp.json();
+    if(data && data[0]) return {lat:parseFloat(data[0].lat), lng:parseFloat(data[0].lon), label:data[0].display_name};
+  }catch(err){ console.error("Geocoding failed:", err); }
+  return null;
+}
+
+// Animates the map preview zooming from a statewide California view down to
+// the resolved point, by stepping the embedded OSM iframe through shrinking
+// bounding boxes.
+function animateMapZoom(lat, lng){
+  const wrap = document.getElementById("zoomMapPreview");
+  if(!wrap) return;
+  wrap.innerHTML = `<iframe id="zoomIframe" loading="lazy"></iframe>`;
+  const iframe = document.getElementById("zoomIframe");
+  const steps = [3.5, 1.6, 0.6, 0.18, 0.05];
+  let i = 0;
+  function step(){
+    const live = document.getElementById("zoomIframe");
+    if(!live) return; // user navigated away mid-animation
+    const d = steps[i];
+    const bbox = `${lng-d}%2C${lat-d}%2C${lng+d}%2C${lat+d}`;
+    live.src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
+    i++;
+    if(i<steps.length) setTimeout(step, 500);
+  }
+  step();
 }
 
 function setState(patch){ state = {...state, ...patch}; render(); }
@@ -646,9 +799,10 @@ function render(){
   const app = document.getElementById('app');
   const sidenav = document.getElementById('sidenav');
 
-  const showSideAndBottomNav = ["feed","browse","impact","profile","events","orgdash"].includes(state.screen);
-  sidenav.className = showSideAndBottomNav && state.mode==="donor" ? "show" : "";
-  sidenav.innerHTML = showSideAndBottomNav && state.mode==="donor" ? sidenavHtml(state.screen) : "";
+  const preAuthScreens = ["splash","landing","nameEntry","onboard","orgonboard","orgAbout"];
+  const showNav = !preAuthScreens.includes(state.screen);
+  sidenav.className = showNav ? "show" : "";
+  sidenav.innerHTML = showNav ? sidenavHtml(state.screen) : "";
 
   let html = "";
   if(state.screen==="splash") html = renderSplash();
@@ -661,12 +815,18 @@ function render(){
   else if(state.screen==="profile") html = renderProfile();
   else if(state.screen==="orgdash") html = renderOrgDash();
   else if(state.screen==="orgonboard") html = renderOrgOnboard();
+  else if(state.screen==="orgAbout") html = renderOrgAbout();
   else if(state.screen==="scan") html = renderScan();
   else if(state.screen==="events") html = renderEvents();
   else if(state.screen==="orgProfile") html = renderOrgProfile();
   else if(state.screen==="chat") html = renderChat();
   else if(state.screen==="mapView") html = renderMapView();
   else if(state.screen==="postRequest") html = renderPostRequest();
+  else if(state.screen==="helpFlow") html = renderHelpFlow();
+
+  if(showNav){
+    html += (state.mode==="org" ? orgBottomNav(state.screen) : bottomNav(state.screen));
+  }
 
   let overlay = "";
   if(state.sheetOpen) overlay += renderDonationSheet();
@@ -674,6 +834,7 @@ function render(){
   if(state.eventFilterSheetOpen) overlay += renderEventFilterSheet();
   if(state.settingsOpen) overlay += renderSettingsSheet();
   if(state.financeSheetOpen) overlay += renderFinanceSheet();
+  if(state.pledgeListOpen) overlay += renderPledgeListSheet();
   if(state.toast) overlay += `<div class="toast">${iconWrap('check',15,'var(--accent)')} ${state.toast.msg}</div>`;
   if(state.routeLoading) overlay += `<div class="route-loading"><div class="spin"></div></div>`;
 
@@ -685,18 +846,31 @@ function render(){
   }
 }
 
+function navItemsFor(mode){
+  return mode==="org"
+    ? [["orgdash","Dashboard","home"],["events","Alerts","heart"],["chat","Messages","chat"],["profile","Profile","user"]]
+    : [["feed","Home","home"],["browse","Browse","search"],["impact","Impact","heart"],["profile","Profile","user"]];
+}
+
 function sidenavHtml(active){
-  const items = [["feed","Home","home"],["browse","Browse","search"],["impact","Impact","heart"],["profile","Profile","user"]];
+  const items = navItemsFor(state.mode);
   return `
     <div class="sidenav-logo"><img src="${LOGO_SRC}"><b style="font-size:15px;">NeedLink</b></div>
     ${items.map(([scr,label,ic])=>`<button class="sidenav-item ${active===scr?'active':''}" data-act="nav" data-val="${scr}">${icon(ic,20)}<span>${label}</span></button>`).join("")}
     <div style="flex:1;"></div>
     <button class="sidenav-item" data-act="open-settings">${icon('gear',20)}<span>Settings</span></button>
+    <button class="sidenav-item" data-act="switch-mode">${icon(state.mode==='org'?'hand':'building',20)}<span>${state.mode==='org'?'Donor view':'Org view'}</span></button>
   `;
 }
 
 function bottomNav(active){
-  const items = [["feed","Home","home"],["browse","Browse","search"],["impact","Impact","heart"],["profile","Profile","user"]];
+  const items = navItemsFor("donor");
+  return `<div class="bottomnav">
+    ${items.map(([scr,label,ic])=>`<button class="navitem ${active===scr?'active':''}" data-act="nav" data-val="${scr}">${icon(ic,21)}<span>${label}</span></button>`).join("")}
+  </div>`;
+}
+function orgBottomNav(active){
+  const items = navItemsFor("org");
   return `<div class="bottomnav">
     ${items.map(([scr,label,ic])=>`<button class="navitem ${active===scr?'active':''}" data-act="nav" data-val="${scr}">${icon(ic,21)}<span>${label}</span></button>`).join("")}
   </div>`;
@@ -715,44 +889,38 @@ function renderSplash(){
 
 // ---------- LANDING ----------
 function renderLanding(){
-  return `<div class="screen" style="padding-top:36px;">
-    <div class="topbar"><div class="brand"><img src="${LOGO_SRC}" style="height:34px;"></div><div></div></div>
+  return `<div class="mega-hero">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+    <img src="${LOGO_SRC}" class="hero-logo-pulse hero-logo-big">
+    <p class="hero-typewriter"><span id="heroTwText"></span><span class="tw-cursor" id="heroTwCursor">|</span></p>
+    <div class="scroll-hint" id="scrollHint">${icon('back',18)}<span>scroll</span></div>
+  </div>
 
-    <div class="landing-hero">
-      <div class="hero-wrap">
-        <div style="margin-top:28px;">
-          <h1 class="landing-h1">We tell you what's needed,<br>before you have to ask.</h1>
-          <div style="margin-top:18px;" id="counterWrap">
-            <div class="counter" id="counterNum">0</div>
-            <p style="font-size:13px;">items delivered through NeedLink</p>
-          </div>
+  <div class="screen" style="padding-top:60px;padding-bottom:80px;">
+    <div class="reveal-ctas" id="revealCtas">
+      <div class="stat-row">
+        <div class="stat-block">
+          <div class="counter counter-big" id="counterNum">0</div>
+          <p style="font-size:14px;">items delivered through NeedLink</p>
         </div>
-        <div class="landing-cta-row">
-          <button class="btn-primary" data-act="go-nameentry" data-val="donor">${iconWrap('hand',18)} I want to help</button>
-          <button class="btn-outline" data-act="go-nameentry" data-val="org">${iconWrap('building',18)} I want to receive</button>
+        <div class="stat-block">
+          <div class="counter counter-big" id="counterNum2">0</div>
+          <p style="font-size:14px;">orgs supported</p>
         </div>
       </div>
-
-      <div class="hero-visual">
-        <div class="hero-visual-glow"></div>
-        <div class="hero-visual-card">
-          <span class="utag urgent">Urgent</span>
-          <div class="org-name">Harbor View Shelter ${iconWrap('check',13,'var(--accent)')}</div>
-          <p style="font-size:12px;margin-top:4px;">38 of 50 blankets</p>
-          <div class="progress-bar"><div class="progress-fill" style="width:76%"></div></div>
-          <p style="font-size:11px;margin-top:8px;">Matched, verified, and routed automatically.</p>
-        </div>
-        <img src="${LOGO_SRC}" class="hero-visual-glyph">
+      <div class="mega-btn-row">
+        <button class="mega-btn mega-btn-primary" data-act="go-nameentry" data-val="donor">
+          <span class="mega-btn-title">${iconWrap('hand',22)} I want to help</span>
+          <span class="mega-btn-sub">Donate items, money, or your time to a nearby need</span>
+        </button>
+        <button class="mega-btn mega-btn-outline" data-act="go-nameentry" data-val="org">
+          <span class="mega-btn-title">${iconWrap('building',22)} I want to receive</span>
+          <span class="mega-btn-sub">Post what your organization needs and reach nearby donors</span>
+        </button>
       </div>
     </div>
-
-    <div class="section-title">Open requests near you</div>
-    <div class="scroll-row">${requests.slice(0,5).map(reqCardHtml).join("")}</div>
-
-    <div class="section-title">Partners who make this possible</div>
-    <p style="font-size:12px;">Local clubs and businesses already give through NeedLink.</p>
-    <div class="partner-strip">${partners.map((p,i)=>`<div class="partner-chip"><div class="pinit p-${i%4}">${p.initials}</div><span>${p.name}</span></div>`).join("")}</div>
-    <button class="btn-ghost" style="margin-top:2px;">${iconWrap('mail',14)} Want your org listed here? Reach out →</button>
   </div>`;
 }
 
@@ -763,7 +931,7 @@ function renderNameEntry(){
     <div class="topbar">${backBtn("landing")}<div class="brand"><img src="${LOGO_SRC}" style="height:26px;"></div><div></div></div>
     <div class="hero-wrap" style="margin-top:40px;">
       <h2 style="font-size:24px;">${forOrg ? "What's your organization called?" : "What should we call you?"}</h2>
-      <p style="margin-top:6px;font-size:14px;">${forOrg ? "This is how donors will see you." : "Your name, or a company/club name if you're giving on behalf of one."}</p>
+      <p style="margin-top:6px;font-size:14px;">${forOrg ? "This is how donors will see you." : "Enter your name, or your company or club's name if you're giving on its behalf."}</p>
       <label class="field-label">${forOrg ? "Organization name" : "Your name"}</label>
       <input type="text" id="nameEntryInput" placeholder="${forOrg ? 'e.g. Harbor View Shelter' : 'e.g. Alex Rivera'}" value="${state.userName}">
     </div>
@@ -776,11 +944,14 @@ function renderOnboard(){
   const step = state.onboardStep;
   let inner = "";
   if(step===0){
+    const interestOpts = [["Food","food"],["Shelter","home"],["Education","book"],["Health","heart"],["Disaster relief","alert"]];
     inner = `<h2 style="font-size:24px;">What matters to you?</h2>
     <p style="margin-top:6px;font-size:14px;">Pick a few to tune your feed.</p>
-    <div class="chip-row" id="interestChipRow">
-      ${["Food","Shelter","Education","Health","Disaster relief"].map(c=>
-        `<button class="chip ${state.interests.includes(c)?'selected':''}" data-act="toggle-interest" data-val="${c}">${c}</button>`).join("")}
+    <div class="interest-grid" id="interestChipRow">
+      ${interestOpts.map(([c,ic])=>
+        `<button class="interest-card ${state.interests.includes(c)?'selected':''}" data-act="toggle-interest" data-val="${c}">
+          <span class="interest-icon">${icon(ic,22)}</span><span>${c}</span>
+        </button>`).join("")}
     </div>`;
   } else if(step===1){
     const opts = [["Individual","individual","Just you, giving on your own."],["School club","club","Rally your club around one request."],["Company","building","Give as a business or team."]];
@@ -795,9 +966,9 @@ function renderOnboard(){
   } else if(step===2){
     inner = `<h2 style="font-size:24px;">Where are you?</h2>
     <label class="field-label">Location</label>
-    <input type="text" id="locInput" placeholder="Enter city or zip" value="${state.location}">
-    ${state.location ? `<div class="map-preview"><div class="radius-circle"></div></div>
-    <p style="font-size:11px;margin-top:8px;">Used only to find nearby requests.</p>` : ""}`;
+    <input type="text" id="locInput" placeholder="Enter city or zip in California" value="${state.location}">
+    <div id="locStatusLine" style="font-size:11px;margin-top:8px;color:var(--muted);">${state.geocodeStatus==='found' ? 'Location found.' : state.geocodeStatus==='searching' ? 'Locating...' : state.geocodeStatus==='notfound' ? "Couldn't find that — try a nearby city." : 'Press Enter after typing to locate you on the map.'}</div>
+    <div class="map-preview" id="zoomMapPreview">${state.geocodedLoc ? '' : `<div class="radius-circle"></div>`}</div>`;
   }
 
   return `<div class="screen">
@@ -825,9 +996,6 @@ function reqCardHtml(r){
 }
 
 // ---------- EVENT BANNER ----------
-function ctaClass(cta){ return cta==="Donate"?"cta-donate":cta==="Volunteer"?"cta-volunteer":cta==="Learn More"?"cta-learn":"cta-help"; }
-function ctaIcon(cta){ return cta==="Donate"?"dollar":cta==="Volunteer"?"clock":cta==="Learn More"?"info":"hand"; }
-
 function eventBannerHtml(e){
   return `<div class="event-banner ${e.liveNow?'live-flash':''}">
     ${e.liveNow ? `<div class="live-badge"><span class="liveDot"></span>Happening now</div>` : ""}
@@ -841,9 +1009,8 @@ function eventBannerHtml(e){
     </div>
     <p class="evt-desc">${e.desc}</p>
     <div class="evt-actions">
-      <button class="${ctaClass(e.cta)}" data-act="cta-event" data-id="${e.id}">${iconWrap(ctaIcon(e.cta),14)} ${e.cta}</button>
+      <button class="cta-help" data-act="cta-event" data-id="${e.id}">${iconWrap('hand',14)} I Can Help</button>
       <button class="evt-loc-btn" data-act="show-location" data-id="${e.id}" title="Show location">${icon('mapPin',18)}</button>
-      <button class="evt-loc-btn" data-act="share-event" data-id="${e.id}" title="Share">${icon('share',17)}</button>
     </div>
   </div>`;
 }
@@ -856,9 +1023,9 @@ function eventRowHtml(e){
       <h4>${e.title} ${e.liveNow?'<span class="utag urgent" style="margin-left:4px;">Live now</span>':''}</h4>
       <p>${e.date} · ${liveDistance(e)} · needs: ${e.help}</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
-      <button class="${ctaClass(e.cta)}" style="padding:9px 12px;border-radius:10px;font-size:11.5px;font-weight:700;" data-act="cta-event" data-id="${e.id}">${e.cta}</button>
-      <button class="evt-loc-btn" style="align-self:center;" data-act="show-location" data-id="${e.id}">${icon('mapPin',16)}</button>
+    <div class="evt-row-actions">
+      <button class="cta-help" data-act="cta-event" data-id="${e.id}">I Can Help</button>
+      <button class="evt-loc-btn" data-act="show-location" data-id="${e.id}">${icon('mapPin',16)}</button>
     </div>
   </div>`;
 }
@@ -896,7 +1063,7 @@ function renderFeed(){
     <div class="grid-row">${topPicks.map(reqCardHtml).join("")}</div>
   </div>
   <button class="fab" data-act="open-scan" title="Scan an item">${icon('camera',24)}</button>
-  ${bottomNav("feed")}`;
+  `;
 }
 // ---------- BROWSE (functional search + filters) ----------
 function filteredRequests(){
@@ -935,7 +1102,7 @@ function renderBrowse(){
       </div>
     </div>
   </div>
-  ${bottomNav("browse")}`;
+  `;
 }
 
 // ---------- COMMUNITY EVENTS (full list + filters) ----------
@@ -948,11 +1115,11 @@ function renderEvents(){
     </div>
     <p style="font-size:12px;margin-top:6px;">${state.userLoc ? "Sorted by urgency, using your location." : "Enable location for distance-based matching."}</p>
 
-    <button class="btn-ghost" style="margin-top:10px;padding-left:0;" data-act="toggle-cta-legend">${iconWrap('info',13)} What's the difference between Help / Donate / Volunteer?</button>
+    <button class="btn-ghost" style="margin-top:10px;padding-left:0;" data-act="toggle-cta-legend">${iconWrap('info',13)} What does "sorted by urgency" mean?</button>
     ${state.ctaLegendOpen ? `<div class="cta-legend">
-      <div class="row"><span class="sw" style="background:var(--accent);"></span> I Can Help — flexible, org matches you to what's needed</div>
-      <div class="row"><span class="sw" style="background:var(--teal);"></span> Donate — money or specific items</div>
-      <div class="row"><span class="sw" style="background:#7C8FE0;"></span> Volunteer — your time, on-site</div>
+      <div class="row"><span class="sw" style="background:var(--urgent);"></span> Urgent — needs items or help as soon as possible</div>
+      <div class="row"><span class="sw" style="background:var(--scheduled);"></span> Scheduled — needs items for a specific event or date</div>
+      <div class="row"><span class="sw" style="background:var(--ongoing);"></span> Ongoing — needs items throughout the year, lowest priority</div>
     </div>` : ""}
 
     <div class="filter-pill-row">
@@ -994,7 +1161,12 @@ function renderOrgProfile(){
   const req = requests.find(r=>r.org===name);
   return `<div class="screen">
     <div class="topbar">${backBtn("feed")}<div></div><div></div></div>
-    <div class="org-hero" style="margin-top:8px;">
+
+    <div class="org-photo-banner">
+      <div class="org-photo-initials">${name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+    </div>
+
+    <div class="org-hero" style="margin-top:-30px;position:relative;border-top-left-radius:0;border-top-right-radius:0;">
       <div style="display:flex;gap:14px;align-items:center;">
         <div class="avatar">${name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
         <div><h2 style="font-size:19px;">${name}</h2><p style="font-size:12px;margin-top:2px;">Founded ${p.founded||'—'} · ${liveDistance(req||{})}</p></div>
@@ -1002,9 +1174,16 @@ function renderOrgProfile(){
       <p style="margin-top:14px;font-size:13.5px;color:var(--cream);line-height:1.5;">${p.mission||''}</p>
       <div class="social-row">
         ${p.social ? `<a class="social-btn" href="#" title="${p.social.instagram}">${icon('instagram',16)}</a>
-        <a class="social-btn" href="#" title="${p.social.web}">${icon('web',16)}</a>
-        <a class="social-btn" href="#" title="${p.social.mail}">${icon('mail',16)}</a>` : ""}
+        <a class="social-btn" href="https://${p.social.web}" target="_blank" title="${p.social.web}">${icon('web',16)}</a>
+        <a class="social-btn" href="mailto:${p.social.mail}" title="${p.social.mail}">${icon('mail',16)}</a>` : ""}
       </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="org-info-row"><span class="org-info-label">${iconWrap('mapPin',14,'var(--muted)')} Address</span><span>${p.address||'Not listed'}</span></div>
+      <div class="org-info-row"><span class="org-info-label">${iconWrap('chat',14,'var(--muted)')} Phone</span><span>${p.phone||'Not listed'}</span></div>
+      <div class="org-info-row"><span class="org-info-label">${iconWrap('clock',14,'var(--muted)')} Hours</span><span>${p.hours||'Not listed'}</span></div>
+      <div class="org-info-row" style="border-bottom:none;"><span class="org-info-label">${iconWrap('heart',14,'var(--muted)')} Donations received</span><span>${p.donationsCount||0} to date</span></div>
     </div>
 
     <div class="section-title">Currently needs</div>
@@ -1015,12 +1194,12 @@ function renderOrgProfile(){
       ${(p.pastDrives||[]).map(d=>`<p style="font-size:12.5px;margin-bottom:8px;">• ${d}</p>`).join("")}
     </div>` : ""}
 
-    <div style="display:flex;gap:10px;margin-top:22px;">
+    <div class="org-action-col">
       <button class="btn-primary" data-act="open-chat" data-val="${name}">${iconWrap('chat',16)} Message org</button>
-      <button class="btn-outline" data-act="open-item" data-id="${req?req.id:''}">${iconWrap('hand',16)} Donate</button>
+      <button class="btn-outline" data-act="open-item" data-id="${req?req.id:''}">${iconWrap('hand',16)} Donate items</button>
+      <button class="btn-outline" data-act="open-finance" data-val="${name}">${iconWrap('dollar',16)} Give money</button>
+      ${state.mode==="org" ? `<button class="btn-outline" data-act="go-post-request">${iconWrap('box',16)} Post a request for this org</button>` : ""}
     </div>
-
-    ${state.mode==="org" ? `<button class="btn-outline" style="margin-top:10px;" data-act="go-post-request">${iconWrap('box',16)} Post a request for this org</button>` : ""}
   </div>`;
 }
 
@@ -1046,7 +1225,7 @@ function renderChat(){
 function renderMapView(){
   const centerLat = state.userLoc ? state.userLoc.lat : HQ.lat;
   const centerLng = state.userLoc ? state.userLoc.lng : HQ.lng;
-  let focusLat = centerLat, focusLng = centerLng, focusLabel = "your area";
+  let focusLat = centerLat, focusLng = centerLng, focusLabel = "Your Area";
   if(state.mapOpenFor){
     const e = communityEvents.find(e=>e.id==state.mapOpenFor) || requests.find(r=>r.id==state.mapOpenFor);
     if(e){ focusLat=e.lat; focusLng=e.lng; focusLabel = e.title || e.org; }
@@ -1085,12 +1264,14 @@ function renderPostRequest(){
       <button class="btn-primary" style="margin-top:24px;" data-act="nav" data-val="orgdash">Back to dashboard</button>
     </div>`;
   }
+  const detectedCat = f.item.trim() ? autoCategorize(f.item) : null;
   return `<div class="screen">
     <div class="topbar">${backBtn("orgdash")}<h2 style="font-size:19px;">Post a request</h2><div></div></div>
     <p style="font-size:13px;margin-top:6px;">Tell donors what you need — keep it simple, they'll ask follow-ups in chat if needed.</p>
 
     <label class="field-label">What do you need?</label>
     <input type="text" id="prItem" placeholder="e.g. Winter coats" value="${f.item}">
+    <div id="prCategoryTag" style="margin-top:8px;">${detectedCat ? `<span class="utag scheduled" style="text-transform:none;font-size:11px;">${iconWrap('info',10)} Auto-categorized as ${detectedCat}</span>` : `<p style="font-size:11px;color:var(--muted);">Category will be detected automatically as you type.</p>`}</div>
 
     <label class="field-label">Quantity</label>
     <input type="text" id="prQty" placeholder="e.g. 25" value="${f.qty}">
@@ -1107,7 +1288,76 @@ function renderPostRequest(){
     <button class="btn-primary" style="margin-top:24px;" data-act="submit-post-request">Post request</button>
   </div>`;
 }
+
+// ---------- AUTO-CATEGORIZATION ----------
+function autoCategorize(text){
+  const t = text.toLowerCase();
+  const map = [
+    ["Food", ["apple","banana","fruit","bread","canned","soup","rice","pasta","produce","food","snack","milk","cereal","vegetable","meat","grocery","water bottle","loaves"]],
+    ["Shelter", ["coat","blanket","jacket","clothes","clothing","tent","sleeping bag","shoe","sock","pillow"]],
+    ["Education", ["backpack","school","book","supplies","laptop","pencil","notebook","binder","calculator"]],
+    ["Health", ["first aid","medicine","health","hygiene","mask","bandage","toothpaste","soap","diaper"]],
+  ];
+  for(const [cat, keywords] of map){ if(keywords.some(k=>t.includes(k))) return cat; }
+  return "Food";
+}
+
+// ---------- I CAN HELP FLOW (photo + quantity + org contact) ----------
+function renderHelpFlow(){
+  const org = state.helpFlowOrg;
+  const p = orgProfiles[org] || {};
+  if(state.helpFlowStage==="success"){
+    return `<div class="screen" style="align-items:center;justify-content:center;text-align:center;">
+      ${iconWrap('check',54,'var(--accent)')}
+      <h2 style="font-size:20px;margin-top:16px;">Thanks — you're in!</h2>
+      <p style="margin-top:8px;font-size:13px;">${org} will follow up at the contact info you gave to confirm drop-off.</p>
+      <button class="btn-primary" style="margin-top:24px;" data-act="nav" data-val="feed">Back to feed</button>
+    </div>`;
+  }
+  return `<div class="screen">
+    <div class="topbar">${backBtn("feed")}<h2 style="font-size:19px;">Helping ${org}</h2><div></div></div>
+
+    <div class="card" style="margin-top:14px;">
+      <b style="font-size:14px;">${org}</b>
+      <p style="font-size:12px;margin-top:4px;">${(p.needs||[]).join(", ") || "General donations welcome"}</p>
+      ${p.social ? `<a class="btn-ghost" style="padding-left:0;margin-top:8px;" href="mailto:${p.social.mail}">${iconWrap('mail',13)} ${p.social.mail}</a>` : ""}
+    </div>
+
+    <label class="field-label">Photo of what you're donating</label>
+    <div class="scan-frame" style="aspect-ratio:16/9;">
+      ${state.helpFlowImage ? `<img src="${state.helpFlowImage}">` : `${icon('camera',34)}<p style="font-size:12px;text-align:center;padding:0 20px;">Optional — helps the org plan intake.</p>`}
+    </div>
+    <input type="file" id="helpFlowFile" accept="image/*" capture="environment" style="display:none;">
+    <button class="btn-outline" style="margin-top:12px;" data-act="trigger-helpflow-camera">${iconWrap('camera',16)} ${state.helpFlowImage?'Retake photo':'Add a photo'}</button>
+
+    <label class="field-label">Quantity</label>
+    <div class="stepper" style="justify-content:flex-start;gap:16px;">
+      <button data-act="helpflow-qty-dec">–</button><div class="val" style="font-size:24px;">${state.helpFlowQty}</div><button data-act="helpflow-qty-inc">+</button>
+    </div>
+
+    <label class="field-label">Your contact email</label>
+    <input type="text" id="helpFlowEmail" placeholder="you@example.com" value="${state.helpFlowEmail||''}">
+
+    <button class="btn-primary" style="margin-top:24px;" data-act="submit-help-flow">Confirm — I'll bring this</button>
+  </div>`;
+}
+
 // ---------- DONATION SHEET (surplus match now driven by donor's entered qty) ----------
+// ---------- PLEDGE LIST (who's already pledged) ----------
+function renderPledgeListSheet(){
+  const r = state.sheetItem;
+  if(!r) return "";
+  return `<div class="sheet-backdrop" data-act="close-pledge-list">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <h3 style="font-size:16px;">Who's pledged so far</h3>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+        ${(r.pledgers||[]).map(name=>`<div class="inv-row"><div style="display:flex;align-items:center;gap:10px;"><span class="profile-avatar" style="width:34px;height:34px;border-radius:10px;background:var(--surface2);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">${name.split(' ').map(w=>w[0]).slice(0,2).join('')}</span>${name}</div></div>`).join("")}
+      </div>
+      <button class="btn-ghost" style="align-self:center;display:block;margin:14px auto 0;" data-act="close-pledge-list">close</button>
+    </div>
+  </div>`;
+}
+
 function renderDonationSheet(){
   const r = state.sheetItem;
   if(!r) return "";
@@ -1118,6 +1368,8 @@ function renderDonationSheet(){
     <div class="org-name">${r.org} ${iconWrap('check',13,'var(--accent)')}</div>
     <p style="font-size:12px;margin-top:4px;">${r.have} of ${r.need} ${r.unit} · ${liveDistance(r)}</p>
     <div class="progress-bar"><div class="progress-fill ${r.surplus?'teal':''}" style="width:${pct}%"></div></div>
+    ${r.details ? `<p style="font-size:12.5px;margin-top:10px;line-height:1.5;">${r.details}</p>` : ""}
+    ${(r.pledgers && r.pledgers.length>0) ? `<button class="btn-ghost" style="padding-left:0;margin-top:6px;" data-act="open-pledge-list">${iconWrap('user',13)} ${r.pledgers.length} ${r.pledgers.length===1?'person has':'people have'} pledged — see who</button>` : ""}
 
     <label class="field-label">How many ${r.unit} are you giving?</label>
     <div class="stepper">
@@ -1220,11 +1472,12 @@ function renderSettingsSheet(){
 
 // ---------- FINANCE (donate money) ----------
 function renderFinanceSheet(){
+  const orgLabel = state.financeOrg ? state.financeOrg : "a nearby organization";
   return `<div class="sheet-backdrop" data-act="close-finance">
     <div class="sheet" onclick="event.stopPropagation()">
       <div style="display:flex;align-items:center;gap:12px;">
         <div class="finance-icon-btn">${icon('dollar',24)}</div>
-        <div><h3 style="font-size:16px;">Give money instead</h3><p style="font-size:12px;">For when the org can shop faster than you can ship.</p></div>
+        <div><h3 style="font-size:16px;">Donating to ${orgLabel}</h3><p style="font-size:12px;">For when the org can shop faster than you can ship.</p></div>
       </div>
       <label class="field-label">Amount</label>
       <div class="stepper"><button data-act="fin-dec">–</button><div class="val">$${state.financeAmount}</div><button data-act="fin-inc">+</button></div>
@@ -1264,11 +1517,34 @@ function renderImpact(){
     </div>
   </div>
   <button class="fab" data-act="open-scan" title="Scan an item">${icon('camera',24)}</button>
-  ${bottomNav("impact")}`;
+  `;
 }
 
 // ---------- PROFILE (genuinely separate screen — fixes the impact/profile glitch) ----------
 function renderProfile(){
+  if(state.mode==="org"){
+    return `<div class="screen">
+      <div class="topbar"><h2 style="font-size:20px;">Organization profile</h2><button class="gear-btn" data-act="open-settings">${icon('gear',17)}</button></div>
+      <div class="card" style="margin-top:16px;display:flex;gap:14px;align-items:center;">
+        <div class="profile-avatar" style="width:56px;height:56px;border-radius:16px;background:var(--accent);color:#3a2018;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;">
+          ${(state.userName||"Org").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase()}
+        </div>
+        <div><b style="font-size:16px;">${state.userName || "Your organization"}</b>
+        <p style="font-size:12px;margin-top:2px;">Verified organization account</p></div>
+      </div>
+
+      <div class="section-title">About</div>
+      <p style="font-size:13px;">${state.orgAboutText || "Not set yet — add a short description so donors know who they're helping."}</p>
+
+      <div class="section-title">Contact</div>
+      <p style="font-size:13px;">${state.orgEmail || "No email on file"}${state.orgPhone ? " · "+state.orgPhone : ""}</p>
+
+      <div class="section-title">Account</div>
+      <button class="btn-outline" data-act="nav" data-val="orgAbout" style="margin-bottom:10px;">Edit organization info</button>
+      <button class="btn-ghost" style="align-self:flex-start;">Sign out</button>
+    </div>
+    `;
+  }
   return `<div class="screen">
     <div class="topbar"><h2 style="font-size:20px;">Profile</h2><button class="gear-btn" data-act="open-settings">${icon('gear',17)}</button></div>
     <div class="card" style="margin-top:16px;display:flex;gap:14px;align-items:center;">
@@ -1296,10 +1572,33 @@ function renderProfile(){
     <button class="btn-outline" data-act="edit-onboarding" style="margin-bottom:10px;">Edit preferences</button>
     <button class="btn-ghost" style="align-self:flex-start;">Sign out</button>
   </div>
-  ${bottomNav("profile")}`;
+  `;
 }
 
 // ---------- ORG ONBOARDING ----------
+// ---------- ORG ABOUT (bio + contact, before verification) ----------
+function renderOrgAbout(){
+  const wordCount = state.orgAboutText.trim() ? state.orgAboutText.trim().split(/\s+/).length : 0;
+  return `<div class="screen">
+    <div class="topbar">${backBtn("nameEntry")}<div class="brand"><img src="${LOGO_SRC}" style="height:26px;"></div><div></div></div>
+    <div class="hero-wrap" style="margin-top:32px;">
+      <h2 style="font-size:24px;">Tell donors about ${state.userName || "your organization"}</h2>
+      <p style="margin-top:6px;font-size:14px;">A quick summary donors will see before they help. Keep it brief.</p>
+
+      <label class="field-label">About the organization/yourself <span id="wordCountLabel" style="color:${wordCount>30?'var(--urgent)':'var(--muted)'};">(${wordCount}/30 words)</span></label>
+      <textarea id="orgAboutInput" placeholder="e.g. We provide emergency shelter and meals for families in the Tri-Valley area.">${state.orgAboutText}</textarea>
+
+      <label class="field-label">Contact email</label>
+      <input type="text" id="orgEmailInput" placeholder="contact@yourorg.org" value="${state.orgEmail}">
+
+      <label class="field-label">Phone number</label>
+      <input type="text" id="orgPhoneInput" placeholder="(555) 123-4567" value="${state.orgPhone}">
+    </div>
+    <div style="flex:1;"></div>
+    <button class="btn-primary hero-wrap" style="margin-top:24px;" data-act="submit-org-about">Continue</button>
+  </div>`;
+}
+
 function renderOrgOnboard(){
   return `<div class="screen">
     <div class="topbar"><div class="brand"><img src="${LOGO_SRC}" style="height:26px;"></div><div></div></div>
@@ -1360,17 +1659,48 @@ function renderOrgDash(){
 
     <button class="btn-primary" style="margin-top:10px;" data-act="go-post-request">${iconWrap('box',16)} Post a request</button>
   </div>
-  ${orgBottomNav("orgdash")}`;
-}
-
-function orgBottomNav(active){
-  const items = [["orgdash","Dashboard","home"],["events","Alerts","heart"],["chat","Messages","chat"],["profile","Profile","user"]];
-  return `<div class="bottomnav">
-    ${items.map(([scr,label,ic])=>`<button class="navitem ${active===scr?'active':''}" data-act="nav" data-val="${scr}">${icon(ic,21)}<span>${label}</span></button>`).join("")}
-  </div>`;
+  `;
 }
 
 // ---------- SCAN ----------
+// ---------- I CAN HELP FLOW (from Community Alerts CTA) ----------
+function renderHelpFlow(){
+  const orgName = state.helpFlowOrg;
+  const p = orgProfiles[orgName] || {};
+  if(state.helpFlowStage==="success"){
+    return `<div class="screen" style="align-items:center;justify-content:center;text-align:center;">
+      ${iconWrap('check',54,'var(--accent)')}
+      <h2 style="font-size:20px;margin-top:16px;">Thanks for helping!</h2>
+      <p style="margin-top:8px;font-size:13px;">${orgName} has been notified and will reach out with drop-off details.</p>
+      <button class="btn-primary" style="margin-top:24px;" data-act="nav" data-val="feed">Back to feed</button>
+    </div>`;
+  }
+  return `<div class="screen">
+    <div class="topbar">${backBtn("events")}<h2 style="font-size:19px;">Help ${orgName}</h2><div></div></div>
+
+    <div class="card" style="margin-top:14px;">
+      <p style="font-size:12px;color:var(--muted);">Contact</p>
+      <p style="font-size:13px;margin-top:2px;">${p.social ? p.social.mail : "contact@"+(orgName||"org").toLowerCase().replace(/\\s+/g,"")+".org"}</p>
+    </div>
+
+    <label class="field-label">Photo of what you're donating</label>
+    <div class="scan-frame" id="helpFlowFrame">
+      ${state.helpFlowImage ? `<img src="${state.helpFlowImage}">` : `${icon('camera',36)}<p style="font-size:12px;text-align:center;padding:0 20px;">Optional, but helps the org plan.</p>`}
+    </div>
+    <input type="file" id="helpFlowFile" accept="image/*" capture="environment" style="display:none;">
+    <button class="btn-outline" style="margin-top:12px;" data-act="trigger-help-camera">${iconWrap('camera',16)} ${state.helpFlowImage?'Retake photo':'Add a photo'}</button>
+
+    <label class="field-label">Quantity</label>
+    <div class="stepper" style="justify-content:flex-start;gap:16px;">
+      <button data-act="help-qty-dec">–</button>
+      <div class="val" style="font-size:24px;">${state.helpFlowQty}</div>
+      <button data-act="help-qty-inc">+</button>
+    </div>
+
+    <button class="btn-primary" style="margin-top:26px;" data-act="submit-help-flow">Send to ${orgName}</button>
+  </div>`;
+}
+
 function renderScan(){
   let inner = "";
   if(state.scanStage==="capture"){
@@ -1486,15 +1816,70 @@ function attachHandlers(){
   document.querySelectorAll("[data-act]").forEach(el=>{
     el.addEventListener("click", (e)=>{
       e.stopPropagation();
-      handleAction(el.getAttribute("data-act"), el.getAttribute("data-val"), el);
+      const act = el.getAttribute("data-act");
+      const val = el.getAttribute("data-val");
+      // Visible press confirmation on every actionable element. Most actions trigger a
+      // synchronous re-render that would otherwise destroy this element before the
+      // browser ever paints the animation, so we let it paint first, then act.
+      el.classList.add("confirm-pop");
+      setTimeout(()=>{ handleAction(act, val, el); }, 110);
     });
   });
 
   const counterNum = document.getElementById("counterNum");
-  if(counterNum){
-    let target=12480, cur=0;
-    const step=()=>{ cur+=Math.ceil(target/40); if(cur>=target)cur=target; counterNum.textContent=cur.toLocaleString(); if(cur<target) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
+  const counterNum2 = document.getElementById("counterNum2");
+  function startCounter(){
+    if(counterNum && !counterNum.dataset.counted){
+      counterNum.dataset.counted = "1";
+      let target=12480, cur=0;
+      const step=()=>{ cur+=Math.ceil(target/40); if(cur>=target)cur=target; counterNum.textContent=cur.toLocaleString(); if(cur<target) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    }
+    if(counterNum2 && !counterNum2.dataset.counted){
+      counterNum2.dataset.counted = "1";
+      let target2=20, cur2=0;
+      const step2=()=>{ cur2+=1; if(cur2>=target2)cur2=target2; counterNum2.textContent=cur2+"+"; if(cur2<target2) setTimeout(step2,45); };
+      step2();
+    }
+  }
+
+  const heroTwText = document.getElementById("heroTwText");
+  if(heroTwText && !heroTwText.dataset.typed){
+    heroTwText.dataset.typed = "1";
+    const text = "Connecting people to those who can help.";
+    let i = 0;
+    const typeStep = ()=>{
+      const live = document.getElementById("heroTwText");
+      if(!live) return;
+      live.textContent = text.slice(0,i);
+      i++;
+      if(i<=text.length) setTimeout(typeStep, 40);
+      else{ const c=document.getElementById("heroTwCursor"); if(c) c.style.display="none"; }
+    };
+    setTimeout(typeStep, 900);
+  }
+
+  const revealEl = document.getElementById("revealCtas");
+  if(revealEl && !revealEl.dataset.observed){
+    revealEl.dataset.observed = "1";
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          revealEl.classList.add("in-view");
+          startCounter();
+          obs.unobserve(en.target);
+        }
+      });
+    }, {threshold:0.25});
+    obs.observe(revealEl);
+  }
+
+  const scrollHint = document.getElementById("scrollHint");
+  if(scrollHint){
+    scrollHint.addEventListener("click", ()=>{
+      const target = document.getElementById("revealCtas");
+      if(target) target.scrollIntoView({behavior:"smooth", block:"center"});
+    });
   }
 
   const cameraFile = document.getElementById("cameraFile");
@@ -1503,6 +1888,16 @@ function attachHandlers(){
       const file = e.target.files[0]; if(!file) return;
       const reader = new FileReader();
       reader.onload = (ev)=>{ setState({scanStage:"analyzing", scanImage:ev.target.result, scanError:null}); runScanAnalysis(ev.target.result, file.type||"image/jpeg"); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const helpFlowFile = document.getElementById("helpFlowFile");
+  if(helpFlowFile){
+    helpFlowFile.addEventListener("change", (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev)=>{ setState({helpFlowImage:ev.target.result}); };
       reader.readAsDataURL(file);
     });
   }
@@ -1518,12 +1913,46 @@ function attachHandlers(){
 
   const locInput = document.getElementById("locInput");
   if(locInput){
-    locInput.addEventListener("blur", e=>setState({location:e.target.value}));
-    locInput.addEventListener("keyup", e=>{ if(e.key==="Enter") setState({location:e.target.value}); });
+    const doGeocode = async (val)=>{
+      if(!val.trim()) return;
+      setState({location:val, geocodeStatus:"searching", geocodedLoc:null});
+      const result = await geocodeLocation(val);
+      if(result){
+        state.geocodedLoc = result;
+        state.geocodeStatus = "found";
+        state.userLoc = {lat:result.lat, lng:result.lng};
+        render();
+        setTimeout(()=>animateMapZoom(result.lat, result.lng), 50);
+        showToast("Found it — using this location for distances");
+      } else {
+        setState({geocodeStatus:"notfound"});
+        showToast("Couldn't find that in California — try a nearby city name");
+      }
+    };
+    locInput.addEventListener("blur", e=>doGeocode(e.target.value));
+    locInput.addEventListener("keyup", e=>{ if(e.key==="Enter"){ e.target.blur(); doGeocode(e.target.value); } });
   }
 
   const nameInput = document.getElementById("nameEntryInput");
   if(nameInput) nameInput.addEventListener("input", e=>{ state.userName = e.target.value; });
+
+  const orgAboutInput = document.getElementById("orgAboutInput");
+  if(orgAboutInput){
+    orgAboutInput.addEventListener("input", e=>{
+      let words = e.target.value.trim().split(/\s+/).filter(Boolean);
+      if(words.length > 30){
+        words = words.slice(0,30);
+        e.target.value = words.join(" ");
+      }
+      state.orgAboutText = e.target.value;
+      const lbl = document.getElementById("wordCountLabel");
+      if(lbl){ lbl.textContent = `(${e.target.value.trim()?words.length:0}/30 words)`; lbl.style.color = "var(--muted)"; }
+    });
+  }
+  const orgEmailInput = document.getElementById("orgEmailInput");
+  if(orgEmailInput) orgEmailInput.addEventListener("input", e=>{ state.orgEmail = e.target.value; });
+  const orgPhoneInput = document.getElementById("orgPhoneInput");
+  if(orgPhoneInput) orgPhoneInput.addEventListener("input", e=>{ state.orgPhone = e.target.value; });
 
   // search bar: targeted update, no focus loss
   const searchInput = document.getElementById("browseSearchInput");
@@ -1566,13 +1995,23 @@ function handleAction(act, val, el){
       const el2 = document.getElementById("nameEntryInput");
       const name = el2 ? el2.value.trim() : state.userName;
       if(!name){ showToast("Add a name to continue"); return; }
-      if(val==="org"){ setState({userName:name, mode:"org", screen:"orgonboard"}); }
+      if(val==="org"){ setState({userName:name, mode:"org", screen:"orgAbout"}); }
       else { setState({userName:name, mode:"donor", screen:"onboard", onboardStep:0}); }
       break;
     }
     case "go-donor": setState({screen:"nameEntry", pendingMode:"donor"}); break;
     case "go-orgonboard": setState({screen:"orgonboard", mode:"org"}); break;
+    case "submit-org-about": {
+      if(!state.orgEmail.trim() && !state.orgPhone.trim()){ showToast("Add an email or phone number so donors can reach you"); return; }
+      setState({screen:"orgonboard"});
+      break;
+    }
     case "go-orgdash": setState({screen:"orgdash", mode:"org"}); break;
+    case "switch-mode": {
+      const newMode = state.mode==="org" ? "donor" : "org";
+      setState({mode:newMode, screen:newMode==="org"?"orgdash":"feed"});
+      break;
+    }
     case "go-browse": setState({screen:"browse"}); break;
     case "go-events": setState({screen:"events"}); break;
     case "go-map": setState({screen:"mapView", mapOpenFor:null}); break;
@@ -1607,6 +2046,8 @@ function handleAction(act, val, el){
       break;
     }
     case "close-sheet": setState({sheetOpen:false, sheetItem:null, donationStage:"form"}); break;
+    case "open-pledge-list": setState({pledgeListOpen:true}); break;
+    case "close-pledge-list": setState({pledgeListOpen:false}); break;
     case "qty-inc": setState({qty:state.qty+1}); break;
     case "qty-dec": setState({qty:Math.max(0,state.qty-1)}); break;
     case "pick-dropoff": setState({dropoff:val}); break;
@@ -1636,17 +2077,9 @@ function handleAction(act, val, el){
       break;
     }
     case "show-location": setState({screen:"mapView", mapOpenFor:val}); break;
-    case "share-event": {
-      const evt = communityEvents.find(e=>e.id==val);
-      const shareText = `${evt.title} — ${evt.org}, ${evt.date}. ${evt.desc}`;
-      if(navigator.share) navigator.share({title:evt.title, text:shareText}).catch(()=>{});
-      else if(navigator.clipboard){ navigator.clipboard.writeText(shareText); showToast("Copied event details to clipboard"); }
-      break;
-    }
     case "cta-event": {
       const evt = communityEvents.find(e=>e.id==val);
-      if(evt.cta === "Learn More"){ setState({screen:"orgProfile", viewingOrg:evt.org, orgProfileExpanded:false}); return; }
-      showToast(`${evt.cta} sent to ${evt.org} — they'll follow up with next steps.`);
+      goTo("helpFlow", {extra:{helpFlowOrg:evt.org, helpFlowStage:"form", helpFlowImage:null, helpFlowQty:1}});
       break;
     }
 
@@ -1678,6 +2111,14 @@ function handleAction(act, val, el){
 
     // ---- scan ----
     case "open-scan": setState({screen:"scan", scanStage:"capture", scanImage:null, scanResult:null}); break;
+    case "trigger-help-camera": document.getElementById("helpFlowFile").click(); break;
+    case "help-qty-inc": setState({helpFlowQty:state.helpFlowQty+1}); break;
+    case "help-qty-dec": setState({helpFlowQty:Math.max(1,state.helpFlowQty-1)}); break;
+    case "submit-help-flow": {
+      showToast(`Sent to ${state.helpFlowOrg} — thank you!`);
+      setState({helpFlowStage:"success"});
+      break;
+    }
     case "trigger-camera": document.getElementById("cameraFile").click(); break;
     case "retake-scan": setState({scanStage:"capture", scanImage:null, scanResult:null}); break;
     case "scan-qty-inc": setState({scanResult:{...state.scanResult, qty:state.scanResult.qty+1}}); break;
@@ -1708,13 +2149,36 @@ function handleAction(act, val, el){
     case "submit-post-request": {
       const f = state.postRequestForm;
       if(!f.item.trim() || !f.qty.trim()){ showToast("Add an item and quantity to post"); return; }
-      orgQueue.unshift({id:Date.now(), item:f.item, need:parseInt(f.qty)||1, pledges:0, urgency:f.urgency==="urgent"?"urgent":"ongoing"});
-      setState({postRequestSuccess:true});
+      const cat = autoCategorize(f.item);
+      const urgencyVal = f.urgency==="urgent" ? "urgent" : "ongoing";
+      const orgName = state.userName || "Your organization";
+      const loc = state.userLoc || HQ;
+      orgQueue.unshift({id:Date.now(), item:f.item, need:parseInt(f.qty)||1, pledges:0, urgency:urgencyVal});
+      requests.unshift({
+        id: Date.now(), org: orgName, item: f.item.toLowerCase(), have: 0, need: parseInt(f.qty)||1,
+        unit: "items", urgency: urgencyVal, category: cat, surplus:false, verified:true,
+        details: f.details || "", pledgers: [],
+        lat: loc.lat + (Math.random()-0.5)*0.02, lng: loc.lng + (Math.random()-0.5)*0.02,
+      });
+      setState({postRequestSuccess:true, postRequestForm:{item:"",qty:"",urgency:"urgent",details:""}});
+      break;
+    }
+
+    // ---- I Can Help flow ----
+    case "trigger-helpflow-camera": document.getElementById("helpFlowFile").click(); break;
+    case "helpflow-qty-inc": setState({helpFlowQty: state.helpFlowQty+1}); break;
+    case "helpflow-qty-dec": setState({helpFlowQty: Math.max(1, state.helpFlowQty-1)}); break;
+    case "submit-help-flow": {
+      const emailEl = document.getElementById("helpFlowEmail");
+      const email = emailEl ? emailEl.value.trim() : state.helpFlowEmail;
+      if(!email){ showToast("Add your email so the org can reach you"); return; }
+      setState({helpFlowStage:"success", helpFlowEmail:email});
+      state.impact.items += state.helpFlowQty;
       break;
     }
 
     // ---- finance ----
-    case "open-finance": setState({financeSheetOpen:true}); break;
+    case "open-finance": setState({financeSheetOpen:true, financeOrg: val||null}); break;
     case "close-finance": setState({financeSheetOpen:false}); break;
     case "fin-inc": setState({financeAmount:state.financeAmount+5}); break;
     case "fin-dec": setState({financeAmount:Math.max(5,state.financeAmount-5)}); break;
