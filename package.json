@@ -1,0 +1,12 @@
+{
+  "name": "needlink",
+  "version": "1.0.0",
+  "description": "NeedLink — an intelligent community donation network. Multi-agent backend logic, single-file frontend. Built for CSI Hacks 2026.",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "dev": "npx serve ."
+  },
+  "keywords": ["hackathon", "donation", "nonprofit", "ai", "multi-agent"],
+  "license": "MIT"
+}

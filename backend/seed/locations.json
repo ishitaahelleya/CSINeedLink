@@ -1,0 +1,29 @@
+{
+  "_note": "All organization names below are FICTIONAL, generated for demo purposes only. They are NOT real nonprofits. Coordinates are real points within Dublin, Pleasanton, and Livermore, CA so distance math is realistic; the orgs sitting at those points are not.",
+
+  "orgs": [
+    { "id": "org_1", "name": "Dublin Pantry Project", "city": "Dublin", "category": "Food", "lat": 37.7022, "lng": -121.9358, "daily_capacity": 40, "staffing_level": 2, "verified": true, "founded_year": 2018 },
+    { "id": "org_2", "name": "Amador Valley Family Shelter", "city": "Pleasanton", "category": "Shelter", "lat": 37.6624, "lng": -121.8747, "daily_capacity": 15, "staffing_level": 3, "verified": true, "founded_year": 2015 },
+    { "id": "org_3", "name": "Livermore Valley Community Kitchen", "city": "Livermore", "category": "Food", "lat": 37.6819, "lng": -121.7680, "daily_capacity": 35, "staffing_level": 2, "verified": true, "founded_year": 2019 },
+    { "id": "org_4", "name": "Tri-Valley Youth Outreach", "city": "Pleasanton", "category": "Education", "lat": 37.6555, "lng": -121.8811, "daily_capacity": 20, "staffing_level": 1, "verified": true, "founded_year": 2020 },
+    { "id": "org_5", "name": "Dublin Foothill Family Center", "city": "Dublin", "category": "Shelter", "lat": 37.7180, "lng": -121.9016, "daily_capacity": 18, "staffing_level": 2, "verified": true, "founded_year": 2017 },
+    { "id": "org_6", "name": "Livermore Downtown Assistance League", "city": "Livermore", "category": "Health", "lat": 37.6816, "lng": -121.7714, "daily_capacity": 12, "staffing_level": 1, "verified": true, "founded_year": 2021 },
+    { "id": "org_7", "name": "Pleasanton Interfaith Food Bank", "city": "Pleasanton", "category": "Food", "lat": 37.6640, "lng": -121.8858, "daily_capacity": 50, "staffing_level": 3, "verified": true, "founded_year": 2012 },
+    { "id": "org_8", "name": "East Dublin Community Closet", "city": "Dublin", "category": "Shelter", "lat": 37.7093, "lng": -121.8858, "daily_capacity": 10, "staffing_level": 1, "verified": false, "founded_year": 2023 }
+  ],
+
+  "clubs": [
+    { "id": "club_1", "name": "Dublin High Key Club", "city": "Dublin", "type": "School club", "member_count": 34, "lat": 37.7057, "lng": -121.9265 },
+    { "id": "club_2", "name": "Amador Valley High Interact Club", "city": "Pleasanton", "type": "School club", "member_count": 41, "lat": 37.6598, "lng": -121.8802 },
+    { "id": "club_3", "name": "Livermore High Community Service Club", "city": "Livermore", "type": "School club", "member_count": 28, "lat": 37.6835, "lng": -121.7729 },
+    { "id": "club_4", "name": "Foothill High Leo Club", "city": "Pleasanton", "type": "School club", "member_count": 22, "lat": 37.6512, "lng": -121.8560 },
+    { "id": "club_5", "name": "Granada High Rotary Interact", "city": "Livermore", "type": "School club", "member_count": 19, "lat": 37.6702, "lng": -121.7935 },
+    { "id": "club_6", "name": "Wells Middle School Give Back Club", "city": "Dublin", "type": "School club", "member_count": 16, "lat": 37.7145, "lng": -121.9203 }
+  ],
+
+  "surplus_sources": [
+    { "id": "src_1", "name": "Sunflower Hill Bakery", "city": "Pleasanton", "category": "Food", "lat": 37.6614, "lng": -121.8776, "reliability_pct": 96, "tier": 1 },
+    { "id": "src_2", "name": "Ravenswood Grocers - Dublin", "city": "Dublin", "category": "Food", "lat": 37.7002, "lng": -121.9147, "reliability_pct": 91, "tier": 1 },
+    { "id": "src_3", "name": "Livermore Farmers Table Cafe", "city": "Livermore", "category": "Food", "lat": 37.6810, "lng": -121.7663, "reliability_pct": 88, "tier": 1 }
+  ]
+}

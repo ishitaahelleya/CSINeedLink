@@ -1,0 +1,16 @@
+{
+  "name": "needlink-backend",
+  "version": "1.0.0",
+  "description": "NeedLink multi-agent backend - simple synchronous fan-out orchestration",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed/seed.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}
