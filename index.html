@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeedLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -2149,30 +2150,95 @@ function renderScan(){
     <div style="margin-top:16px;">${inner}</div>
   </div>`;
 }
-// ---------- REAL AI VISION SCAN (Claude → free Hugging Face captioning → mock) ----------
+// ---------- REAL AI VISION SCAN (Claude → free CLIP + OCR → mock) ----------
 // The camera photo is identified by a real vision model. Priority order:
 //   1. Anthropic Claude vision (best — reads labels & printed quantities) if a key is set
-//   2. Hugging Face's free image-captioning model (no key required; token optional for higher limits)
+//   2. Free path: Hugging Face CLIP zero-shot classification (what it is) + Tesseract OCR (how many, from printed text) — no key required, token optional for higher limits
 //   3. Honest mock fallback, clearly labeled, so the demo never dead-ends offline
-function parseCaptionToItem(caption){
-  const cap = (caption || "").trim();
-  if(!cap) return null;
-  const qtyMatch =
-    cap.match(/(\d{1,3})\s*[- ]?(pack|count|ct|pcs|pieces|cans?|bottles?|boxes?|rolls?|bars?|loaves|jars?)/i) ||
-    cap.match(/\b(\d{1,3})\b/);
-  const qty = qtyMatch ? Math.max(1, Math.min(500, parseInt(qtyMatch[1]))) : 1;
-  let item = cap.replace(/^(a|an|the|there is|there are|this is)\s+/i, "")
-                .replace(/\s+(on|in|at|next to|sitting on|placed on)\s+.*$/i, "")
-                .trim();
-  if(!item) item = cap;
-  item = item.charAt(0).toUpperCase() + item.slice(1);
-  return {item, qty, unit:"items", category: autoCategorize(cap)};
+
+// ---------- OCR (Tesseract.js — fully client-side, no key needed) ----------
+async function ocrExtractText(dataUrl){
+  try{
+    if(typeof Tesseract === "undefined") return "";
+    const result = await Tesseract.recognize(dataUrl, 'eng', { logger: () => {} });
+    return result.data.text || "";
+  }catch(err){
+    console.error("OCR failed:", err);
+    return "";
+  }
 }
 
+function extractQtyFromOCR(text){
+  const t = (text || "").replace(/\n/g, " ");
+  const patterns = [
+    /(\d{1,4})\s*[- ]?(pack|count|ct\.?|pcs|pieces)/i,
+    /pack\s*(?:of)?\s*(\d{1,4})/i,
+    /(\d{1,4})\s*(cans?|bottles?|boxes?|rolls?|bars?|loaves|bags?)/i,
+  ];
+  for(const p of patterns){
+    const m = t.match(p);
+    if(m) return parseInt(m[1]);
+  }
+  return null;
+}
+
+// ---------- CLIP zero-shot image classification (free via Hugging Face) ----------
+async function classifyWithCLIP(base64, mimeType){
+  // NOTE: function name kept for compatibility with identifyImage() below.
+  // Zero-shot CLIP classification isn't currently supported on HF's free
+  // "hf-inference" provider (confirmed via live testing — it 400s with
+  // "Model not supported by provider hf-inference"), and the old
+  // api-inference.huggingface.co domain has been fully retired (DNS no longer
+  // resolves). Standard (non-zero-shot) image classification IS reliably
+  // supported there, so we use that instead. It returns ImageNet-style labels
+  // (e.g. "water bottle", "trench coat") rather than our exact candidate list,
+  // so we clean the label up and map it to a category ourselves.
+  const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+  const headers = {"Content-Type": mimeType || "image/jpeg"};
+  if(state.hfToken && state.hfToken.trim()) headers["Authorization"] = "Bearer " + state.hfToken.trim();
+  const body = new Blob([bytes], {type: mimeType || "image/jpeg"});
+
+  const attempts = [
+    "https://router.huggingface.co/hf-inference/models/google/vit-base-patch16-224",
+    "https://router.huggingface.co/hf-inference/models/microsoft/resnet-50",
+  ];
+
+  let lastErr = null;
+  for(const url of attempts){
+    try{
+      const resp = await fetch(url, { method:"POST", headers, body, signal: AbortSignal.timeout(20000) });
+      if(!resp.ok){
+        const errText = await resp.text().catch(()=>"");
+        console.error("Image classification attempt failed [" + url + "]:", resp.status, errText);
+        lastErr = new Error("classify_failed_" + resp.status);
+        continue;
+      }
+      const data = await resp.json();
+      const top = Array.isArray(data) ? data[0] : null;
+      if(!top || !top.label) { lastErr = new Error("classify_no_label"); continue; }
+      // ImageNet labels often look like "water_bottle" or "trench_coat, coat" —
+      // clean underscores and take the first comma-separated synonym.
+      const cleanLabel = top.label.split(",")[0].replace(/_/g, " ").trim();
+      return {
+        item: cleanLabel.charAt(0).toUpperCase() + cleanLabel.slice(1),
+        qty: 1,
+        unit: "items",
+        category: autoCategorize(cleanLabel),
+        source: "hf-clip",
+      };
+    }catch(err){
+      console.error("Image classification attempt errored [" + url + "]:", err);
+      lastErr = err;
+    }
+  }
+  throw lastErr || new Error("classify_all_attempts_failed");
+}
+
+// ---------- MAIN IDENTIFY FUNCTION (Claude vision -> free CLIP+OCR -> null) ----------
 async function identifyImage(dataUrl, mimeType){
   const base64 = dataUrl.split(",")[1];
 
-  // 1) Claude vision (reads printed quantities off the box)
+  // 1) Claude vision (best — reads labels & printed quantities) if a key is set
   if(state.apiKey && state.apiKey.trim().length > 10){
     try{
       const resp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -2192,25 +2258,25 @@ async function identifyImage(dataUrl, mimeType){
         const parsed = JSON.parse(textBlock.text.replace(/```json|```/g,"").trim());
         return {...parsed, source:"claude"};
       }
-    }catch(err){ console.error("Claude vision failed, trying Hugging Face:", err); }
+    }catch(err){ console.error("Claude vision failed, trying free path:", err); }
   }
 
-  // 2) Hugging Face image captioning (free)
+  // 2) Free path: CLIP (what) + Tesseract OCR (how many), run in parallel
   try{
-    const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
-    const headers = {"Content-Type": mimeType || "application/octet-stream"};
-    if(state.hfToken && state.hfToken.trim()) headers["Authorization"] = "Bearer " + state.hfToken.trim();
-    const resp = await fetch("https://router.huggingface.co/hf-inference/models/Salesforce/blip-image-captioning-large", {
-      method:"POST", headers, body: new Blob([bytes], {type: mimeType || "image/jpeg"}),
-      signal: AbortSignal.timeout(20000),
-    });
-    if(resp.ok){
-      const data = await resp.json();
-      const caption = Array.isArray(data) && data[0] ? data[0].generated_text : null;
-      const parsed = parseCaptionToItem(caption);
-      if(parsed) return {...parsed, source:"hf"};
+    const [clipResult, ocrText] = await Promise.all([
+      classifyWithCLIP(base64, mimeType).catch(err=>{ console.error("CLIP failed:", err); return null; }),
+      ocrExtractText(dataUrl).catch(err=>{ console.error("OCR failed:", err); return ""; }),
+    ]);
+
+    if(clipResult){
+      const ocrQty = extractQtyFromOCR(ocrText);
+      return {
+        ...clipResult,
+        qty: ocrQty || clipResult.qty,
+        source: ocrQty ? "hf-clip+ocr" : "hf-clip",
+      };
     }
-  }catch(err){ console.error("Hugging Face captioning failed:", err); }
+  }catch(err){ console.error("Free vision path failed entirely:", err); }
 
   return null;
 }
@@ -2219,7 +2285,7 @@ async function runScanAnalysis(dataUrl, mimeType){
   const live = await identifyImage(dataUrl, mimeType);
   if(live){
     setState({scanStage:"result", scanResult:live, aiStatus: live.source==="claude" ? "live" : state.aiStatus,
-              scanError: live.source==="hf" ? "Identified by a free AI vision model — double-check the name & quantity." : null});
+              scanError: (live.source==="hf-clip" || live.source==="hf-clip+ocr") ? "Identified by a free AI vision model — double-check the name & quantity." : null});
     computeBestMatch(live);
     return;
   }
