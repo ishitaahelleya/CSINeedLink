@@ -89,7 +89,7 @@ svg{display:block;}
 @keyframes blobMove2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-8%,-4%) scale(1.15);}}
 @keyframes blobMove3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(5%,-8%) scale(1.1);}}
 
-.hero-logo-big{width:min(70vw,460px) !important;}
+.hero-logo-big{width:min(86vw,640px) !important;}
 
 .hero-typewriter{
   position:relative;z-index:2;font-size:clamp(16px,2.6vw,24px);color:var(--cream);font-weight:600;
@@ -139,12 +139,15 @@ svg{display:block;}
   background-size:220% 220%;animation:miniGradient 6s ease infinite;
 }
 @keyframes miniGradient{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-.mega-btn-primary{background:var(--accent);color:#3a2018;box-shadow:0 8px 24px rgba(240,179,77,0.3);}
-.mega-btn-outline{background:rgba(255,255,255,0.04);border:2px solid var(--accent);color:var(--accent);}
+/* Both entry choices are styled identically — clear until hovered — so
+   neither "help" nor "receive" reads as the preferred option. */
+.mega-btn-equal{background:rgba(255,255,255,0.04);border:2px solid var(--accent);color:var(--accent);transition:transform .28s cubic-bezier(.2,.8,.25,1.3), box-shadow .28s ease, background .25s ease, color .25s ease;}
 @media (hover:hover){
   .mega-btn:hover{transform:translateY(-6px) scale(1.015); box-shadow:0 20px 40px rgba(20,10,40,0.4);}
-  .mega-btn:hover::before{opacity:0.55;}
+  .mega-btn-equal:hover{background:var(--accent);color:#3a2018;}
+  .mega-btn-equal:hover::before{opacity:0;}
 }
+.mega-btn-equal:active{background:var(--accent);color:#3a2018;}
 
 
 /* ---------- LANDING HERO (real desktop layout, not a stretched phone) ---------- */
@@ -289,7 +292,7 @@ svg{display:block;}
   .navitem{transition:transform .15s ease, color .2s ease;}
   .navitem:hover{transform:translateY(-2px);}
   .fab{transition:transform .22s cubic-bezier(.3,.6,.3,1.6), box-shadow .22s ease;}
-  .fab:hover{transform:scale(1.08); box-shadow:0 10px 26px rgba(240,179,77,0.55);}
+  .fab:hover{transform:scale(1.08); box-shadow:0 10px 26px rgba(63,193,224,0.6);}
   .partner-chip{transition:transform .2s ease, background .2s ease;}
   .partner-chip:hover{transform:translateY(-3px); background:var(--surface2);}
   .cta-help{transition:transform .18s ease, filter .18s ease;}
@@ -473,7 +476,7 @@ label.field-label{font-size:12.5px;color:var(--guide);font-weight:700;display:bl
 @keyframes scanSweep{0%{top:6%;}50%{top:94%;}100%{top:6%;}}
 .item-input{background:var(--bg-deep);border:2px solid var(--surface2);border-radius:10px;color:var(--cream);font-weight:700;font-size:16px;text-align:left;padding:10px 12px;font-family:inherit;width:100%;}
 
-.fab{position:fixed;left:50%;transform:translateX(calc(-50% + 200px));bottom:96px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#3a2018;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(240,179,77,0.4);z-index:40;transition:transform .15s ease-out;}
+.fab{position:fixed;left:50%;transform:translateX(calc(-50% + 200px));bottom:96px;width:58px;height:58px;border-radius:50%;background:var(--teal);color:#052733;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(63,193,224,0.45);z-index:40;transition:transform .15s ease-out;border:2px solid rgba(255,255,255,0.25);}
 .fab:active{transform:translateX(calc(-50% + 200px)) scale(0.92);}
 .fab svg{width:24px;height:24px;}
 
@@ -629,6 +632,40 @@ label.field-label{font-size:12.5px;color:var(--guide);font-weight:700;display:bl
 .search-bar input{background:none;border:none;padding:0;color:var(--cream);font-size:14px;width:100%;}
 .search-bar input:focus{outline:none;}
 
+/* stepper with a typed field for big quantities */
+.stepper-input{
+  width:96px;background:transparent;border:none;border-bottom:2px solid var(--surface2);
+  color:var(--cream);font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:800;
+  text-align:center;padding:2px 4px;border-radius:0;
+}
+.stepper-input:focus{outline:none;border-bottom-color:var(--accent);}
+.stepper-input::-webkit-outer-spin-button,.stepper-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.stepper-input{-moz-appearance:textfield;appearance:textfield;}
+.stepper-hint{font-size:11px;color:var(--guide);text-align:center;margin-top:2px;font-weight:600;}
+
+/* compact camera capture: preview + button share one frame */
+.scan-frame.compact{width:100%;max-width:580px;margin:0 auto;aspect-ratio:16/10;}
+.scan-actions{width:100%;max-width:580px;margin:14px auto 0 auto;display:flex;flex-direction:column;gap:10px;}
+
+/* home + dashboard use the width on desktop instead of stacking */
+.feed-top{display:grid;grid-template-columns:1fr;gap:4px;}
+.dash-top{display:grid;grid-template-columns:1fr;gap:16px;align-items:stretch;}
+@media (min-width:900px){
+  .feed-top{grid-template-columns:1.15fr 1fr;gap:28px;align-items:start;}
+  .dash-top{grid-template-columns:1.2fr 1fr;}
+}
+
+/* my inventory page */
+.inv-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:18px;}
+.inv-item{
+  display:flex;align-items:center;gap:16px;background:var(--surface);border-radius:var(--radius-lg);
+  padding:18px;border:1px solid rgba(255,255,255,0.06);margin-bottom:12px;
+}
+.inv-item-icon{width:52px;height:52px;border-radius:14px;background:rgba(63,193,224,0.16);color:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.inv-item-qty{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:800;color:var(--accent);min-width:64px;text-align:right;}
+.inv-item.flash-add{animation:invFlash 1s ease-out 1;}
+@keyframes invFlash{0%{box-shadow:0 0 0 0 rgba(63,193,224,0);}30%{box-shadow:0 0 0 4px rgba(63,193,224,0.5);}100%{box-shadow:0 0 0 0 rgba(63,193,224,0);}}
+
 /* toggle switch (urgent/not urgent) */
 .toggle-row{display:flex;gap:10px;margin-top:8px;}
 .toggle-opt{flex:1;padding:12px;border-radius:var(--radius);text-align:center;font-weight:700;font-size:13px;border:2px solid var(--surface2);background:var(--bg-deep);}
@@ -680,6 +717,8 @@ const ICONS = {
   mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>`,
   pin: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5c0 2.4 1.6 4.1 3.4 4.8L10 16.5h4l-.4-4.7C15.4 11.1 17 9.4 17 7a5 5 0 0 0-5-5z"/><path d="M12 16.5V22" fill="none" stroke-width="2"/></svg>`,
   pencil: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/><path d="M14.5 5.5l4 4"/></svg>`,
+  shirt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3l5 3-2.5 4L16 8.6V21H8V8.6L5.5 10 3 6l5-3a4 4 0 0 0 8 0z"/></svg>`,
+  aid: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M12 10v6M9 13h6"/></svg>`,
   bread: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4c0 1.3-.8 2.5-2 3v6a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-6c-1.2-.5-2-1.7-2-3z"/><path d="M10 12.5v3.5M14 12.5v3.5"/></svg>`,
 };
 function icon(name, size=20){ return (ICONS[name]||"").replace("<svg ", `<svg width="${size}" height="${size}" `); }
@@ -843,7 +882,14 @@ let state = {
   scanStage: "capture",
   scanImage: null,
   scanResult: null,
-  inventory: [],
+  inventory: [
+    {item:"Water Bottles", qty:24, unit:"bottles", icon:"drop", category:"Food"},
+    {item:"Canned Foods", qty:36, unit:"cans", icon:"food", category:"Food"},
+    {item:"Clothes", qty:12, unit:"pieces", icon:"shirt", category:"Social Services"},
+    {item:"School Supplies", qty:18, unit:"items", icon:"pencil", category:"Education"},
+    {item:"First Aid Kits", qty:6, unit:"kits", icon:"aid", category:"Health"},
+  ],
+  invFlashItem: null,
   screenBeforeEvents: "feed",
   eventFilters: {type:"All", maxDistance:50, date:"Any", urgentOnly:false},
   eventFilterSheetOpen:false,
@@ -957,7 +1003,7 @@ function restoreFromUrlHash(){
     const i = p.indexOf("="); return [p.slice(0,i), decodeURIComponent(p.slice(i+1))];
   }));
   if(!q.s) return false;
-  const valid = ["feed","browse","impact","profile","orgdash","orgs","scan","orgProfile","mapView","helpFlow","createDrive"];
+  const valid = ["feed","browse","inventory","impact","profile","orgdash","orgs","scan","orgProfile","mapView","helpFlow","createDrive"];
   state.screen = valid.includes(q.s) ? q.s : (q.m === "org" ? "orgdash" : "feed");
   state.mode = q.m || "donor";
   if(q.n) state.userName = q.n;
@@ -1011,6 +1057,7 @@ function render(){
   else if(state.screen==="orgAbout") html = renderOrgAbout();
   else if(state.screen==="scan") html = renderScan();
   else if(state.screen==="orgs") html = renderOrgsPage();
+  else if(state.screen==="inventory") html = renderInventory();
   else if(state.screen==="orgProfile") html = renderOrgProfile();
   else if(state.screen==="mapView") html = renderMapView();
   else if(state.screen==="helpFlow") html = renderHelpFlow();
@@ -1040,7 +1087,7 @@ function render(){
 function navItemsFor(mode){
   return mode==="org"
     ? [["orgdash","Dashboard","home"],["orgs","Organizations","building"],["profile","Profile","user"]]
-    : [["feed","Home","home"],["browse","Browse","search"],["orgs","Organizations","building"],["impact","Impact","heart"],["profile","Profile","user"]];
+    : [["feed","Home","home"],["browse","Browse","search"],["inventory","My Inventory","box"],["impact","Impact","heart"],["profile","Profile","user"]];
 }
 
 function sidenavHtml(active){
@@ -1102,11 +1149,11 @@ function renderLanding(){
         </div>
       </div>
       <div class="mega-btn-row">
-        <button class="mega-btn mega-btn-primary" data-act="go-nameentry" data-val="donor">
+        <button class="mega-btn mega-btn-equal" data-act="go-nameentry" data-val="donor">
           <span class="mega-btn-title">${iconWrap('hand',22)} I Want to Help</span>
           <span class="mega-btn-sub">Donate items, money, or your time to a nearby need</span>
         </button>
-        <button class="mega-btn mega-btn-outline" data-act="go-nameentry" data-val="org">
+        <button class="mega-btn mega-btn-equal" data-act="go-nameentry" data-val="org">
           <span class="mega-btn-title">${iconWrap('building',22)} I Want to Receive</span>
           <span class="mega-btn-sub">Post what your organization needs and reach nearby donors</span>
         </button>
@@ -1214,41 +1261,44 @@ function reqCardHtml(r){
 function renderFeed(){
   const topPicks = [...requests].sort((a,b)=>urgencyRank(a.urgency)-urgencyRank(b.urgency)).slice(0,4);
   const liveEvent = communityEvents.find(e=>e.liveNow);
-  const upcoming = eventsByDate(communityEvents.filter(e=>!e.liveNow)).slice(0,3);
+  const upcoming = eventsByDate(communityEvents.filter(e=>!e.liveNow)).slice(0,2);
   return `<div class="screen zoom-in" style="padding-bottom:110px;">
     <div class="topbar">
       <div class="brand"><img src="${LOGO_SRC}" style="height:26px;"><b style="font-size:14px;">Hi${state.userName? ", "+state.userName.split(" ")[0]:""}</b></div>
       <button class="gear-btn" data-act="open-settings" title="Settings">${icon('gear',17)}</button>
     </div>
 
-    <div class="section-title" style="margin-top:20px;">Happening Now</div>
-    ${liveEvent ? `
-      <div class="alert-line">
-        <span class="alert-pin">${icon('pin',26)}</span>
-        <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <span class="alert-live-chip"><span class="liveDot"></span>Live</span>
-            <b style="font-size:15px;">${liveEvent.title}</b>
-          </div>
-          <p style="font-size:12.5px;margin-top:4px;color:var(--muted);">${liveEvent.org} · needs: ${liveEvent.help}</p>
-        </div>
-        <button class="alert-loc-btn" data-act="show-location" data-id="${liveEvent.id}" title="Show location">${icon('mapPin',22)}</button>
-        <button class="alert-help-btn" data-act="cta-event" data-id="${liveEvent.id}">I Can Help</button>
-      </div>`
-      : `<p class="hint" style="font-size:12.5px;">No live drives right now — the moment one starts, it's pinned here.</p>`}
-
-    <div class="section-title">Coming Up Nearby</div>
-    <p class="hint" style="font-size:12px;margin-top:-4px;margin-bottom:10px;">Soonest first, so you never miss a drive.</p>
-    ${upcoming.map(e=>`
-      <div class="upcoming-row">
-        <div class="upcoming-when">${friendlyWhen(e)}</div>
-        <div style="flex:1;min-width:0;">
-          <b style="font-size:13.5px;">${e.title}</b>
-          <p style="font-size:11.5px;margin-top:2px;">${e.org} · ${e.type} · ${liveDistance(e)}</p>
-        </div>
-        <button class="alert-loc-btn" style="width:44px;height:44px;" data-act="show-location" data-id="${e.id}" title="Show location">${icon('mapPin',18)}</button>
-        <button class="alert-help-btn" data-act="cta-event" data-id="${e.id}">I Can Help</button>
-      </div>`).join("")}
+    <div class="feed-top">
+      <div>
+        <div class="section-title" style="margin-top:20px;">Happening Now</div>
+        ${liveEvent ? `
+          <div class="alert-line">
+            <span class="alert-pin">${icon('pin',26)}</span>
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span class="alert-live-chip"><span class="liveDot"></span>Live</span>
+                <b style="font-size:15px;">${liveEvent.title}</b>
+              </div>
+              <p style="font-size:12.5px;margin-top:4px;color:var(--muted);">${liveEvent.org} · needs: ${liveEvent.help}</p>
+            </div>
+            <button class="alert-loc-btn" data-act="show-location" data-id="${liveEvent.id}" title="Show location">${icon('mapPin',22)}</button>
+            <button class="alert-help-btn" data-act="cta-event" data-id="${liveEvent.id}">I Can Help</button>
+          </div>`
+          : `<p class="hint" style="font-size:12.5px;">No live drives right now — the moment one starts, it's pinned here.</p>`}
+      </div>
+      <div>
+        <div class="section-title" style="margin-top:20px;">Coming Up Nearby</div>
+        ${upcoming.map(e=>`
+          <div class="upcoming-row">
+            <div class="upcoming-when">${friendlyWhen(e)}</div>
+            <div style="flex:1;min-width:0;">
+              <b style="font-size:13.5px;">${e.title}</b>
+              <p style="font-size:11.5px;margin-top:2px;">${e.org} · ${liveDistance(e)}</p>
+            </div>
+            <button class="alert-help-btn" data-act="cta-event" data-id="${e.id}">I Can Help</button>
+          </div>`).join("")}
+      </div>
+    </div>
 
     <div class="section-title">For You, Near You <span class="see-all" data-act="go-browse">Browse All</span></div>
     <p class="hint" style="font-size:12px;margin-top:-4px;margin-bottom:10px;">Most urgent needs first, closest to you.</p>
@@ -1457,10 +1507,10 @@ function renderPostRequestSheet(){
     <input type="text" id="prItem" placeholder="e.g. Winter coats" value="${f.item}">
     <div id="prCategoryTag" style="margin-top:8px;">${detectedCat ? `<span class="utag scheduled" style="text-transform:none;font-size:11px;">${iconWrap('info',10)} Auto-categorized as ${detectedCat}</span>` : `<p class="hint" style="font-size:11.5px;">Category is detected automatically as you type.</p>`}</div>
 
-    <label class="field-label">How many do you need?</label>
+    <label class="field-label">How many do you need? <span style="color:var(--muted);font-weight:400;">(tap +/– or type it)</span></label>
     <div class="stepper">
       <button data-act="pr-qty-dec">–</button>
-      <div class="val" id="prQtyVal">${qty}</div>
+      <input type="number" class="stepper-input" id="prQtyInput" min="1" max="9999" value="${qty}">
       <button data-act="pr-qty-inc">+</button>
     </div>
 
@@ -1608,7 +1658,9 @@ function renderHelpFlow(){
 
     <label class="field-label">Quantity</label>
     <div class="stepper" style="justify-content:flex-start;gap:16px;">
-      <button data-act="helpflow-qty-dec">–</button><div class="val" id="helpQtyVal" style="font-size:24px;">${state.helpFlowQty}</div><button data-act="helpflow-qty-inc">+</button>
+      <button data-act="helpflow-qty-dec">–</button>
+      <input type="number" class="stepper-input" id="helpQtyInput" min="1" max="9999" value="${state.helpFlowQty}">
+      <button data-act="helpflow-qty-inc">+</button>
     </div>
 
     <label class="field-label">Your contact email</label>
@@ -1649,10 +1701,10 @@ function renderDonationSheet(){
     ${(r.neededBy && r.urgency!=="ongoing") ? `<p style="font-size:12px;margin-top:6px;color:var(--scheduled);font-weight:600;">${iconWrap('clock',12)} Needed by: ${r.neededBy}</p>` : ""}
     ${(r.pledgers && r.pledgers.length>0) ? `<button class="btn-ghost" style="padding-left:0;margin-top:6px;" data-act="open-pledge-list">${iconWrap('user',13)} ${r.pledgers.length} ${r.pledgers.length===1?'person has':'people have'} pledged — see who & how much</button>` : ""}
 
-    <label class="field-label">How many ${r.unit} are you giving?</label>
+    <label class="field-label">How many ${r.unit} are you giving? <span style="color:var(--muted);font-weight:400;">(tap +/– or type it)</span></label>
     <div class="stepper">
       <button data-act="qty-dec">–</button>
-      <div class="val" id="qtyVal">${state.qty}</div>
+      <input type="number" class="stepper-input" id="qtyInput" min="0" max="9999" value="${state.qty}">
       <button data-act="qty-inc">+</button>
     </div>
 
@@ -1833,7 +1885,10 @@ function renderFinanceSheet(){
         <div><h3 style="font-size:16px;">Donating to ${orgLabel}</h3><p style="font-size:12px;">For when the org can shop faster than you can ship.</p></div>
       </div>
       <label class="field-label">Amount</label>
-      <div class="stepper"><button data-act="fin-dec">–</button><div class="val" id="finVal">$${state.financeAmount}</div><button data-act="fin-inc">+</button></div>
+      <div class="stepper"><button data-act="fin-dec">–</button>
+        <span style="display:flex;align-items:baseline;gap:2px;"><b style="font-size:24px;color:var(--accent);">$</b><input type="number" class="stepper-input" id="finInput" min="5" max="99999" step="5" value="${state.financeAmount}" style="width:110px;text-align:left;"></span>
+      <button data-act="fin-inc">+</button></div>
+      <p class="stepper-hint">Tap +/– for $5 steps, or type any amount</p>
       <div class="card" style="margin-top:14px;">
         <p style="font-size:11.5px;display:flex;gap:8px;align-items:flex-start;">${iconWrap('info',14,'var(--muted)')} Processed securely, sent directly to the org — NeedLink never holds funds.</p>
       </div>
@@ -1842,6 +1897,70 @@ function renderFinanceSheet(){
     </div>
   </div>`;
 }
+// ---------- MY INVENTORY (donor's items, fed by the camera scanner) ----------
+const INV_MATCHERS = [
+  ["Water Bottles", /water|bottle/i, "drop", "bottles", "Food"],
+  ["Canned Foods", /can|soup|beans|tin|food/i, "food", "cans", "Food"],
+  ["Clothes", /coat|jacket|cloth|shirt|pant|sweater|hoodie|sock|shoe/i, "shirt", "pieces", "Social Services"],
+  ["School Supplies", /pencil|pen|notebook|backpack|school|binder|book|crayon|marker/i, "pencil", "items", "Education"],
+  ["First Aid Kits", /first aid|bandage|band-aid|medic|gauze|antiseptic/i, "aid", "kits", "Health"],
+];
+
+// A scanned photo lands in the matching inventory row (or creates a new one).
+function addScanToInventory(entry){
+  const label = (entry.item || "").toLowerCase();
+  let target = null;
+  for(const [name, rx] of INV_MATCHERS){
+    if(rx.test(label)){ target = state.inventory.find(i=>i.item===name); break; }
+  }
+  if(!target) target = state.inventory.find(i=>i.item.toLowerCase()===label);
+  const qty = Math.max(1, parseInt(entry.qty)||1);
+  if(target){
+    target.qty += qty;
+    state.invFlashItem = target.item;
+    return {name: target.item, qty};
+  }
+  const fresh = {item: entry.item, qty, unit: entry.unit||"items", icon:"box", category: entry.category||"Food"};
+  state.inventory.unshift(fresh);
+  state.invFlashItem = fresh.item;
+  return {name: fresh.item, qty};
+}
+
+function renderInventory(){
+  const totalItems = state.inventory.reduce((s,i)=>s+i.qty, 0);
+  const cats = new Set(state.inventory.map(i=>i.category));
+  return `<div class="screen" style="padding-bottom:110px;">
+    <div class="topbar"><h2 style="font-size:22px;">My Inventory</h2><div></div></div>
+    <p class="hint" style="font-size:12.5px;margin-top:6px;">Everything you've set aside to give. Scan an item with the camera and it lands here automatically.</p>
+
+    <div class="inv-summary">
+      <div class="card impact-stat" style="padding:22px 12px;">
+        <div class="impact-icon" style="background:rgba(63,193,224,0.16);color:var(--teal);">${icon('box',22)}</div>
+        <div class="num" style="font-size:38px;">${totalItems}</div><div class="lbl" style="font-weight:700;">Total Items</div>
+      </div>
+      <div class="card impact-stat" style="padding:22px 12px;">
+        <div class="impact-icon" style="background:rgba(63,193,224,0.16);color:var(--teal);">${icon('heart',22)}</div>
+        <div class="num" style="font-size:38px;">${cats.size}</div><div class="lbl" style="font-weight:700;">Categories</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="margin-top:18px;" data-act="open-scan">${iconWrap('camera',18)} Scan an Item to Add</button>
+
+    <div class="section-title">On Hand</div>
+    ${state.inventory.map((it,i)=>`
+    <div class="inv-item ${state.invFlashItem===it.item?'flash-add':''}">
+      <div class="inv-item-icon">${icon(it.icon||'box',26)}</div>
+      <div style="flex:1;min-width:0;">
+        <b style="font-size:17px;">${it.item}</b>
+        <p style="font-size:12px;margin-top:2px;">${it.unit} · ${it.category}</p>
+      </div>
+      <div class="inv-item-qty" style="font-size:34px;padding-right:8px;">${it.qty}</div>
+    </div>`).join("")}
+  </div>
+  <button class="fab" data-act="open-scan" title="Scan an item">${icon('camera',24)}</button>
+  `;
+}
+
 // ---------- IMPACT (stats + history — bigger, warmer, fuller) ----------
 function renderImpact(){
   const stats = [
@@ -1872,13 +1991,6 @@ function renderImpact(){
         <span style="color:var(--accent);display:flex;align-items:center;">${icon(h.kind==="money"?"dollar":"box",18)}</span>
       </div>`).join("")}
     </div>
-
-    ${state.inventory.length>0 ? `
-    <div class="section-title">My Inventory <span class="see-all" data-act="open-scan">+ Scan More</span></div>
-    ${state.inventory.map((it,i)=>`<div class="inv-row">
-      <div><b style="font-size:13px;color:var(--cream);">${it.item}</b><p style="font-size:11px;">${it.qty} ${it.unit}</p></div>
-      <button class="btn-ghost" style="background:var(--accent);color:#3a2018;font-weight:700;padding:8px 14px;border-radius:10px;" data-act="donate-inv" data-val="${i}">Match to a Request</button>
-    </div>`).join("")}` : ""}
 
     <div class="thank-you">
       <span class="ty-heart">${icon('heart',32)}</span>
@@ -2020,32 +2132,32 @@ function myRequestRows(){
   return [...serverRows, ...localRows];
 }
 
-// ---------- ORG DASHBOARD (post actions on top, clear simulation, clickable requests) ----------
+// ---------- ORG DASHBOARD (space-efficient two-column top + minimal simulation) ----------
 function renderOrgDash(){
   const s = state.eveningStage;
-  const simSteps = ["Predict", "Confirm", "Split & Deliver"];
   return `<div class="screen" style="padding-bottom:110px;">
     <div class="topbar">
       <div class="brand"><img src="${LOGO_SRC}" style="height:26px;"><b style="font-size:14px;">${state.userName || "Harbor View Shelter"}</b></div>
       <div></div>
     </div>
 
-    <div class="forecast-card" style="margin-top:18px;">
-      <span class="utag scheduled">Smart Suggestion</span>
-      <p style="font-size:14px;color:var(--cream);margin-top:8px;">Blankets usually run out around this week. Post your request early?</p>
-      <div style="display:flex;gap:10px;margin-top:12px;">
-        <button class="btn-primary" style="flex:1;" data-act="prepost">Pre-Post Request</button>
-        <button class="btn-ghost" data-act="open-trace" data-val="org">Why?</button>
+    <div class="dash-top" style="margin-top:18px;">
+      <div class="forecast-card" style="margin-bottom:0;">
+        <span class="utag scheduled">Smart Suggestion</span>
+        <p style="font-size:14px;color:var(--cream);margin-top:8px;">Blankets usually run out around this week. Post your request early?</p>
+        <div style="display:flex;gap:10px;margin-top:12px;">
+          <button class="btn-primary" style="flex:1;" data-act="prepost">Pre-Post Request</button>
+          <button class="btn-ghost" data-act="open-trace" data-val="org">Why?</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;justify-content:center;">
+        <button class="btn-primary" data-act="go-post-request">${iconWrap('box',16)} Post a Request</button>
+        <button class="btn-outline" data-act="go-create-drive">${iconWrap('heart',16)} Create a Fundraiser or Drive</button>
       </div>
     </div>
 
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <button class="btn-primary" style="flex:1;min-width:220px;" data-act="go-post-request">${iconWrap('box',16)} Post a Request</button>
-      <button class="btn-outline" style="flex:1;min-width:220px;" data-act="go-create-drive">${iconWrap('heart',16)} Create a Fundraiser or Drive</button>
-    </div>
-
     <div class="section-title">My Requests</div>
-    <p class="hint" style="font-size:12px;margin-top:-4px;margin-bottom:10px;">Tap any request to see exactly who pledged, how much, and the full details.</p>
+    <p class="hint" style="font-size:12px;margin-top:-4px;margin-bottom:10px;">Tap any request to see who pledged, how much, and the full details.</p>
     <div class="org-req-grid">
     ${myRequestRows().map(o=>{
       const pct = Math.min(100, Math.round((o.have/o.need)*100));
@@ -2065,44 +2177,31 @@ function renderOrgDash(){
     </div>`;}).join("")}
     </div>
 
-    <div class="section-title">Surplus Rescue — Live Simulation</div>
+    <div class="section-title">Surplus Rescue <span style="font-size:10px;background:rgba(63,193,224,0.18);color:var(--teal);padding:3px 8px;border-radius:8px;">Simulation</span></div>
     <div class="card" style="border:1.5px solid var(--teal);">
-      <p class="hint" style="font-size:12.5px;line-height:1.6;">
-        <b style="color:var(--cream);">What is this?</b> Local shops often have food left over at closing time.
-        NeedLink learns those patterns, asks the shop <i>before</i> it closes, and routes the extras to
-        kitchens that have room — so nothing goes to waste and nobody has to ask. Watch one rescue happen:
-      </p>
-
-      <div style="display:flex;gap:8px;margin:14px 0 4px 0;align-items:center;">
-        ${simSteps.map((label,i)=>`
-          <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:${s>i?'var(--teal)':'var(--muted)'};">
-            <span style="width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:${s>i?'var(--teal)':'var(--surface2)'};color:${s>i?'#052733':'var(--muted)'};font-size:10px;">${s>i?'✓':i+1}</span>
-            ${label}
-          </span>${i<simSteps.length-1?`<span style="flex:1;height:2px;background:${s>i+0?'rgba(63,193,224,0.5)':'rgba(255,255,255,0.12)'};border-radius:2px;"></span>`:''}`).join("")}
-      </div>
+      <p style="font-size:14px;color:var(--cream);line-height:1.6;">When a bakery closes with extra bread, NeedLink catches it before it hits the trash and sends it to a kitchen that can serve it tonight.</p>
 
       ${s===0 ? `
-        <button class="btn-primary" style="margin-top:14px;" data-act="trigger-evening">▶ Run the 6:00 PM Simulation</button>
+        <button class="btn-primary" style="margin-top:14px;" data-act="trigger-evening">▶ See It Happen</button>
       ` : ""}
 
       ${s===1 ? `
-        <div class="evening-banner" style="margin-top:14px;margin-bottom:0;"><b>Step 1 — Predict (6:00 PM)</b>Millbrook Bakery is about to close. Based on 14 weeks of history, NeedLink predicts ~40 leftover loaves tonight — and asks the bakery to confirm.</div>
-        <button class="btn-primary" style="margin-top:12px;" data-act="confirm-business">Bakery taps: "Yes, we have extra"</button>
+        <div class="evening-banner" style="margin-top:14px;margin-bottom:0;"><b>6:00 PM</b>Millbrook Bakery has about 40 extra loaves tonight.</div>
+        <button class="btn-primary" style="margin-top:12px;" data-act="confirm-business">Bakery says yes</button>
       ` : ""}
 
       ${s>=2 ? `
-        <div class="evening-banner" style="margin-top:14px;margin-bottom:0;"><b>Step 2 — Confirmed</b>40 loaves are real. NeedLink checks which kitchens have room today and splits the bread between them:</div>
-        <div class="split-bar"><div class="split-seg" style="width:45%;"></div><div class="split-seg" style="width:55%;opacity:0.6;"></div></div>
-        <p style="font-size:12.5px;margin-top:8px;"><b>18 loaves</b> → Second Harvest Co-op · <b>22 loaves</b> → Grace Community Kitchen</p>
+        <div class="split-bar" style="margin-top:14px;"><div class="split-seg" style="width:45%;"></div><div class="split-seg" style="width:55%;opacity:0.6;"></div></div>
+        <p style="font-size:13.5px;margin-top:8px;color:var(--cream);"><b>18 loaves</b> → Second Harvest · <b>22 loaves</b> → Grace Kitchen</p>
         ${s===2
-          ? `<button class="btn-primary" style="margin-top:12px;" data-act="accept-surplus">Step 3 — Accept Our 18 Loaves</button>`
-          : `<p style="font-size:13px;margin-top:12px;color:var(--teal);font-weight:700;">✓ Done — 18 loaves added to today's intake. Bread that would have been thrown away is now dinner.</p>`}
+          ? `<button class="btn-primary" style="margin-top:12px;" data-act="accept-surplus">Take Our 18 Loaves</button>`
+          : `<p style="font-size:13.5px;margin-top:12px;color:var(--teal);font-weight:700;">✓ Saved — 18 loaves are on tonight's menu instead of in the trash.</p>`}
         <div style="display:flex;gap:14px;margin-top:8px;">
-          <button class="btn-ghost" style="padding-left:0;" data-act="open-trace" data-val="org">How Was This Decided?</button>
-          ${s===3 ? `<button class="btn-ghost" data-act="reset-sim">↺ Restart Simulation</button>` : ""}
+          <button class="btn-ghost" style="padding-left:0;" data-act="open-trace" data-val="org">How?</button>
+          ${s===3 ? `<button class="btn-ghost" data-act="reset-sim">↺ Restart</button>` : ""}
         </div>
       ` : ""}
-      <p id="agentStatusLine" class="hint" style="font-size:11px;margin-top:10px;">${s>0 && state.liveAgents ? (state.liveAgents.ok ? "● Decided live by your local AI agents ("+state.liveAgents.model+")" : "Demo mode — start the backend to run this through your real AI agents.") : ""}</p>
+      <p id="agentStatusLine" style="display:none;"></p>
     </div>
   </div>
   `;
@@ -2114,25 +2213,29 @@ function renderScan(){
   let inner = "";
   if(state.scanStage==="capture"){
     inner = `
-    <div class="scan-frame">${icon('camera',40)}<p style="font-size:13px;text-align:center;padding:0 24px;">Snap a photo of the box or label — we'll read what it is.</p></div>
+    <div class="scan-frame compact">${icon('camera',48)}<p class="hint" style="font-size:13.5px;text-align:center;padding:0 28px;max-width:420px;">Snap the box or label — AI reads what it is and how many.</p></div>
     <input type="file" id="cameraFile" accept="image/*" capture="environment" style="display:none;">
-    <button class="btn-primary" style="margin-top:22px;" data-act="trigger-camera">Take a Photo</button>
-    <div class="status-pill ${state.aiStatus==='live'?'live':'mock'}" style="align-self:flex-start;">${state.aiStatus==='live' ? `<span class="dot-live"></span> Live Claude Vision` : `<span class="dot-live"></span> Free AI Vision — add a Claude key in Settings for best results`}</div>
+    <div class="scan-actions">
+      <button class="btn-primary" data-act="trigger-camera">${iconWrap('camera',18)} Take a Photo</button>
+      <div class="status-pill ${state.aiStatus==='live'?'live':'mock'}" style="align-self:center;">${state.aiStatus==='live' ? `<span class="dot-live"></span> Live Claude Vision` : `<span class="dot-live"></span> Free AI Vision — add a Claude key in Settings for best results`}</div>
+    </div>
     `;
   } else if(state.scanStage==="analyzing"){
-    inner = `<div class="scan-frame"><img src="${state.scanImage}"><div class="scan-line"></div></div>
+    inner = `<div class="scan-frame compact"><img src="${state.scanImage}"><div class="scan-line"></div></div>
     <p class="ai-thinking" style="text-align:center;margin-top:16px;">${state.apiKey ? "Asking Claude what's in the photo..." : "AI is reading the photo..."}</p>`;
   } else if(state.scanStage==="result"){
     const r = state.scanResult; const m = state.bestMatch;
     inner = `
-    <div class="scan-frame" style="aspect-ratio:16/9;"><img src="${state.scanImage}"></div>
-    ${state.scanError ? `<p style="font-size:11px;color:var(--accent);margin-top:8px;">${state.scanError}</p>` : ""}
-    <p style="font-size:12px;margin-top:12px;">We think this is —</p>
+    <div class="scan-frame compact" style="aspect-ratio:16/9;"><img src="${state.scanImage}"></div>
+    ${state.scanError ? `<p style="font-size:11px;color:var(--accent);margin-top:8px;text-align:center;">${state.scanError}</p>` : ""}
+    <p class="hint" style="font-size:12px;margin-top:12px;">We think this is —</p>
     <label class="field-label">Item</label>
     <input type="text" class="item-input" id="scanItemInput" value="${r.item}">
-    <label class="field-label">Quantity</label>
+    <label class="field-label">Quantity <span style="color:var(--muted);font-weight:400;">(tap +/– or type it)</span></label>
     <div class="stepper" style="justify-content:flex-start;gap:16px;margin-top:8px;">
-      <button data-act="scan-qty-dec">–</button><div class="val" style="font-size:24px;">${r.qty}</div><button data-act="scan-qty-inc">+</button>
+      <button data-act="scan-qty-dec">–</button>
+      <input type="number" class="stepper-input" id="scanQtyInput" min="1" max="9999" value="${r.qty}">
+      <button data-act="scan-qty-inc">+</button>
       <span style="color:var(--muted);font-size:13px;">${r.unit}</span>
     </div>
     ${m ? `<div class="card match-reveal" style="margin-top:20px;display:flex;gap:12px;align-items:center;">
@@ -2333,6 +2436,13 @@ function updateBrowseResults(){
 }
 
 // ---------- HANDLERS ----------
+// Keeps the donation sheet's match-check + confirm button in step with the qty,
+// whether it was typed or tapped.
+function syncDonationQtyUI(){
+  const mc = document.getElementById("matchCheckWrap");
+  if(mc && state.sheetItem) mc.innerHTML = state.qty>0 ? matchCheckHtml(state.sheetItem, state.qty) : "";
+  const cb = document.getElementById("confirmPledgeBtn"); if(cb) cb.disabled = (state.qty<1 || !state.dropoff);
+}
 
 // Ask the real multi-agent backend (localhost:4000) to make the surplus decision.
 // If it's running, the demo becomes a genuinely AI-decided flow and says so;
@@ -2564,6 +2674,32 @@ function attachHandlers(){
   const hfTokenInput = document.getElementById("hfTokenInput");
   if(hfTokenInput) hfTokenInput.addEventListener("input", e=>{ state.hfToken = e.target.value; });
 
+  // ---- typed quantity fields (paired with the +/- steppers) ----
+  const qtyInput = document.getElementById("qtyInput");
+  if(qtyInput){
+    qtyInput.addEventListener("input", e=>{
+      state.qty = Math.max(0, Math.min(9999, parseInt(e.target.value)||0));
+      syncDonationQtyUI();
+    });
+  }
+  const prQtyInput = document.getElementById("prQtyInput");
+  if(prQtyInput) prQtyInput.addEventListener("input", e=>{
+    state.postRequestForm = {...state.postRequestForm, qty: String(Math.max(1, Math.min(9999, parseInt(e.target.value)||1)))};
+  });
+  const helpQtyInput = document.getElementById("helpQtyInput");
+  if(helpQtyInput) helpQtyInput.addEventListener("input", e=>{
+    state.helpFlowQty = Math.max(1, Math.min(9999, parseInt(e.target.value)||1));
+  });
+  const scanQtyInput = document.getElementById("scanQtyInput");
+  if(scanQtyInput) scanQtyInput.addEventListener("input", e=>{
+    state.scanResult = {...state.scanResult, qty: Math.max(1, Math.min(9999, parseInt(e.target.value)||1))};
+  });
+  const finInput = document.getElementById("finInput");
+  if(finInput) finInput.addEventListener("input", e=>{
+    state.financeAmount = Math.max(1, Math.min(99999, parseInt(e.target.value)||1));
+    const b = document.getElementById("finBtnAmt"); if(b) b.textContent = "$"+state.financeAmount;
+  });
+
   const locInput = document.getElementById("locInput");
   if(locInput){
     const doGeocode = async (val)=>{
@@ -2667,10 +2803,11 @@ function handleAction(act, val, el){
     case "go-post-request": setState({postSheetOpen:true, postSheetStage:"form", postRequestForm:{item:"", qty:"1", urgency:"urgent", details:"", timing:""}}); break;
     case "close-post-sheet": setState({postSheetOpen:false, postSheetStage:"form"}); break;
     case "pr-qty-inc": case "pr-qty-dec": {
-      const cur = parseInt(state.postRequestForm.qty) || 1;
+      const inEl = document.getElementById("prQtyInput");
+      const cur = inEl ? (parseInt(inEl.value)||1) : (parseInt(state.postRequestForm.qty) || 1);
       const next = act==="pr-qty-inc" ? cur+1 : Math.max(1, cur-1);
       state.postRequestForm = {...readPostForm(), qty: String(next)};
-      const v = document.getElementById("prQtyVal"); if(v) v.textContent = next;
+      if(inEl) inEl.value = next;
       break;
     }
 
@@ -2707,10 +2844,8 @@ function handleAction(act, val, el){
     case "close-pledge-list": setState({pledgeListOpen:false}); break;
     case "qty-inc": case "qty-dec": {
       state.qty = act==="qty-inc" ? state.qty+1 : Math.max(0, state.qty-1);
-      const v = document.getElementById("qtyVal"); if(v) v.textContent = state.qty;
-      const mc = document.getElementById("matchCheckWrap");
-      if(mc && state.sheetItem) mc.innerHTML = state.qty>0 ? matchCheckHtml(state.sheetItem, state.qty) : "";
-      const cb = document.getElementById("confirmPledgeBtn"); if(cb) cb.disabled = (state.qty<1 || !state.dropoff);
+      const v = document.getElementById("qtyInput"); if(v) v.value = state.qty;
+      syncDonationQtyUI();
       break;
     }
     case "pick-dropoff": setState({dropoff:val}); break;
@@ -2791,17 +2926,37 @@ function handleAction(act, val, el){
     case "open-scan": setState({screen:"scan", scanStage:"capture", scanImage:null, scanResult:null}); break;
     case "trigger-camera": document.getElementById("cameraFile").click(); break;
     case "retake-scan": setState({scanStage:"capture", scanImage:null, scanResult:null}); break;
-    case "scan-qty-inc": setState({scanResult:{...state.scanResult, qty:state.scanResult.qty+1}}); break;
-    case "scan-qty-dec": setState({scanResult:{...state.scanResult, qty:Math.max(1,state.scanResult.qty-1)}}); break;
-    case "confirm-scan": {
-      const itemInput = document.getElementById("scanItemInput");
-      const finalItem = itemInput ? itemInput.value : state.scanResult.item;
-      const entry = {...state.scanResult, item:finalItem};
-      setState({inventory:[...state.inventory, entry], screen:"impact", scanStage:"capture", scanImage:null, scanResult:null});
-      showToast(`Added ${entry.qty} ${entry.unit} of ${entry.item} to your inventory`);
+    case "scan-qty-inc": case "scan-qty-dec": {
+      const cur = Math.max(1, parseInt(state.scanResult.qty)||1);
+      state.scanResult = {...state.scanResult, qty: act==="scan-qty-inc" ? cur+1 : Math.max(1, cur-1)};
+      const v = document.getElementById("scanQtyInput"); if(v) v.value = state.scanResult.qty;
       break;
     }
-    case "donate-inv": { const entry = state.inventory[parseInt(val)]; showToast(`Matching ${entry.item} to nearby requests...`); break; }
+    case "confirm-scan": {
+      const itemInput = document.getElementById("scanItemInput");
+      const qtyInput = document.getElementById("scanQtyInput");
+      const finalItem = itemInput ? itemInput.value : state.scanResult.item;
+      const finalQty = qtyInput ? Math.max(1, parseInt(qtyInput.value)||1) : state.scanResult.qty;
+      const added = addScanToInventory({...state.scanResult, item:finalItem, qty:finalQty});
+      setState({screen:"inventory", scanStage:"capture", scanImage:null, scanResult:null});
+      showToast(`Added ${added.qty} to ${added.name} — inventory updated`);
+      setTimeout(()=>{ if(state.invFlashItem===added.name){ state.invFlashItem=null; render(); } }, 1400);
+      break;
+    }
+    case "donate-inv": {
+      const entry = state.inventory[parseInt(val)];
+      if(!entry) return;
+      // Find the open request that best fits this inventory item and open its pledge sheet.
+      const match = requests
+        .filter(r=>r.need-r.have>0)
+        .sort((a,b)=>{
+          const ca = a.category===entry.category?0:1, cb = b.category===entry.category?0:1;
+          return ca-cb || urgencyRank(a.urgency)-urgencyRank(b.urgency);
+        })[0];
+      if(!match){ showToast("No open requests right now — check back soon."); return; }
+      setState({sheetOpen:true, sheetItem:match, qty:Math.min(entry.qty, match.need-match.have), dropoff:null, donationStage:"form"});
+      break;
+    }
 
     // ---- trace ----
     case "open-trace": {
@@ -2829,6 +2984,8 @@ function handleAction(act, val, el){
     }
     case "submit-post-request": {
       const f = readPostForm();
+      const qEl = document.getElementById("prQtyInput");
+      if(qEl) f.qty = String(Math.max(1, parseInt(qEl.value)||1));
       if(!f.item.trim()){ showToast("Add an item name to post"); return; }
       const cat = autoCategorize(f.item);
       const urgencyVal = ["urgent","scheduled","ongoing"].includes(f.urgency) ? f.urgency : "urgent";
@@ -2934,11 +3091,15 @@ function handleAction(act, val, el){
     // ---- I Can Help flow ----
     case "trigger-helpflow-camera": document.getElementById("helpFlowFile").click(); break;
     case "helpflow-qty-inc": case "helpflow-qty-dec": {
-      state.helpFlowQty = act==="helpflow-qty-inc" ? state.helpFlowQty+1 : Math.max(1, state.helpFlowQty-1);
-      const v = document.getElementById("helpQtyVal"); if(v) v.textContent = state.helpFlowQty;
+      const inEl = document.getElementById("helpQtyInput");
+      const cur = inEl ? (parseInt(inEl.value)||1) : state.helpFlowQty;
+      state.helpFlowQty = act==="helpflow-qty-inc" ? cur+1 : Math.max(1, cur-1);
+      if(inEl) inEl.value = state.helpFlowQty;
       break;
     }
     case "submit-help-flow": {
+      const hq = document.getElementById("helpQtyInput");
+      if(hq) state.helpFlowQty = Math.max(1, parseInt(hq.value)||1);
       const emailEl = document.getElementById("helpFlowEmail");
       const email = emailEl ? emailEl.value.trim() : state.helpFlowEmail;
       if(!email){ showToast("Add your email so the org can reach you"); return; }
@@ -2958,12 +3119,16 @@ function handleAction(act, val, el){
     case "open-finance": setState({financeSheetOpen:true, financeOrg: val||null}); break;
     case "close-finance": setState({financeSheetOpen:false}); break;
     case "fin-inc": case "fin-dec": {
-      state.financeAmount = act==="fin-inc" ? state.financeAmount+5 : Math.max(5, state.financeAmount-5);
-      const v = document.getElementById("finVal"); if(v) v.textContent = "$"+state.financeAmount;
+      const inEl = document.getElementById("finInput");
+      const cur = inEl ? (parseInt(inEl.value)||5) : state.financeAmount;
+      state.financeAmount = act==="fin-inc" ? cur+5 : Math.max(5, cur-5);
+      if(inEl) inEl.value = state.financeAmount;
       const b = document.getElementById("finBtnAmt"); if(b) b.textContent = "$"+state.financeAmount;
       break;
     }
     case "confirm-finance": {
+      const fEl = document.getElementById("finInput");
+      if(fEl) state.financeAmount = Math.max(1, parseInt(fEl.value)||state.financeAmount);
       state.pledgeHistory.unshift({
         kind:"money", org: state.financeOrg || "NeedLink community fund", amount: state.financeAmount,
         detail: "Sent directly to the organization", when: new Date(),
